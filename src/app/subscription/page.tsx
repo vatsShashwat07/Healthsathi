@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import BottomNav from "@/components/shared/BottomNav";
 import { ArrowLeft, Check, Sparkles, Crown, Zap } from "lucide-react";
 import Link from "next/link";
+import Script from "next/script";
 
 const plans = [
     {
@@ -54,23 +56,99 @@ const plans = [
 
 export default function SubscriptionPage() {
     const { t, isHindi } = useLanguage();
+    const { user } = useAuth();
     const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
     const [showPayment, setShowPayment] = useState(false);
     const [paymentPlan, setPaymentPlan] = useState<string>("");
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const handleUpgrade = (planKey: string, _price: number) => {
-        setPaymentPlan(planKey);
-        setShowPayment(true);
-        setPaymentSuccess(false);
-        // Simulate Razorpay payment processing
-        setTimeout(() => {
-            setPaymentSuccess(true);
-        }, 2500);
+    const handleUpgrade = async (planKey: string, price: number) => {
+        if (!user) {
+            alert(isHindi ? "अपग्रेड करने के लिए पहले लॉगिन करें।" : "Please login to upgrade.");
+            return;
+        }
+
+        try {
+            setIsProcessing(true);
+
+            // 1. Create order on Next.js backend
+            const orderRes = await fetch('/api/payments/create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: price, planId: planKey })
+            });
+            const orderData = await orderRes.json();
+
+            if (!orderData.id) {
+                alert(isHindi ? "पेमेंट सर्वर से कनेक्ट करने में विफल (API Keys Missing)" : "Failed to connect to payment server (API Keys Missing)");
+                setIsProcessing(false);
+                return;
+            }
+
+            // 2. Open Razorpay Checktout 
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
+                amount: orderData.amount,
+                currency: orderData.currency,
+                name: "HealthSathi",
+                description: `Saathi ${planKey === 'family' ? 'Family' : 'Plus'} Subscription`,
+                order_id: orderData.id,
+                theme: {
+                    color: "#FF9933"
+                },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                handler: async function (response: any) {
+                    setPaymentPlan(planKey);
+                    setShowPayment(true);
+                    setPaymentSuccess(false);
+
+                    // 3. Verify Signature 
+                    const verifyRes = await fetch('/api/payments/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature,
+                            userId: user.id,
+                            planId: planKey
+                        })
+                    });
+
+                    const verifyData = await verifyRes.json();
+                    if (verifyData.success || verifyData.warning) {
+                        setPaymentSuccess(true);
+                        // Force session refresh to pickup new is_premium tag
+                        window.location.href = "/profile";
+                    } else {
+                        alert(isHindi ? "पेमेंट वेरिफिकेशन विफल रहा।" : "Payment verification failed.");
+                        setShowPayment(false);
+                    }
+                },
+                prefill: {
+                    email: user.email,
+                }
+            };
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const rzp = new (window as any).Razorpay(options);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            rzp.on('payment.failed', function (response: any) {
+                alert(response.error.description);
+            });
+            rzp.open();
+        } catch (err) {
+            console.error(err);
+            alert(isHindi ? "त्रुटि उत्पन्न हुई" : "An error occurred");
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     return (
         <div className="w-full min-h-screen pb-nav">
+            <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
             {/* Header */}
             <header className="relative px-5 pt-12 pb-5 overflow-hidden">
                 <div className="absolute inset-0"
@@ -178,11 +256,11 @@ export default function SubscriptionPage() {
                                 ) : (
                                     <button
                                         onClick={() => handleUpgrade(plan.key, displayPrice)}
-                                        className={`w-full text-sm gap-2 ${plan.key === "family" ? "btn-premium" : "btn-primary"}`}
+                                        disabled={isProcessing}
+                                        className={`w-full text-sm gap-2 ${plan.key === "family" ? "btn-premium" : "btn-primary"} ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     >
                                         {plan.key === "family" ? <Crown size={16} /> : <Zap size={16} />}
-                                        {t("subscription.upgrade")} — ₹{displayPrice}
-                                        {billingCycle === "annual" ? t("subscription.perYear") : t("subscription.perMonth")}
+                                        {isProcessing ? "प्रोसेस हो रहा है..." : (t("subscription.upgrade") + " — ₹" + displayPrice + (billingCycle === "annual" ? t("subscription.perYear") : t("subscription.perMonth")))}
                                     </button>
                                 )}
                             </div>

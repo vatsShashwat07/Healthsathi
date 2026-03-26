@@ -4,6 +4,7 @@ import React from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 import BottomNav from "@/components/shared/BottomNav";
 import {
@@ -28,22 +29,43 @@ function getGreeting(t: (key: string) => string): string {
   return t("greeting.night");
 }
 
-const demoMedicines = [
-  { id: "1", name: "Metformin 500mg", nameHi: "मेटफ़ॉर्मिन 500mg", time: "सुबह 8:00", timeEn: "8:00 AM", status: "pending", emoji: "💊" },
-  { id: "2", name: "Amlodipine 5mg", nameHi: "एम्लोडिपिन 5mg", time: "सुबह 8:00", timeEn: "8:00 AM", status: "taken", emoji: "💊" },
-  { id: "3", name: "Calcium D3", nameHi: "कैल्शियम D3", time: "दोपहर 1:00", timeEn: "1:00 PM", status: "pending", emoji: "🦴" },
-];
-
-const demoRecords = [
-  { id: "1", type: "lab", name: "CBC Report", nameHi: "सीबीसी रिपोर्ट", date: "15 Mar 2026", dateHi: "15 मार्च 2026", lab: "Lal Path Labs", emoji: "🧪" },
-  { id: "2", type: "prescription", name: "Dr. Sharma Prescription", nameHi: "डॉ. शर्मा का पर्चा", date: "10 Mar 2026", dateHi: "10 मार्च 2026", lab: "City Hospital", emoji: "📋" },
-];
-
 export default function HomePage() {
   const { t, isHindi } = useLanguage();
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const supabase = createClient();
   const greeting = getGreeting(t);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [medicines, setMedicines] = React.useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [records, setRecords] = React.useState<any[]>([]);
+  const [stats, setStats] = React.useState({ todayCount: 0, recordCount: 0 });
+
+  React.useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/login");
+    } else if (user) {
+      // Fetch live data from Supabase!
+      const fetchData = async () => {
+        const [medsRes, recsRes] = await Promise.all([
+          supabase.from('medicines').select('*').eq('user_id', user.id).limit(3),
+          supabase.from('health_records').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(2)
+        ]);
+
+        if (medsRes.data) {
+          setMedicines(medsRes.data);
+          setStats(s => ({ ...s, todayCount: medsRes.data.length }));
+        }
+        if (recsRes.data) {
+          setRecords(recsRes.data);
+          setStats(s => ({ ...s, recordCount: recsRes.data.length }));
+        }
+      };
+
+      fetchData();
+    }
+  }, [user, isLoading, router]);
 
   React.useEffect(() => {
     if (!isLoading && !user) {
@@ -110,8 +132,8 @@ export default function HomePage() {
                 </p>
                 <p className="text-sm md:text-base text-white font-bold" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
                   {isHindi
-                    ? "3 दवाइयाँ आज • 2 रिपोर्ट • 7 दिन स्ट्रीक"
-                    : "3 medicines today • 2 records • 7-day streak"}
+                    ? `${stats.todayCount} दवाइयाँ आज • ${stats.recordCount} रिपोर्ट • 0 दिन स्ट्रीक`
+                    : `${stats.todayCount} medicines today • ${stats.recordCount} records • 0-day streak`}
                 </p>
               </div>
             </div>
@@ -182,36 +204,42 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-3">
-              {demoMedicines.map((med) => (
-                <div
-                  key={med.id}
-                  className={`rounded-2xl p-4 flex items-center justify-between transition-all ${med.status === "taken" ? "bg-gray-50 opacity-70" : "bg-white shadow-card-border"
-                    }`}
-                  style={{ borderLeft: `3px solid ${med.status === "taken" ? "#22c55e" : "#FF9933"}` }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-11 h-11 rounded-xl flex items-center justify-center text-lg ${med.status === "taken" ? "bg-green-100" : "bg-orange-50"
-                        }`}
-                    >
-                      {med.status === "taken" ? "✅" : med.emoji}
-                    </div>
-                    <div>
-                      <p suppressHydrationWarning className={`font-semibold text-[15px] ${med.status === "taken" ? "text-gray-400 line-through" : "text-ink-900"}`}>
-                        {isHindi ? med.nameHi : med.name}
-                      </p>
-                      <p suppressHydrationWarning className="text-xs text-gray-400">{isHindi ? med.time : med.timeEn}</p>
-                    </div>
-                  </div>
-                  {med.status === "pending" ? (
-                    <button className="px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-all active:scale-95 shadow-saffron">
-                      {isHindi ? "लिया" : "Take"}
-                    </button>
-                  ) : (
-                    <span className="text-green-500 text-sm font-semibold flex items-center gap-1">✓ {isHindi ? "लिया" : "Taken"}</span>
-                  )}
+              {medicines.length === 0 ? (
+                <div className="p-4 bg-sage-50 rounded-2xl border border-dashed border-sage-200 text-center">
+                  <p className="text-xs text-text-muted">{isHindi ? "आज कोई दवाई नहीं है।" : "No medicines scheduled for today."}</p>
                 </div>
-              ))}
+              ) : (
+                medicines.map((med) => (
+                  <div
+                    key={med.id}
+                    className={`rounded-2xl p-4 flex items-center justify-between transition-all ${med.status === "taken" ? "bg-gray-50 opacity-70" : "bg-white shadow-card-border"
+                      }`}
+                    style={{ borderLeft: `3px solid ${med.status === "taken" ? "#22c55e" : "#FF9933"}` }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-11 h-11 rounded-xl flex items-center justify-center text-lg ${med.status === "taken" ? "bg-green-100" : "bg-orange-50"
+                          }`}
+                      >
+                        {med.status === "taken" ? "✅" : med.emoji}
+                      </div>
+                      <div>
+                        <p suppressHydrationWarning className={`font-semibold text-[15px] ${med.status === "taken" ? "text-gray-400 line-through" : "text-ink-900"}`}>
+                          {isHindi ? med.name_hi : med.name_en}
+                        </p>
+                        <p suppressHydrationWarning className="text-xs text-gray-400">{isHindi ? med.time_hi : med.time_en}</p>
+                      </div>
+                    </div>
+                    {med.status === "pending" ? (
+                      <button className="px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-all active:scale-95 shadow-saffron">
+                        {isHindi ? "लिया" : "Take"}
+                      </button>
+                    ) : (
+                      <span className="text-green-500 text-sm font-semibold flex items-center gap-1">✓ {isHindi ? "लिया" : "Taken"}</span>
+                    )}
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -231,21 +259,27 @@ export default function HomePage() {
                 </Link>
               </div>
               <div className="space-y-3">
-                {demoRecords.map((rec) => (
-                  <div
-                    key={rec.id}
-                    className="bg-white rounded-2xl p-4 flex items-center gap-3 shadow-card-border transition-all hover:shadow-card-hover"
-                  >
-                    <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center text-lg">
-                      {rec.emoji}
-                    </div>
-                    <div className="flex-1">
-                      <p suppressHydrationWarning className="font-semibold text-ink-900 text-[15px]">{isHindi ? rec.nameHi : rec.name}</p>
-                      <p suppressHydrationWarning className="text-xs text-gray-400">{isHindi ? rec.dateHi : rec.date} • {rec.lab}</p>
-                    </div>
-                    <ArrowRight size={16} className="text-gray-300" />
+                {records.length === 0 ? (
+                  <div className="p-4 bg-sage-50 rounded-2xl border border-dashed border-sage-200 text-center">
+                    <p className="text-xs text-text-muted">{isHindi ? "अभी तक कोई रिपोर्ट नहीं है।" : "No health records found."}</p>
                   </div>
-                ))}
+                ) : (
+                  records.map((rec) => (
+                    <div
+                      key={rec.id}
+                      className="bg-white rounded-2xl p-4 flex items-center gap-3 shadow-card-border transition-all hover:shadow-card-hover cursor-pointer"
+                    >
+                      <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center text-lg">
+                        {rec.emoji || '📋'}
+                      </div>
+                      <div className="flex-1">
+                        <p suppressHydrationWarning className="font-semibold text-ink-900 text-[15px]">{isHindi ? rec.name_hi : rec.name_en}</p>
+                        <p suppressHydrationWarning className="text-xs text-gray-400 shrink-0">{rec.record_date} • {rec.lab_name || "Self"}</p>
+                      </div>
+                      <ArrowRight size={16} className="text-gray-300" />
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 

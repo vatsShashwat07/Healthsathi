@@ -4,6 +4,7 @@ import React from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 import {
@@ -39,15 +40,24 @@ export default function ProfilePage() {
     const { t, isHindi } = useLanguage();
     const { user, signOut, isLoading } = useAuth();
     const router = useRouter();
+    const supabase = createClient();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [profile, setProfile] = React.useState<any>(null);
 
     React.useEffect(() => {
         if (!isLoading && !user) {
             router.push("/login");
+        } else if (user) {
+            supabase.from('profiles').select('*').eq('id', user.id).single()
+                .then(({ data }) => {
+                    if (data) setProfile(data);
+                });
         }
     }, [user, isLoading, router]);
 
-    const userName = user?.email ? user.email.split('@')[0] : (isHindi ? "रमेश कुमार" : "Ramesh Kumar");
-    const userEmail = user?.email || "+91 98765 43210";
+    const userName = profile?.name || (user?.email ? user.email.split('@')[0] : (isHindi ? "रमेश कुमार" : "Ramesh Kumar"));
+    const userContact = profile?.phone || user?.email || "+91 98765 43210";
+    const isPremium = profile?.is_premium || false;
 
     return (
         <div className="w-full min-h-screen pb-nav">
@@ -78,12 +88,12 @@ export default function ProfilePage() {
                             👤
                         </div>
                         <div>
-                            <h2 className="text-2xl font-extrabold">{userName}</h2>
-                            <p className="text-white/50 text-sm mt-0.5">{userEmail}</p>
-                            <span className="inline-flex items-center gap-1 mt-1.5 px-3 py-1 rounded-full text-xs font-semibold"
-                                style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(10px)" }}>
-                                <Heart size={10} />
-                                {isHindi ? "मुफ़्त प्लान" : "Free Plan"}
+                            <h2 suppressHydrationWarning className="text-2xl font-extrabold capitalize">{userName}</h2>
+                            <p suppressHydrationWarning className="text-white/50 text-sm mt-0.5">{userContact}</p>
+                            <span suppressHydrationWarning className="inline-flex items-center gap-1 mt-1.5 px-3 py-1 rounded-full text-xs font-semibold"
+                                style={{ background: isPremium ? "rgba(255,200,0,0.25)" : "rgba(255,255,255,0.15)", backdropFilter: "blur(10px)" }}>
+                                <Heart size={10} className={isPremium ? "text-yellow-300" : "text-white"} />
+                                {isPremium ? (isHindi ? "प्लस मेंबर" : "Plus Member") : (isHindi ? "मुफ़्त प्रोफ़ाइल" : "Free Profile")}
                             </span>
                         </div>
                     </div>
