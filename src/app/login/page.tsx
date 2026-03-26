@@ -38,7 +38,7 @@ export default function LoginPage() {
 
         try {
             if (isSignUp) {
-                const { error } = await supabase.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -46,7 +46,13 @@ export default function LoginPage() {
                     }
                 });
                 if (error) throw error;
-                alert(isHindi ? "चेक करें! ईमेल पर पुष्टि लिंक भेजा गया है।" : "Check your email for the confirmation link!");
+
+                if (data.session) {
+                    router.push("/dashboard");
+                    router.refresh();
+                } else {
+                    alert(isHindi ? "चेक करें! ईमेल पर पुष्टि लिंक भेजा गया है।" : "Check your email for the confirmation link!");
+                }
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,
