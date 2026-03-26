@@ -1,0 +1,245 @@
+{
+    "app": {
+        "name": "HealthSathi",
+        "tagline": "Your AI Health Companion"
+    },
+    "nav": {
+        "home": "Home",
+        "symptoms": "Symptoms",
+        "records": "Records",
+        "medicines": "Medicines",
+        "profile": "Profile"
+    },
+    "greeting": {
+        "morning": "Good Morning",
+        "afternoon": "Good Afternoon",
+        "evening": "Good Evening",
+        "night": "Good Night",
+        "suffix": ""
+    },
+    "home": {
+        "title": "Today's Health",
+        "quickActions": "What would you like to do?",
+        "checkSymptoms": "Check Symptoms",
+        "uploadRecord": "Upload Record",
+        "addMedicine": "Add Medicine",
+        "todayMeds": "Today's Medicines",
+        "recentRecords": "Recent Records",
+        "noMeds": "No medicines added",
+        "noRecords": "No records yet",
+        "healthSummary": "Health Summary",
+        "familyMembers": "Family Members"
+    },
+    "symptoms": {
+        "title": "Check Symptoms",
+        "subtitle": "Tell us what you're feeling",
+        "tapBody": "Tap on the body where it hurts",
+        "inputPlaceholder": "Describe your symptom... e.g. 'severe headache since morning'",
+        "voiceInput": "Speak",
+        "submit": "Check",
+        "checking": "Checking...",
+        "result": "Assessment",
+        "urgency": "Urgency Level",
+        "possibleCauses": "Possible Causes",
+        "homeCare": "Home Care",
+        "doctorNotes": "What to Tell Your Doctor",
+        "redFlags": "Watch for these warning signs",
+        "disclaimer": "⚕️ This is not a medical diagnosis. Please consult your doctor for any serious health concern.",
+        "save": "Save",
+        "shareWhatsApp": "Share on WhatsApp",
+        "limitReached": "Today's free symptom checks are used up. Upgrade to HealthSathi Plus for unlimited checks.",
+        "upgrade": "Upgrade",
+        "bodyParts": {
+            "head": "Head",
+            "eyes": "Eyes",
+            "ears": "Ears",
+            "throat": "Throat",
+            "chest": "Chest",
+            "upperBack": "Upper Back",
+            "stomach": "Stomach",
+            "lowerBack": "Lower Back",
+            "arms": "Arms",
+            "hands": "Hands",
+            "legs": "Legs",
+            "feet": "Feet"
+        },
+        "urgencyLevels": {
+            "emergency": "🚨 Go to Emergency NOW",
+            "urgent": "⚠️ See a Doctor Within 24 Hours",
+            "soon": "🩺 Visit Doctor in 2-3 Days",
+            "homeCare": "🏠 Home Care is Sufficient"
+        },
+        "followUp": {
+            "duration": "How long have you had this?",
+            "severity": "How severe is it? (1-10)",
+            "pattern": "Is it constant or comes and goes?",
+            "associated": "Any other symptoms?",
+            "recent": "Any recent dietary changes or travel?"
+        }
+    },
+    "records": {
+        "title": "Health Records",
+        "addRecord": "Add Record",
+        "camera": "Take Photo",
+        "gallery": "Choose from Gallery",
+        "pdf": "Upload PDF",
+        "manual": "Enter Manually",
+        "processing": "AI is reading your report...",
+        "extracted": "AI Extracted Data",
+        "confirm": "Confirm",
+        "edit": "Edit",
+        "types": {
+            "all": "All",
+            "lab": "Lab Report",
+            "prescription": "Prescription",
+            "xray": "X-Ray / Scan",
+            "vaccination": "Vaccination",
+            "discharge": "Discharge Summary",
+            "other": "Other"
+        },
+        "search": "Search records...",
+        "shareLink": "Create Share Link",
+        "linkCreated": "Link created! Valid for 24 hours.",
+        "storageUsed": "Storage Used",
+        "storageFull": "Storage full. Please upgrade.",
+        "noRecords": "No records yet. Upload your first report!",
+        "abnormal": "Abnormal",
+        "normal": "Normal",
+        "notes": "Notes"
+    },
+    "medicines": {
+        "title": "Medicines",
+        "addMedicine": "Add Medicine",
+        "scanPrescription": "Scan Prescription",
+        "manualAdd": "Add Manually",
+        "medicineName": "Medicine Name",
+        "dose": "Dose",
+        "frequency": "Frequency",
+        "mealPref": "Before / After Meals",
+        "beforeFood": "Before Meals",
+        "afterFood": "After Meals",
+        "withFood": "With Meals",
+        "anytime": "Anytime",
+        "quantity": "Tablets Remaining",
+        "refillDate": "Refill Needed By",
+        "times": {
+            "morning": "Morning",
+            "afternoon": "Afternoon",
+            "evening": "Evening",
+            "night": "Night"
+        },
+        "taken": "Taken ✓",
+        "missed": "Missed",
+        "takeMedicine": "Take Medicine",
+        "streak": "days of taking medicine on time — Great job! 🎉",
+        "lowStock": "⚠️ Running low on medicine",
+        "orderRefill": "Order Refill",
+        "genericAvailable": "Cheaper generic available",
+        "savings": "Savings",
+        "missedDose": {
+            "title": "Missed Dose — What to Do?",
+            "safeToTake": "Safe to take now",
+            "skipDose": "Skip this dose, take next on time"
+        },
+        "interactions": {
+            "warning": "⚠️ Dangerous Drug Interaction",
+            "detail": "These medicines together may be dangerous. Please consult your doctor."
+        }
+    },
+    "subscription": {
+        "title": "Choose a Plan",
+        "free": "Free",
+        "plus": "HealthSathi Plus",
+        "family": "HealthSathi Family",
+        "perMonth": "/month",
+        "perYear": "/year",
+        "monthly": "Monthly",
+        "annual": "Annual",
+        "saveBadge": "Save",
+        "currentPlan": "Your Plan",
+        "upgrade": "Upgrade",
+        "features": "Features",
+        "unlimited": "Unlimited",
+        "popular": "Most Popular"
+    },
+    "emergency": {
+        "title": "🚨 Emergency",
+        "call108": "108 — Ambulance",
+        "call112": "112 — Helpline",
+        "nearestHospital": "Nearest Hospital",
+        "warning": "If life is at risk, call 108 immediately!"
+    },
+    "profile": {
+        "title": "Profile",
+        "familyMembers": "Family Members",
+        "addMember": "Add Member",
+        "subscription": "Subscription",
+        "notifications": "Notifications",
+        "language": "Language",
+        "privacy": "Privacy",
+        "deleteData": "Delete All Data",
+        "logout": "Log Out",
+        "settings": "Settings",
+        "relation": {
+            "self": "Self",
+            "father": "Father",
+            "mother": "Mother",
+            "wife": "Wife",
+            "husband": "Husband",
+            "son": "Son",
+            "daughter": "Daughter",
+            "brother": "Brother",
+            "sister": "Sister",
+            "other": "Other"
+        }
+    },
+    "onboarding": {
+        "welcome": {
+            "title": "Welcome to HealthSathi",
+            "subtitle": "Your Trusted AI Health Companion",
+            "feature1": "Check symptoms in Hindi",
+            "feature2": "All family records in one place",
+            "feature3": "Medicine reminders, never miss a dose"
+        },
+        "language": {
+            "title": "Choose Language",
+            "hindi": "हिंदी",
+            "english": "English"
+        },
+        "login": {
+            "title": "Enter Phone Number",
+            "phone": "Mobile Number",
+            "sendOtp": "Send OTP",
+            "enterOtp": "Enter OTP",
+            "verify": "Verify",
+            "resend": "Resend OTP"
+        },
+        "profile": {
+            "title": "Tell Us About Yourself",
+            "name": "Your Name",
+            "age": "Age",
+            "gender": "Gender",
+            "male": "Male",
+            "female": "Female",
+            "other": "Other",
+            "continue": "Continue"
+        }
+    },
+    "common": {
+        "next": "Next",
+        "back": "Back",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "share": "Share",
+        "loading": "Loading...",
+        "error": "Something went wrong. Please try again.",
+        "retry": "Try Again",
+        "close": "Close",
+        "search": "Search",
+        "noResults": "No results found",
+        "comingSoon": "Coming Soon!",
+        "yes": "Yes",
+        "no": "No"
+    }
+}

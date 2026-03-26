@@ -1,0 +1,245 @@
+{
+    "app": {
+        "name": "हेल्थसाथी",
+        "tagline": "आपका AI स्वास्थ्य साथी"
+    },
+    "nav": {
+        "home": "होम",
+        "symptoms": "लक्षण",
+        "records": "रिपोर्ट",
+        "medicines": "दवाइयाँ",
+        "profile": "प्रोफ़ाइल"
+    },
+    "greeting": {
+        "morning": "शुभ प्रभात",
+        "afternoon": "नमस्कार",
+        "evening": "शुभ संध्या",
+        "night": "शुभ रात्रि",
+        "suffix": "जी"
+    },
+    "home": {
+        "title": "आज का स्वास्थ्य",
+        "quickActions": "क्या करना है?",
+        "checkSymptoms": "लक्षण जाँचें",
+        "uploadRecord": "रिपोर्ट अपलोड करें",
+        "addMedicine": "दवाई जोड़ें",
+        "todayMeds": "आज की दवाइयाँ",
+        "recentRecords": "हाल की रिपोर्ट",
+        "noMeds": "कोई दवाई नहीं है",
+        "noRecords": "कोई रिपोर्ट नहीं है",
+        "healthSummary": "स्वास्थ्य सारांश",
+        "familyMembers": "परिवार के सदस्य"
+    },
+    "symptoms": {
+        "title": "लक्षण जाँचो",
+        "subtitle": "बताइए आपको क्या तकलीफ़ है",
+        "tapBody": "शरीर पर वहाँ टैप करें जहाँ तकलीफ़ है",
+        "inputPlaceholder": "अपना लक्षण लिखें... जैसे 'सिर में तेज़ दर्द है सुबह से'",
+        "voiceInput": "बोलकर बताएँ",
+        "submit": "जाँचें",
+        "checking": "जाँच हो रही है...",
+        "result": "जाँच का नतीजा",
+        "urgency": "कितना ज़रूरी है",
+        "possibleCauses": "संभावित कारण",
+        "homeCare": "घर पर क्या करें",
+        "doctorNotes": "डॉक्टर को क्या बताएँ",
+        "redFlags": "ये लक्षण दिखें तो तुरंत डॉक्टर को दिखाएँ",
+        "disclaimer": "⚕️ यह मेडिकल डायग्नोसिस नहीं है। किसी भी गंभीर तकलीफ़ के लिए अपने डॉक्टर से ज़रूर मिलें।",
+        "save": "सेव करें",
+        "shareWhatsApp": "WhatsApp पर शेयर करें",
+        "limitReached": "आज के मुफ़्त लक्षण जाँच ख़त्म हो गए। अनलिमिटेड जाँच के लिए हेल्थसाथी प्लस लें।",
+        "upgrade": "अपग्रेड करें",
+        "bodyParts": {
+            "head": "सिर",
+            "eyes": "आँखें",
+            "ears": "कान",
+            "throat": "गला",
+            "chest": "छाती",
+            "upperBack": "ऊपरी पीठ",
+            "stomach": "पेट",
+            "lowerBack": "कमर",
+            "arms": "बाँहें",
+            "hands": "हाथ",
+            "legs": "टाँगें",
+            "feet": "पैर"
+        },
+        "urgencyLevels": {
+            "emergency": "🚨 तुरंत अस्पताल जाएँ",
+            "urgent": "⚠️ 24 घंटे में डॉक्टर को दिखाएँ",
+            "soon": "🩺 2-3 दिन में डॉक्टर से मिलें",
+            "homeCare": "🏠 घर पर देखभाल करें"
+        },
+        "followUp": {
+            "duration": "कब से है?",
+            "severity": "दर्द कितना तेज़ है? (1-10)",
+            "pattern": "लगातार है या आता-जाता है?",
+            "associated": "और कोई तकलीफ़ भी है?",
+            "recent": "कुछ नया खाया या कहीं यात्रा की?"
+        }
+    },
+    "records": {
+        "title": "स्वास्थ्य रिपोर्ट",
+        "addRecord": "रिपोर्ट जोड़ें",
+        "camera": "कैमरा से फ़ोटो लें",
+        "gallery": "गैलरी से चुनें",
+        "pdf": "PDF अपलोड करें",
+        "manual": "खुद लिखें",
+        "processing": "AI रिपोर्ट पढ़ रहा है...",
+        "extracted": "AI ने यह पढ़ा",
+        "confirm": "सही है",
+        "edit": "बदलें",
+        "types": {
+            "all": "सभी",
+            "lab": "लैब रिपोर्ट",
+            "prescription": "पर्चा",
+            "xray": "एक्स-रे / स्कैन",
+            "vaccination": "टीकाकरण",
+            "discharge": "छुट्टी सारांश",
+            "other": "अन्य"
+        },
+        "search": "रिपोर्ट खोजें...",
+        "shareLink": "शेयर लिंक बनाएँ",
+        "linkCreated": "लिंक बन गया! 24 घंटे तक वैध है।",
+        "storageUsed": "स्टोरेज इस्तेमाल",
+        "storageFull": "स्टोरेज भर गया है। अपग्रेड करें।",
+        "noRecords": "अभी कोई रिपोर्ट नहीं है। अपनी पहली रिपोर्ट अपलोड करें!",
+        "abnormal": "असामान्य",
+        "normal": "सामान्य",
+        "notes": "नोट्स"
+    },
+    "medicines": {
+        "title": "दवाइयाँ",
+        "addMedicine": "दवाई जोड़ें",
+        "scanPrescription": "पर्चा स्कैन करें",
+        "manualAdd": "खुद जोड़ें",
+        "medicineName": "दवाई का नाम",
+        "dose": "खुराक",
+        "frequency": "कितनी बार",
+        "mealPref": "खाने से पहले / बाद",
+        "beforeFood": "खाने से पहले",
+        "afterFood": "खाने के बाद",
+        "withFood": "खाने के साथ",
+        "anytime": "कभी भी",
+        "quantity": "कितनी गोलियाँ बची हैं",
+        "refillDate": "दवाई फिर से लेनी होगी",
+        "times": {
+            "morning": "सुबह",
+            "afternoon": "दोपहर",
+            "evening": "शाम",
+            "night": "रात"
+        },
+        "taken": "ले ली ✓",
+        "missed": "छूट गई",
+        "takeMedicine": "दवाई लें",
+        "streak": "दिन से दवाई समय पर ली — शाबाश! 🎉",
+        "lowStock": "⚠️ दवाई कम बची है",
+        "orderRefill": "दवाई मँगाओ",
+        "genericAvailable": "सस्ती जेनेरिक दवाई उपलब्ध",
+        "savings": "बचत",
+        "missedDose": {
+            "title": "खुराक छूट गई — क्या करें?",
+            "safeToTake": "अभी ले सकते हैं",
+            "skipDose": "यह खुराक छोड़ दें, अगली समय पर लें"
+        },
+        "interactions": {
+            "warning": "⚠️ दवाइयों का खतरनाक मिलान",
+            "detail": "ये दवाइयाँ साथ में लेना खतरनाक हो सकता है। डॉक्टर से बात करें।"
+        }
+    },
+    "subscription": {
+        "title": "प्लान चुनें",
+        "free": "मुफ़्त",
+        "plus": "हेल्थसाथी प्लस",
+        "family": "हेल्थसाथी फ़ैमिली",
+        "perMonth": "/महीना",
+        "perYear": "/साल",
+        "monthly": "मासिक",
+        "annual": "वार्षिक",
+        "saveBadge": "बचाएँ",
+        "currentPlan": "आपका प्लान",
+        "upgrade": "अपग्रेड करें",
+        "features": "क्या मिलेगा",
+        "unlimited": "अनलिमिटेड",
+        "popular": "सबसे लोकप्रिय"
+    },
+    "emergency": {
+        "title": "🚨 इमरजेंसी",
+        "call108": "108 — एम्बुलेंस",
+        "call112": "112 — हेल्पलाइन",
+        "nearestHospital": "नज़दीकी अस्पताल",
+        "warning": "जान का खतरा हो तो तुरंत 108 कॉल करें!"
+    },
+    "profile": {
+        "title": "प्रोफ़ाइल",
+        "familyMembers": "परिवार के सदस्य",
+        "addMember": "सदस्य जोड़ें",
+        "subscription": "सब्सक्रिप्शन",
+        "notifications": "नोटिफ़िकेशन",
+        "language": "भाषा",
+        "privacy": "प्राइवेसी",
+        "deleteData": "सारा डेटा मिटाएँ",
+        "logout": "लॉग आउट",
+        "settings": "सेटिंग्स",
+        "relation": {
+            "self": "मैं",
+            "father": "पिताजी",
+            "mother": "माताजी",
+            "wife": "पत्नी",
+            "husband": "पति",
+            "son": "बेटा",
+            "daughter": "बेटी",
+            "brother": "भाई",
+            "sister": "बहन",
+            "other": "अन्य"
+        }
+    },
+    "onboarding": {
+        "welcome": {
+            "title": "हेल्थसाथी में आपका स्वागत है",
+            "subtitle": "आपका भरोसेमंद AI स्वास्थ्य साथी",
+            "feature1": "लक्षण हिंदी में जाँचें",
+            "feature2": "परिवार की सभी रिपोर्ट एक जगह",
+            "feature3": "दवाई का रिमाइंडर, कभी न भूलें"
+        },
+        "language": {
+            "title": "भाषा चुनें",
+            "hindi": "हिंदी",
+            "english": "English"
+        },
+        "login": {
+            "title": "फ़ोन नंबर दें",
+            "phone": "मोबाइल नंबर",
+            "sendOtp": "OTP भेजें",
+            "enterOtp": "OTP डालें",
+            "verify": "वेरिफ़ाई करें",
+            "resend": "OTP दोबारा भेजें"
+        },
+        "profile": {
+            "title": "अपने बारे में बताएँ",
+            "name": "आपका नाम",
+            "age": "उम्र",
+            "gender": "लिंग",
+            "male": "पुरुष",
+            "female": "महिला",
+            "other": "अन्य",
+            "continue": "आगे बढ़ें"
+        }
+    },
+    "common": {
+        "next": "आगे",
+        "back": "पीछे",
+        "save": "सेव करें",
+        "cancel": "रद्द करें",
+        "delete": "मिटाएँ",
+        "share": "शेयर करें",
+        "loading": "लोड हो रहा है...",
+        "error": "कुछ गड़बड़ हो गई। कृपया दोबारा कोशिश करें।",
+        "retry": "फिर से कोशिश करें",
+        "close": "बंद करें",
+        "search": "खोजें",
+        "noResults": "कोई नतीजा नहीं मिला",
+        "comingSoon": "जल्द आ रहा है!",
+        "yes": "हाँ",
+        "no": "नहीं"
+    }
+}
