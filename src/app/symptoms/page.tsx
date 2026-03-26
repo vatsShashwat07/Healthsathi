@@ -56,6 +56,7 @@ const bodyRegions: {
         { key: "feet", x: 36, y: 82, w: 28, h: 12 },
     ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean) {
     const t = text.toLowerCase();
 

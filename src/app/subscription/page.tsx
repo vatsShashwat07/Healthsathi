@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import BottomNav from "@/components/shared/BottomNav";
-import { ArrowLeft, Check, Sparkles, Crown, Zap } from "lucide-react";
+import { ArrowLeft, Check, Crown, Zap } from "lucide-react";
 import Link from "next/link";
 import Script from "next/script";
 
@@ -87,6 +87,7 @@ export default function SubscriptionPage() {
             }
 
             // 2. Open Razorpay Checktout 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const options = {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
                 amount: orderData.amount,
