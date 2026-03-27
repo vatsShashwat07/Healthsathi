@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
+
 
 export async function POST(req: Request) {
   try {
@@ -12,7 +12,6 @@ export async function POST(req: Request) {
       );
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const langInstructions = isHindi
       ? "IMPORTANT: You MUST return all text fields entirely in strictly Devanagari Hindi (e.g., 'वायरल बुखार', 'आराम करें'). Do NOT use English."
       : "IMPORTANT: You MUST return all text fields entirely in English.";
@@ -46,16 +45,28 @@ You must return ONLY a JSON object with the following schema:
 }
 `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        temperature: 0.2,
-      }
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.2,
+          responseMimeType: "application/json"
+        }
+      })
     });
 
-    const data = JSON.parse(response.text || "{}");
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Gemini Native REST Error:", errorText);
+      throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
+    }
+
+    const json = await response.json();
+    const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    const data = JSON.parse(rawText);
+
     return NextResponse.json(data);
 
   } catch (error: unknown) {
