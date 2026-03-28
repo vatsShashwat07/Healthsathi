@@ -97,6 +97,8 @@ function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean
                 ? ["अगर खून की उल्टी हो या मल में खून", "अगर दर्द बहुत तेज़ और अचानक", "अगर बुखार 101°F से ऊपर", "अगर 2 दिन से मल त्याग न हो"]
                 : ["Blood in vomit or stool", "Very severe and sudden pain", "Fever above 101°F", "No bowel movement for 2+ days"]
             ),
+            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
+            confidence: 90,
         };
     }
 
@@ -118,6 +120,8 @@ function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean
             redFlags: isHindi
                 ? ["⚠️ बाएँ हाथ/जबड़े में दर्द → तुरंत 108 कॉल करें", "साँस लेने में बहुत तकलीफ़", "पसीना और चक्कर आए", "दर्द 20 मिनट से ज़्यादा रहे"]
                 : ["⚠️ Pain in left arm/jaw → Call 108 immediately", "Severe difficulty breathing", "Sweating and dizziness", "Pain lasting more than 20 minutes"],
+            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
+            confidence: 88,
         };
     }
 
@@ -139,6 +143,8 @@ function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean
             redFlags: isHindi
                 ? ["बुखार 101°F से ऊपर", "5 दिन से ज़्यादा खराश", "साँस लेने में तकलीफ़", "गर्दन में गाँठ"]
                 : ["Fever above 101°F", "Sore throat lasting 5+ days", "Difficulty breathing", "Lump in neck"],
+            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
+            confidence: 95,
         };
     }
 
@@ -160,6 +166,8 @@ function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean
             redFlags: isHindi
                 ? ["अचानक दिखना बंद हो", "लगातार पानी या पस आए", "लालिमा और दर्द बढ़े"]
                 : ["Sudden vision loss", "Continuous watering or pus discharge", "Increasing redness and pain"],
+            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
+            confidence: 92,
         };
     }
 
@@ -181,6 +189,8 @@ function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean
             redFlags: isHindi
                 ? ["पैर में सूजन और लालिमा", "पैर हिलाने में असमर्थ", "तेज़ और अचानक दर्द"]
                 : ["Swelling and redness in leg", "Unable to move the leg", "Severe and sudden pain"],
+            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
+            confidence: 85,
         };
     }
 
@@ -202,6 +212,8 @@ function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean
             redFlags: isHindi
                 ? ["पैर सुन्न हो जाएँ", "पेशाब में दिक्कत", "1 हफ़्ते से ज़्यादा दर्द रहे"]
                 : ["Numbness in legs", "Difficulty urinating", "Pain lasting more than 1 week"],
+            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
+            confidence: 89,
         };
     }
 
@@ -222,6 +234,8 @@ function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean
         redFlags: isHindi
             ? ["बुखार 102°F से ऊपर", "गर्दन अकड़ जाए", "देखने में धुंधलापन", "उल्टी रुके नहीं"]
             : ["Fever above 102°F", "Stiff neck", "Blurred vision", "Persistent vomiting"],
+        disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
+        confidence: 94,
     };
 }
 
@@ -431,6 +445,32 @@ export default function SymptomsPage() {
         }
     };
 
+    // ===== SHARE & SAVE =====
+    const handleSave = () => {
+        window.print();
+    };
+
+    const handleShare = () => {
+        if (!currentResult) return;
+        let text = isHindi ? "*HealthSathi - AI हेल्थ असेसमेंट*\n\n" : "*HealthSathi - AI Symptom Assessment*\n\n";
+        text += isHindi ? `*स्थिति:* ${currentResult.urgencyLevel}\n\n*संभावित कारण:*\n` : `*Urgency:* ${currentResult.urgencyLevel.toUpperCase()}\n\n*Possible Causes:*\n`;
+
+        currentResult.possibleCauses.forEach(c => {
+            text += `- ${c.name} (${c.likelihood})\n`;
+        });
+
+        text += isHindi ? `\n*खतरे के संकेत:*\n` : `\n*Red Flags:*\n`;
+        currentResult.redFlags.forEach(r => {
+            text += `⚠️ ${r}\n`;
+        });
+
+        text += `\n_Note: ${currentResult.disclaimer || "This is an AI generated response and not medical advice."}_\n`;
+        text += `View full details on https://healthsathi.vercel.app`;
+
+        const encoded = encodeURIComponent(text);
+        window.open(`https://wa.me/?text=${encoded}`, '_blank');
+    };
+
     // ===== EMERGENCY OVERLAY =====
     if (showEmergency && emergencyKeyword) {
         return (
@@ -601,11 +641,11 @@ export default function SymptomsPage() {
 
                     {/* Actions */}
                     <div className="flex gap-3">
-                        <button className="btn-secondary flex-1 text-sm gap-2">
+                        <button onClick={handleSave} className="btn-secondary flex-1 text-sm gap-2">
                             <Bookmark size={16} />
                             {t("symptoms.save")}
                         </button>
-                        <button className="btn-primary flex-1 text-sm gap-2">
+                        <button onClick={handleShare} className="btn-primary flex-1 text-sm gap-2">
                             <Share2 size={16} />
                             {t("symptoms.shareWhatsApp")}
                         </button>
