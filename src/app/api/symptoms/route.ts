@@ -28,20 +28,25 @@ ${langInstructions}
 
 You must return ONLY a JSON object with the following schema:
 {
-  "urgencyLevel": "normal" | "warning" | "critical",
-  "causes": [
+  "urgencyLevel": "emergency" | "urgent" | "soon" | "homeCare",
+  "possibleCauses": [
     {
       "name": "Name of the condition",
-      "description": "Short description of why it fits"
+      "description": "Short description of why it fits",
+      "likelihood": "high" | "medium" | "low"
     }
   ],
   "homeCareTips": [
     "Tip 1", "Tip 2"
   ],
-  "doctorNotes": "Advice on when and why to see a doctor",
+  "doctorNotes": [
+    "Note 1 on when/why to see a doctor", "Note 2"
+  ],
   "redFlags": [
     "Critical symptom 1", "Critical symptom 2"
-  ]
+  ],
+  "disclaimer": "This is an AI generated response and not medical advice.",
+  "confidence": 85
 }
 `;
 
