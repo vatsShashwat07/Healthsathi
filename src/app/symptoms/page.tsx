@@ -27,7 +27,7 @@ import {
     Search,
 } from "lucide-react";
 import Link from "next/link";
-import type { BodyRegion, UrgencyLevel } from "@/types";
+import type { BodyRegion, UrgencyLevel, SymptomResult } from "@/types";
 import { detectEmergency } from "@/lib/emergency";
 import {
     trackSymptomCheck,
@@ -55,190 +55,6 @@ const bodyRegions: {
         { key: "legs", x: 36, y: 52, w: 28, h: 30 },
         { key: "feet", x: 36, y: 82, w: 28, h: 12 },
     ];
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getDemoResult(region: BodyRegion | null, text: string, isHindi: boolean) {
-    const t = text.toLowerCase();
-
-    // ===== Stomach / pet dard — includes Indian diseases (Dengue, Typhoid) weighted for monsoon season =====
-    if (region === "stomach" || t.includes("pet") || t.includes("stomach") || t.includes("पेट") || t.includes("acidity") || t.includes("gas") || t.includes("bukhar") || t.includes("fever") || t.includes("बुखार") || t.includes("dengue") || t.includes("डेंगू") || t.includes("malaria") || t.includes("मलेरिया") || t.includes("typhoid") || t.includes("टाइफ़ाइड")) {
-        // Detect if fever-related to weight Indian diseases higher
-        const hasFever = t.includes("fever") || t.includes("bukhar") || t.includes("बुखार") || t.includes("dengue") || t.includes("malaria") || t.includes("typhoid") || t.includes("डेंगू") || t.includes("मलेरिया") || t.includes("टाइफ़ाइड");
-        return {
-            urgencyLevel: (hasFever ? "urgent" : "soon") as UrgencyLevel,
-            possibleCauses: hasFever ? [
-                { name: isHindi ? "डेंगू बुखार" : "Dengue Fever", description: isHindi ? "मच्छर से फैलने वाला वायरल बुखार — तेज़ बुखार, शरीर/जोड़ों में तेज़ दर्द, प्लेटलेट्स गिरना (मानसून में ज़्यादा)" : "Mosquito-borne viral fever — high temperature, severe body/joint pain, platelet drop (monsoon peak season)", likelihood: "high" as const },
-                { name: isHindi ? "मलेरिया" : "Malaria", description: isHindi ? "प्लास्मोडियम परजीवी — ठंड लगकर बुखार, पसीना, सिरदर्द (बारिश के मौसम में आम)" : "Plasmodium parasite — chills then fever then sweating cycle, headache (common in rainy season)", likelihood: "medium" as const },
-                { name: isHindi ? "टाइफ़ाइड" : "Typhoid Fever", description: isHindi ? "दूषित पानी/खाने से — लगातार बुखार, पेट दर्द, कमज़ोरी" : "Contaminated food/water — sustained fever, abdominal pain, weakness", likelihood: "medium" as const },
-                { name: isHindi ? "वायरल बुखार" : "Viral Fever", description: isHindi ? "मौसमी वायरल इन्फेक्शन — बुखार, बदन दर्द, थकान" : "Seasonal viral infection — fever, body ache, fatigue", likelihood: "low" as const },
-            ] : [
-                { name: isHindi ? "गैस्ट्राइटिस" : "Gastritis", description: isHindi ? "पेट की अंदरूनी परत में सूजन — मसालेदार खाने से" : "Inflammation of stomach lining — from spicy food", likelihood: "high" as const },
-                { name: isHindi ? "एसिडिटी" : "Acid Reflux (GERD)", description: isHindi ? "पेट का एसिड ऊपर आना, सीने में जलन" : "Stomach acid rises up, causes heartburn", likelihood: "medium" as const },
-                { name: isHindi ? "इरिटेबल बाउल सिंड्रोम (IBS)" : "Irritable Bowel Syndrome (IBS)", description: isHindi ? "पेट में ऐंठन, गैस, और मल त्याग में बदलाव" : "Abdominal cramps, gas, and irregular bowel movements", likelihood: "low" as const },
-            ],
-            homeCareTips: hasFever ? (isHindi
-                ? ["ज़्यादा से ज़्यादा पानी, ORS, नारियल पानी पिएँ", "Paracetamol 500mg — दिन में 3 बार (खाने के बाद)", "शरीर को गीले कपड़े से पोंछें — बुखार कम करने के लिए", "मच्छरदानी लगाकर सोएँ", "प्लेटलेट्स कम हों तो पपीते के पत्ते का रस पिएँ", "⚠️ खून का टेस्ट (CBC + Dengue NS1 + Widal) तुरंत कराएँ"]
-                : ["Drink plenty of water, ORS, coconut water — stay hydrated", "Paracetamol 500mg — 3 times a day (after meals)", "Sponge body with wet cloth to reduce fever", "Sleep under mosquito net", "Papaya leaf juice may help if platelets are low", "⚠️ Get blood test immediately (CBC + Dengue NS1 + Widal)"]
-            ) : (isHindi
-                ? ["हल्का और सादा खाना खाएँ — खिचड़ी, दही, केला", "तेल, मसाला, चाय-कॉफ़ी से बचें", "गुनगुना पानी पिएँ — 8-10 गिलास", "जीरे का पानी या अजवाइन चबाएँ", "ज़रूरत हो तो Antacid (Gelusil/Digene) लें"]
-                : ["Eat light bland food — khichdi, yogurt, banana", "Avoid oil, spices, tea, and coffee", "Drink warm water — 8-10 glasses daily", "Try cumin water or ajwain (carom seeds)", "Take Antacid (Gelusil/Digene) if needed"]
-            ),
-            doctorNotes: hasFever ? (isHindi
-                ? ["तेज़ बुखार 2 दिन से — 102-104°F", "शरीर और जोड़ों में तेज़ दर्द", "भूख नहीं लग रही, कमज़ोरी", "रैश/लाल दाने दिख रहे हैं"]
-                : ["High fever for 2 days — 102-104°F", "Severe body and joint pain", "Loss of appetite, weakness", "Rash/red spots appearing on skin"]
-            ) : (isHindi
-                ? ["पेट दर्द खाने के बाद बढ़ता है", "दर्द की तीव्रता 5/10", "गैस और bloating की शिकायत", "1 हफ़्ते से समस्या"]
-                : ["Stomach pain worsens after eating", "Pain severity 5/10", "Complaint of gas and bloating", "Problem since 1 week"]
-            ),
-            redFlags: hasFever ? (isHindi
-                ? ["प्लेटलेट्स 50,000 से नीचे → तुरंत अस्पताल", "मसूड़ों या नाक से खून", "बुखार 104°F से ऊपर — 2 दिन से", "पेशाब बहुत कम या बंद"]
-                : ["Platelets below 50,000 → rush to hospital", "Bleeding from gums or nose", "Fever above 104°F for 2+ days", "Very low or no urine output"]
-            ) : (isHindi
-                ? ["अगर खून की उल्टी हो या मल में खून", "अगर दर्द बहुत तेज़ और अचानक", "अगर बुखार 101°F से ऊपर", "अगर 2 दिन से मल त्याग न हो"]
-                : ["Blood in vomit or stool", "Very severe and sudden pain", "Fever above 101°F", "No bowel movement for 2+ days"]
-            ),
-            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
-            confidence: 90,
-        };
-    }
-
-    // ===== Chest =====
-    if (region === "chest" || t.includes("chest") || t.includes("chhati") || t.includes("सीने") || t.includes("छाती")) {
-        return {
-            urgencyLevel: "urgent" as UrgencyLevel,
-            possibleCauses: [
-                { name: isHindi ? "मांसपेशी खिंचाव" : "Muscle Strain", description: isHindi ? "छाती की मांसपेशियों में खिंचाव" : "Strain in chest muscles due to exertion", likelihood: "high" as const },
-                { name: isHindi ? "एसिड रिफ़्लक्स (GERD)" : "Acid Reflux (GERD)", description: isHindi ? "पेट का एसिड ऊपर आना — जलन" : "Stomach acid rising up — burning sensation", likelihood: "medium" as const },
-                { name: isHindi ? "चिंता / एंग्ज़ाइटी" : "Anxiety / Panic Attack", description: isHindi ? "तनाव से सीने में दबाव और साँस में दिक्कत" : "Stress causing chest tightness and breathlessness", likelihood: "medium" as const },
-            ],
-            homeCareTips: isHindi
-                ? ["शांत बैठें और गहरी साँस लें", "ढीले कपड़े पहनें", "गुनगुना पानी पिएँ", "एसिडिटी हो तो Antacid लें"]
-                : ["Sit calmly and take deep breaths", "Wear loose clothing", "Drink lukewarm water", "Take Antacid if acidity is suspected"],
-            doctorNotes: isHindi
-                ? ["सीने में दर्द", "साँस लेने पर दर्द की स्थिति", "दबाने पर tender"]
-                : ["Chest pain reported", "Pain on breathing noted", "Tender on palpation"],
-            redFlags: isHindi
-                ? ["⚠️ बाएँ हाथ/जबड़े में दर्द → तुरंत 108 कॉल करें", "साँस लेने में बहुत तकलीफ़", "पसीना और चक्कर आए", "दर्द 20 मिनट से ज़्यादा रहे"]
-                : ["⚠️ Pain in left arm/jaw → Call 108 immediately", "Severe difficulty breathing", "Sweating and dizziness", "Pain lasting more than 20 minutes"],
-            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
-            confidence: 88,
-        };
-    }
-
-    // ===== Throat =====
-    if (region === "throat" || t.includes("throat") || t.includes("gala") || t.includes("गला") || t.includes("cough") || t.includes("khansi") || t.includes("खाँसी")) {
-        return {
-            urgencyLevel: "homecare" as UrgencyLevel,
-            possibleCauses: [
-                { name: isHindi ? "गले का संक्रमण" : "Pharyngitis", description: isHindi ? "वायरल इन्फेक्शन से गले में खराश" : "Viral infection causing sore throat", likelihood: "high" as const },
-                { name: isHindi ? "टॉन्सिलाइटिस" : "Tonsillitis", description: isHindi ? "टॉन्सिल्स में सूजन — निगलने में दर्द" : "Swollen tonsils — pain while swallowing", likelihood: "medium" as const },
-                { name: isHindi ? "एलर्जी" : "Allergy", description: isHindi ? "धूल या मौसम बदलने से खराश" : "Irritation from dust or weather change", likelihood: "low" as const },
-            ],
-            homeCareTips: isHindi
-                ? ["गर्म पानी में नमक डालकर गरारे — दिन में 3-4 बार", "शहद-अदरक की चाय पिएँ", "ठंडी चीज़ें बंद करें", "हल्दी वाला दूध (Golden Milk) पिएँ", "Strepsils या Vicks गोली चूसें"]
-                : ["Gargle with warm salt water — 3-4 times a day", "Drink honey-ginger tea", "Avoid cold food and drinks", "Drink turmeric milk (Golden Milk)", "Suck on Strepsils or Vicks lozenges"],
-            doctorNotes: isHindi
-                ? ["गले में खराश 2 दिन से", "निगलने में हल्का दर्द", "बुखार नहीं है"]
-                : ["Sore throat for 2 days", "Mild pain while swallowing", "No fever"],
-            redFlags: isHindi
-                ? ["बुखार 101°F से ऊपर", "5 दिन से ज़्यादा खराश", "साँस लेने में तकलीफ़", "गर्दन में गाँठ"]
-                : ["Fever above 101°F", "Sore throat lasting 5+ days", "Difficulty breathing", "Lump in neck"],
-            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
-            confidence: 95,
-        };
-    }
-
-    // ===== Eyes =====
-    if (region === "eyes" || t.includes("eye") || t.includes("aankh") || t.includes("आँख")) {
-        return {
-            urgencyLevel: "homecare" as UrgencyLevel,
-            possibleCauses: [
-                { name: isHindi ? "आई स्ट्रेन / डिजिटल थकान" : "Digital Eye Strain", description: isHindi ? "स्क्रीन ज़्यादा देखने से थकान" : "Fatigue from excessive screen use", likelihood: "high" as const },
-                { name: isHindi ? "ड्राई आई" : "Dry Eyes", description: isHindi ? "आँखों में नमी की कमी — जलन" : "Lack of moisture in eyes — burning", likelihood: "medium" as const },
-                { name: isHindi ? "कॉन्जंक्टिवाइटिस" : "Conjunctivitis (Pink Eye)", description: isHindi ? "आँख का संक्रमण — लालिमा" : "Eye infection — redness and discharge", likelihood: "low" as const },
-            ],
-            homeCareTips: isHindi
-                ? ["20-20-20 Rule: हर 20 min में 20 sec 20 ft दूर देखें", "स्क्रीन brightness कम करें", "ठंडे पानी से आँखें धोएँ", "Artificial tears — दिन में 3-4 बार"]
-                : ["20-20-20 Rule: Every 20 min, look 20 ft away for 20 sec", "Reduce screen brightness", "Wash eyes with cold water", "Use artificial tears — 3-4 times daily"],
-            doctorNotes: isHindi
-                ? ["आँखों में दर्द/थकान", "डिजिटल स्क्रीन का ज़्यादा use"]
-                : ["Eye pain/fatigue reported", "Excessive digital screen usage"],
-            redFlags: isHindi
-                ? ["अचानक दिखना बंद हो", "लगातार पानी या पस आए", "लालिमा और दर्द बढ़े"]
-                : ["Sudden vision loss", "Continuous watering or pus discharge", "Increasing redness and pain"],
-            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
-            confidence: 92,
-        };
-    }
-
-    // ===== Legs / joints =====
-    if (region === "legs" || region === "feet" || t.includes("leg") || t.includes("ghutna") || t.includes("joint") || t.includes("घुटना") || t.includes("पैर")) {
-        return {
-            urgencyLevel: "soon" as UrgencyLevel,
-            possibleCauses: [
-                { name: isHindi ? "मांसपेशी ऐंठन" : "Muscle Cramps", description: isHindi ? "dehydration या थकान से ऐंठन" : "Cramping from dehydration or fatigue", likelihood: "high" as const },
-                { name: isHindi ? "जोड़ों का दर्द" : "Joint Pain (Arthralgia)", description: isHindi ? "घुटने/टखने में दर्द — उम्र या चोट से" : "Knee/ankle pain — from age or injury", likelihood: "medium" as const },
-                { name: isHindi ? "साइटिका" : "Sciatica", description: isHindi ? "कमर से पैर तक नस में दर्द" : "Nerve pain radiating from lower back to leg", likelihood: "low" as const },
-            ],
-            homeCareTips: isHindi
-                ? ["गर्म सिकाई — 15-20 मिनट", "हल्की stretching करें", "ज़्यादा पानी पिएँ", "Combiflam/Ibuprofen दर्द ज़्यादा हो तो"]
-                : ["Hot compress — 15-20 minutes", "Light stretching exercises", "Drink more water", "Combiflam/Ibuprofen if pain is severe"],
-            doctorNotes: isHindi
-                ? ["पैर/घुटने में दर्द", "चलने पर बढ़ता है"]
-                : ["Leg/knee pain reported", "Worsens with walking"],
-            redFlags: isHindi
-                ? ["पैर में सूजन और लालिमा", "पैर हिलाने में असमर्थ", "तेज़ और अचानक दर्द"]
-                : ["Swelling and redness in leg", "Unable to move the leg", "Severe and sudden pain"],
-            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
-            confidence: 85,
-        };
-    }
-
-    // ===== Back =====
-    if (region === "upperBack" || region === "lowerBack" || t.includes("back") || t.includes("kamar") || t.includes("कमर") || t.includes("पीठ")) {
-        return {
-            urgencyLevel: "soon" as UrgencyLevel,
-            possibleCauses: [
-                { name: isHindi ? "मांसपेशी खिंचाव" : "Muscle Strain", description: isHindi ? "गलत posture से कमर दर्द" : "Back pain from poor posture", likelihood: "high" as const },
-                { name: isHindi ? "स्लिप डिस्क" : "Herniated Disc", description: isHindi ? "रीढ़ की डिस्क पर दबाव" : "Pressure on spinal disc", likelihood: "medium" as const },
-                { name: isHindi ? "किडनी समस्या" : "Kidney Issue", description: isHindi ? "कमर के पीछे गहरा दर्द" : "Deep pain behind the lower back", likelihood: "low" as const },
-            ],
-            homeCareTips: isHindi
-                ? ["सीधा बैठें, एक position में ज़्यादा देर न रहें", "गर्म सिकाई 20 min, दिन में 2-3 बार", "हल्के back stretches करें", "सख़्त गद्दे पर सोएँ", "Diclofenac gel लगाएँ"]
-                : ["Sit upright, don't stay in one position too long", "Hot compress 20 min, 2-3 times daily", "Do light back stretches", "Sleep on a firm mattress", "Apply Diclofenac gel"],
-            doctorNotes: isHindi
-                ? ["कमर दर्द", "बैठने से बढ़ता है"]
-                : ["Lower back pain reported", "Worsens with prolonged sitting"],
-            redFlags: isHindi
-                ? ["पैर सुन्न हो जाएँ", "पेशाब में दिक्कत", "1 हफ़्ते से ज़्यादा दर्द रहे"]
-                : ["Numbness in legs", "Difficulty urinating", "Pain lasting more than 1 week"],
-            disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
-            confidence: 89,
-        };
-    }
-
-    // ===== Default — headache =====
-    return {
-        urgencyLevel: "soon" as UrgencyLevel,
-        possibleCauses: [
-            { name: isHindi ? "माइग्रेन" : "Migraine", description: isHindi ? "एक तरफ़ सिर में तेज़ दर्द — 4-72 घंटे" : "Intense one-sided headache — lasts 4-72 hours", likelihood: "high" as const },
-            { name: isHindi ? "तनाव सिरदर्द" : "Tension Headache", description: isHindi ? "सिर के दोनों तरफ़ दबाव — तनाव/थकान से" : "Pressure on both sides — from stress/fatigue", likelihood: "medium" as const },
-            { name: isHindi ? "साइनस" : "Sinusitis", description: isHindi ? "नाक बंद + माथे के पास दर्द" : "Nasal congestion + pain near forehead", likelihood: "low" as const },
-        ],
-        homeCareTips: isHindi
-            ? ["अंधेरे शांत कमरे में आराम करें", "माथे पर ठंडा कपड़ा रखें", "ज़्यादा पानी पिएँ — 8 गिलास", "दर्द ज़्यादा हो तो Paracetamol 500mg लें"]
-            : ["Rest in a dark, quiet room", "Place a cold cloth on your forehead", "Drink plenty of water — 8 glasses", "Take Paracetamol 500mg if pain is severe"],
-        doctorNotes: isHindi
-            ? ["सिर दर्द सुबह से, दायीं तरफ़ ज़्यादा", "तीव्रता 7/10", "रोशनी से बढ़ता है", "2 हफ़्ते में 3 बार हुआ"]
-            : ["Headache since morning, worse on right side", "Severity 7/10", "Aggravated by light", "Occurred 3 times in 2 weeks"],
-        redFlags: isHindi
-            ? ["बुखार 102°F से ऊपर", "गर्दन अकड़ जाए", "देखने में धुंधलापन", "उल्टी रुके नहीं"]
-            : ["Fever above 102°F", "Stiff neck", "Blurred vision", "Persistent vomiting"],
-        disclaimer: isHindi ? "यह एक AI जनरेटेड रिपोर्ट है, चिकित्सीय सलाह नहीं।" : "This is an AI generated response and not medical advice.",
-        confidence: 94,
-    };
-}
-
 
 /* ===== Emergency Overlay Component ===== */
 function EmergencyOverlay({
@@ -336,11 +152,10 @@ export default function SymptomsPage() {
     const { t, isHindi } = useLanguage();
     const [selectedRegion, setSelectedRegion] = useState<BodyRegion | null>(null);
     const [symptomText, setSymptomText] = useState("");
-    const [showResult, setShowResult] = useState(false);
     const [isChecking, setIsChecking] = useState(false);
     const [isListening, setIsListening] = useState(false);
-    const [currentResult, setCurrentResult] = useState<ReturnType<typeof getDemoResult> | null>(null);
-    // Emergency detection state
+    const [currentResult, setCurrentResult] = useState<SymptomResult | null>(null);
+    const [showResult, setShowResult] = useState(false);
     const [emergencyKeyword, setEmergencyKeyword] = useState<string | null>(null);
     const [showEmergency, setShowEmergency] = useState(false);
     const [showPaywall, setShowPaywall] = useState(false);

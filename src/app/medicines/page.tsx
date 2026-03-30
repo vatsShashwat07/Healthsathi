@@ -22,6 +22,8 @@ import {
     ShieldCheck,
 } from "lucide-react";
 import { trackMedicineTaken, trackRefillOrder, trackGenericToggle } from "@/lib/analytics";
+import { useAuth } from "@/context/AuthContext";
+import { createClient } from "@/utils/supabase/client";
 
 // ===== Refill Date Calculation =====
 function calculateRefillDate(tabletsRemaining: number, dosesPerDay: number): string {
@@ -39,20 +41,6 @@ function formatRefillInfo(tabletsRemaining: number, dosesPerDay: number, isHindi
         : `${tabletsRemaining} tablets left • ${daysLeft} days remaining • Refill by: ${dateStr}`;
 }
 
-const demoSchedule = {
-    morning: [
-        { id: "1", name: "Metformin 500mg", dose: "1 गोली", doseEn: "1 tablet", meal: "खाने के बाद", mealEn: "After meals", status: "taken", generic: null, genericEn: null, remaining: 25, dosesPerDay: 2 },
-        { id: "2", name: "Amlodipine 5mg", dose: "1 गोली", doseEn: "1 tablet", meal: "खाने से पहले", mealEn: "Before meals", status: "pending", generic: "Generic ₹12 — Brand ₹85 (बचत 86%)", genericEn: "Generic ₹12 — Brand ₹85 (Save 86%)", remaining: 5, dosesPerDay: 1 },
-    ],
-    afternoon: [
-        { id: "3", name: "Calcium D3", dose: "1 गोली", doseEn: "1 tablet", meal: "खाने के साथ", mealEn: "With meals", status: "pending", generic: null, genericEn: null, remaining: 30, dosesPerDay: 1 },
-    ],
-    evening: [],
-    night: [
-        { id: "4", name: "Atorvastatin 10mg", dose: "1 गोली", doseEn: "1 tablet", meal: "खाने के बाद", mealEn: "After meals", status: "pending", generic: "Generic ₹8 — Brand ₹120 (बचत 93%)", genericEn: "Generic ₹8 — Brand ₹120 (Save 93%)", remaining: 12, dosesPerDay: 1 },
-    ],
-};
-
 const timeSlots = [
     { key: "morning", emoji: "🌅" },
     { key: "afternoon", emoji: "☀️" },
@@ -62,10 +50,53 @@ const timeSlots = [
 
 export default function MedicinesPage() {
     const { t, isHindi } = useLanguage();
-    const [takenIds, setTakenIds] = useState<Set<string>>(new Set(["1"]));
+    const { user } = useAuth();
+    const supabase = createClient();
+
+    const [takenIds, setTakenIds] = useState<Set<string>>(new Set());
     const [showRefill, setShowRefill] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showGeneric, setShowGeneric] = useState(true);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [schedule, setSchedule] = useState<any>({ morning: [], afternoon: [], evening: [], night: [] });
+    const [isLoading, setIsLoading] = useState(true);
+
+    React.useEffect(() => {
+        if (!user) return;
+        const fetchMeds = async () => {
+            const { data } = await supabase.from('medicines').select('*').eq('user_id', user.id);
+            if (data) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const newSchedule: any = { morning: [], afternoon: [], evening: [], night: [] };
+                data.forEach(m => {
+                    const time = m.time_en.toLowerCase();
+                    const formatted = {
+                        id: m.id,
+                        name: m.name_en,
+                        name_hi: m.name_hi,
+                        dose: "1 गोली",
+                        doseEn: "1 tablet",
+                        meal: m.time_hi,
+                        mealEn: m.time_en,
+                        status: m.status,
+                        remaining: m.stock_remaining || 30,
+                        dosesPerDay: 1,
+                        generic: null,
+                        genericEn: null,
+                        emoji: m.emoji || "💊"
+                    };
+                    if (time.includes('afternoon')) newSchedule.afternoon.push(formatted);
+                    else if (time.includes('evening')) newSchedule.evening.push(formatted);
+                    else if (time.includes('night')) newSchedule.night.push(formatted);
+                    else newSchedule.morning.push(formatted);
+                });
+                setSchedule(newSchedule);
+            }
+            setIsLoading(false);
+        };
+        fetchMeds();
+    }, [user, supabase]);
 
     const toggleTaken = (id: string) => {
         const next = new Set(takenIds);
@@ -84,9 +115,9 @@ export default function MedicinesPage() {
         trackGenericToggle(newState);
     };
 
-    const totalMeds = Object.values(demoSchedule).flat().length;
+    const totalMeds = Object.values(schedule).flat().length;
     const takenCount = takenIds.size;
-    const progress = Math.round((takenCount / totalMeds) * 100);
+    const progress = totalMeds === 0 ? 0 : Math.round((takenCount / totalMeds) * 100);
 
     return (
         <div className="w-full min-h-screen pb-nav">
@@ -179,7 +210,7 @@ export default function MedicinesPage() {
                 {/* Schedule */}
                 <div className="space-y-4 stagger-children">
                     {timeSlots.map((slot) => {
-                        const meds = demoSchedule[slot.key as keyof typeof demoSchedule];
+                        const meds = schedule[slot.key as keyof typeof schedule];
                         if (meds.length === 0) return null;
                         return (
                             <section key={slot.key} className="animate-slide-up">
@@ -188,7 +219,7 @@ export default function MedicinesPage() {
                                     <h3 className="text-sm font-bold text-text-primary">{t(`medicines.times.${slot.key}`)}</h3>
                                 </div>
                                 <div className="space-y-2.5">
-                                    {meds.map((med) => {
+                                    {meds.map((med: any) => {
                                         const isTaken = takenIds.has(med.id);
                                         return (
                                             <div
@@ -215,7 +246,7 @@ export default function MedicinesPage() {
                                                     </button>
                                                     <div className="flex-1 min-w-0">
                                                         <p className={`text-sm font-bold ${isTaken ? "line-through text-text-muted" : "text-text-primary"}`}>
-                                                            {med.name}
+                                                            {isHindi ? med.name_hi : med.name}
                                                         </p>
                                                         <p className="text-xs text-text-muted mt-0.5">{isHindi ? med.dose : med.doseEn} • {isHindi ? med.meal : med.mealEn}</p>
                                                         {((isHindi ? med.generic : med.genericEn)) && !isTaken && (

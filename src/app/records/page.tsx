@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { RecordType } from "@/types";
+import { useAuth } from "@/context/AuthContext";
+import { createClient } from "@/utils/supabase/client";
 
 const recordTabs: { key: RecordType | "all"; emoji: string }[] = [
     { key: "all", emoji: "📋" },
@@ -29,50 +31,43 @@ const recordTabs: { key: RecordType | "all"; emoji: string }[] = [
     { key: "other", emoji: "📄" },
 ];
 
-const demoRecords = [
-    {
-        id: "1", type: "lab" as RecordType, name: "CBC — Complete Blood Count",
-        nameHi: "CBC — संपूर्ण रक्त गणना",
-        date: "15 Mar 2026", dateHi: "15 मार्च 2026",
-        lab: "Dr. Lal PathLabs", member: "Ramesh", memberHi: "रमेश", hasAbnormal: true,
-        tests: [
-            { name: "Hemoglobin", value: "11.2", unit: "g/dL", range: "13-17", abnormal: true },
-            { name: "WBC", value: "7,200", unit: "/μL", range: "4000-11000", abnormal: false },
-            { name: "Platelets", value: "2,50,000", unit: "/μL", range: "150000-400000", abnormal: false },
-        ],
-    },
-    {
-        id: "2", type: "prescription" as RecordType, name: "Dr. Rajesh Sharma — Prescription",
-        nameHi: "Dr. Rajesh Sharma — पर्चा",
-        date: "10 Mar 2026", dateHi: "10 मार्च 2026",
-        lab: "City Hospital, Kanpur", member: "Ramesh", memberHi: "रमेश", hasAbnormal: false, tests: [],
-    },
-    {
-        id: "3", type: "lab" as RecordType, name: "Thyroid Profile — T3, T4, TSH",
-        nameHi: "थायरॉयड प्रोफ़ाइल — T3, T4, TSH",
-        date: "28 Feb 2026", dateHi: "28 फ़रवरी 2026",
-        lab: "Thyrocare", member: "Sunita", memberHi: "सुनीता", hasAbnormal: false,
-        tests: [
-            { name: "TSH", value: "3.2", unit: "μIU/mL", range: "0.4-4.0", abnormal: false },
-            { name: "T3", value: "1.1", unit: "ng/mL", range: "0.8-2.0", abnormal: false },
-            { name: "T4", value: "7.5", unit: "μg/dL", range: "4.5-12.0", abnormal: false },
-        ],
-    },
-    {
-        id: "4", type: "vaccination" as RecordType, name: "COVID-19 Booster — Covishield",
-        nameHi: "कोविड-19 बूस्टर — कोविशील्ड",
-        date: "15 Jan 2026", dateHi: "15 जनवरी 2026",
-        lab: "PHC Kanpur", member: "Father", memberHi: "पिताजी", hasAbnormal: false, tests: [],
-    },
-];
 
 export default function RecordsPage() {
     const { t, isHindi } = useLanguage();
+    const { user } = useAuth();
+    const supabase = createClient();
+
     const [activeTab, setActiveTab] = useState<RecordType | "all">("all");
     const [showUpload, setShowUpload] = useState(false);
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [showPaywall, setShowPaywall] = useState(false);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [records, setRecords] = useState<any[]>([]);
+
+    React.useEffect(() => {
+        if (!user) return;
+        const fetchRecords = async () => {
+            const { data } = await supabase.from('health_records').select('*').eq('user_id', user.id).order('record_date', { ascending: false });
+            if (data) {
+                setRecords(data.map(r => ({
+                    id: r.id,
+                    type: r.type as RecordType,
+                    name: r.name_en,
+                    nameHi: r.name_hi,
+                    date: new Date(r.record_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    dateHi: new Date(r.record_date).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    lab: r.lab_name || (isHindi ? "अपलोड किया गया" : "Uploaded"),
+                    member: "Self",
+                    memberHi: "मैं खुद",
+                    hasAbnormal: false,
+                    tests: []
+                })));
+            }
+        };
+        fetchRecords();
+    }, [user, supabase, isHindi]);
 
     // Upload counter — tracks uploads in localStorage (5 free, paywall on 6th)
     const getUploadCount = (): number => {
@@ -91,7 +86,7 @@ export default function RecordsPage() {
         setShowUpload(!showUpload);
     };
 
-    const filteredRecords = demoRecords.filter(
+    const filteredRecords = records.filter(
         (r) =>
             (activeTab === "all" || r.type === activeTab) &&
             (searchQuery === "" ||
@@ -206,7 +201,7 @@ export default function RecordsPage() {
                                             ✨ {t("records.extracted")}:
                                         </p>
                                         <div className="space-y-2">
-                                            {record.tests.map((test, i) => (
+                                            {record.tests.map((test: any, i: number) => (
                                                 <div
                                                     key={i}
                                                     className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm"
