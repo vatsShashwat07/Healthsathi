@@ -5,18 +5,21 @@ import { useLanguage } from "@/context/LanguageContext";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 import {
-    Search,
     Plus,
     X,
     Camera,
     FileText,
     Image as ImageIcon,
-    Edit3,
     ChevronDown,
+    Edit3,
     Link as LinkIcon,
     Sparkles,
+    UserCircle,
+    MessageSquare,
+    Search,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { RecordType } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 import { createClient } from "@/utils/supabase/client";
@@ -37,6 +40,8 @@ export default function RecordsPage() {
     const { user } = useAuth();
     const supabase = createClient();
 
+    const router = useRouter();
+
     const [activeTab, setActiveTab] = useState<RecordType | "all">("all");
     const [showUpload, setShowUpload] = useState(false);
     const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -45,6 +50,18 @@ export default function RecordsPage() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [records, setRecords] = useState<any[]>([]);
+
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const cameraInputRef = React.useRef<HTMLInputElement>(null);
+
+    const userName = user?.user_metadata?.first_name || user?.user_metadata?.full_name || (user?.email ? user.email.split('@')[0] : "Self");
+    const userNameHi = user?.user_metadata?.first_name || user?.user_metadata?.full_name || (user?.email ? user.email.split('@')[0] : "मैं खुद");
+
+    const familyTabs = [
+        { id: "all", label: isHindi ? "सभी" : "All" },
+        { id: "self", label: isHindi ? userNameHi : userName },
+        { id: "add", label: isHindi ? "+ परिवार जोड़ें" : "+ Add Family" }
+    ];
 
     React.useEffect(() => {
         if (!user) return;
@@ -59,15 +76,15 @@ export default function RecordsPage() {
                     date: new Date(r.record_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
                     dateHi: new Date(r.record_date).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
                     lab: r.lab_name || (isHindi ? "अपलोड किया गया" : "Uploaded"),
-                    member: "Self",
-                    memberHi: "मैं खुद",
+                    member: userName,
+                    memberHi: userNameHi,
                     hasAbnormal: false,
                     tests: []
                 })));
             }
         };
         fetchRecords();
-    }, [user, supabase, isHindi]);
+    }, [user, supabase, isHindi, userName, userNameHi]);
 
     // Upload counter — tracks uploads in localStorage (5 free, paywall on 6th)
     const getUploadCount = (): number => {
@@ -82,8 +99,24 @@ export default function RecordsPage() {
             setShowPaywall(true);
             return;
         }
-        localStorage.setItem("hs_upload_count", String(count + 1));
         setShowUpload(!showUpload);
+    };
+
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const count = getUploadCount();
+        if (count >= 5) {
+            setShowPaywall(true);
+            return;
+        }
+        localStorage.setItem("hs_upload_count", String(count + 1));
+        alert(isHindi ? "फ़ाइल अपलोड हो रही है..." : "Uploading file...");
+        setTimeout(() => {
+            alert(isHindi ? "सफलतापूर्वक अपलोड किया गया! (डेमो)" : "Uploaded Successfully! (Demo)");
+            setShowUpload(false);
+            window.location.reload();
+        }, 1500);
     };
 
     const filteredRecords = records.filter(
@@ -108,7 +141,7 @@ export default function RecordsPage() {
                         <div>
                             <h1 className="text-2xl font-extrabold">{t("records.title")}</h1>
                             <p className="text-white/60 text-xs mt-1">
-                                {isHindi ? "4 रिपोर्ट • 2 परिवार सदस्य" : "4 records • 2 family members"}
+                                {isHindi ? `${records.length} रिपोर्ट • 1 परिवार सदस्य` : `${records.length} records • 1 family member`}
                             </p>
                         </div>
                         <LanguageToggle />
@@ -136,9 +169,13 @@ export default function RecordsPage() {
             <div className="px-4 -mt-3 relative z-10">
                 {/* Family chips */}
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pb-3">
-                    {(isHindi ? ["सभी", "रमेश", "सुनीता", "पिताजी"] : ["All", "Ramesh", "Sunita", "Father"]).map((name, i) => (
-                        <button key={name} className={i === 0 ? "chip-active" : "chip-inactive"}>
-                            {name}
+                    {familyTabs.map((tab, i) => (
+                        <button
+                            key={tab.id}
+                            onClick={tab.id === 'add' ? () => router.push('/profile') : undefined}
+                            className={i === 0 ? "chip-active" : (tab.id === "add" ? "chip-inactive border-dashed border-2 text-primary bg-primary-50" : "chip-inactive")}
+                        >
+                            {tab.label}
                         </button>
                     ))}
                 </div>
@@ -270,27 +307,30 @@ export default function RecordsPage() {
             )}
 
             {/* Upload Bottom Sheet */}
+            <input type="file" accept="image/*,.pdf" ref={fileInputRef} className="hidden" onChange={handleFileUpload} />
+            <input type="file" accept="image/*" capture="environment" ref={cameraInputRef} className="hidden" onChange={handleFileUpload} />
+
             {showUpload && (
                 <div className="bottom-sheet">
                     <div className="bottom-sheet-overlay" onClick={() => setShowUpload(false)} />
-                    <div className="bottom-sheet-content">
+                    <div className="bottom-sheet-content md:pb-8 pb-14">
                         <div className="w-10 h-1 bg-sage-300 rounded-full mx-auto mb-4" />
                         <h3 className="text-lg font-bold mb-4">{t("records.addRecord")}</h3>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-3 mb-6">
                             {[
-                                { icon: Camera, label: t("records.camera"), gradient: "linear-gradient(135deg, #d3f3e4, #aae8cd)", color: "text-emerald-700" },
-                                { icon: ImageIcon, label: t("records.gallery"), gradient: "linear-gradient(135deg, #ccfbf1, #cffafe)", color: "text-teal-700" },
-                                { icon: FileText, label: t("records.pdf"), gradient: "linear-gradient(135deg, #fef3c7, #fde68a)", color: "text-amber-700" },
-                                { icon: Edit3, label: t("records.manual"), gradient: "linear-gradient(135deg, #e0e7ff, #ede9fe)", color: "text-indigo-700" },
+                                { icon: Camera, label: t("records.camera"), gradient: "linear-gradient(135deg, #d3f3e4, #aae8cd)", color: "text-emerald-700", action: () => cameraInputRef.current?.click() },
+                                { icon: ImageIcon, label: t("records.gallery"), gradient: "linear-gradient(135deg, #ccfbf1, #cffafe)", color: "text-teal-700", action: () => fileInputRef.current?.click() },
+                                { icon: FileText, label: t("records.pdf"), gradient: "linear-gradient(135deg, #fef3c7, #fde68a)", color: "text-amber-700", action: () => fileInputRef.current?.click() },
+                                { icon: Edit3, label: t("records.manual"), gradient: "linear-gradient(135deg, #e0e7ff, #ede9fe)", color: "text-indigo-700", action: () => alert("Manual entry launching soon!") },
                             ].map((item, i) => {
                                 const Icon = item.icon;
                                 return (
-                                    <button key={i} className="card flex flex-col items-center gap-2.5 py-5 border border-sage-100 hover:border-primary-300 transition-all">
+                                    <button onClick={item.action} key={i} className="card flex flex-col items-center gap-2.5 py-5 border border-sage-100 hover:border-primary-300 transition-all active:scale-95">
                                         <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
                                             style={{ background: item.gradient }}>
                                             <Icon size={24} className={item.color} />
                                         </div>
-                                        <span className="text-sm font-semibold">{item.label}</span>
+                                        <span className="text-sm font-semibold text-text-primary">{item.label}</span>
                                     </button>
                                 );
                             })}

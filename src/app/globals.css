@@ -322,7 +322,7 @@
   }
 
   .bottom-sheet-content {
-    @apply relative w-full max-w-lg bg-white p-5 pb-8;
+    @apply relative w-full max-w-lg bg-white p-5 pb-16;
     border-radius: 28px 28px 0 0;
     animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
