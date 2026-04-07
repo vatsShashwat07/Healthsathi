@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
+import FloatingHearts from "@/components/shared/FloatingHearts";
 import BottomNav from "@/components/shared/BottomNav";
 import { ArrowLeft, Check, Crown, Zap } from "lucide-react";
 import Link from "next/link";
@@ -96,7 +97,7 @@ export default function SubscriptionPage() {
                 description: `Saathi ${planKey === 'family' ? 'Family' : 'Plus'} Subscription`,
                 order_id: orderData.id,
                 theme: {
-                    color: "#FF9933"
+                    color: "#10b981"
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 handler: async function (response: any) {
@@ -211,7 +212,7 @@ export default function SubscriptionPage() {
                                 style={{ background: plan.gradient, border: plan.border }}>
                                 {plan.popular && (
                                     <div className="absolute top-0 right-0 text-white text-[10px] font-bold px-3 py-1 rounded-bl-2xl"
-                                        style={{ background: "linear-gradient(135deg, #FF9933, #E67A00)" }}>
+                                        style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}>
                                         {t("subscription.popular")} ⭐
                                     </div>
                                 )}
@@ -224,7 +225,7 @@ export default function SubscriptionPage() {
                                             <p className="text-sm text-text-muted">{isHindi ? "हमेशा मुफ़्त" : "Free forever"}</p>
                                         ) : (
                                             <div className="flex items-baseline gap-1.5">
-                                                <span className="text-3xl font-extrabold" style={{ color: plan.key === "family" ? "#6366f1" : "#FF9933" }}>
+                                                <span className="text-3xl font-extrabold" style={{ color: plan.key === "family" ? "#6366f1" : "#10b981" }}>
                                                     ₹{billingCycle === "annual" ? monthlyPrice : displayPrice}
                                                 </span>
                                                 <span className="text-sm text-text-muted">{t("subscription.perMonth")}</span>
@@ -285,7 +286,7 @@ export default function SubscriptionPage() {
                 {/* Razorpay Payment Simulation Modal */}
                 {showPayment && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: "rgba(0,0,0,0.6)" }}>
-                        <div className="card max-w-sm w-full text-center py-10 px-6" style={{ border: "2px solid #FF9933", background: "#fff" }}>
+                        <div className="card max-w-sm w-full text-center py-10 px-6" style={{ border: "2px solid #10b981", background: "#fff" }}>
                             {!paymentSuccess ? (
                                 <>
                                     <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse" style={{ background: "linear-gradient(135deg, #2563eb, #3b82f6)", boxShadow: "0 6px 20px rgba(37,99,235,0.3)" }}>
@@ -321,6 +322,7 @@ export default function SubscriptionPage() {
                     </div>
                 )}
             </div>
+            <FloatingHearts />
             <BottomNav />
         </div>
     );

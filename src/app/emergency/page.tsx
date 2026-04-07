@@ -76,7 +76,7 @@ export default function EmergencyPage() {
                     className="card flex items-center gap-4 py-5"
                     style={{ border: "1px solid #a7f3d0", background: "linear-gradient(135deg, #fff, #f0fdf4)" }}>
                     <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
-                        style={{ background: "linear-gradient(135deg, #FF9933, #E67A00)", boxShadow: "0 6px 20px rgba(255,153,51,0.3)" }}>
+                        style={{ background: "linear-gradient(135deg, #10b981, #059669)", boxShadow: "0 6px 20px rgba(16,185,129,0.3)" }}>
                         <MapPin size={24} className="text-white" />
                     </div>
                     <div className="flex-1">

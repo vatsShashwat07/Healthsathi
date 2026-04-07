@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import FloatingHearts from "@/components/shared/FloatingHearts";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 
@@ -301,8 +302,8 @@ export default function SymptomsPage() {
     if (showPaywall) {
         return (
             <div className="w-full min-h-screen flex items-center justify-center px-5" style={{ background: "linear-gradient(180deg, #FFF9F2 0%, #FFFFFF 50%)" }}>
-                <div className="card max-w-sm w-full text-center py-10 px-6" style={{ border: "2px solid #FF9933" }}>
-                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "linear-gradient(135deg, #FF9933, #E67A00)", boxShadow: "0 6px 20px rgba(255,153,51,0.3)" }}>
+                <div className="card max-w-sm w-full text-center py-10 px-6" style={{ border: "2px solid #10b981" }}>
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "linear-gradient(135deg, #10b981, #059669)", boxShadow: "0 6px 20px rgba(16,185,129,0.3)" }}>
                         <Sparkles size={28} className="text-white" />
                     </div>
                     <h2 className="text-xl font-extrabold text-text-primary mb-2">
@@ -466,7 +467,8 @@ export default function SymptomsPage() {
                         </button>
                     </div>
                 </div>
-                <BottomNav />
+                <FloatingHearts />
+            <BottomNav />
             </div>
         );
     }
@@ -477,7 +479,7 @@ export default function SymptomsPage() {
             {/* Header */}
             <header className="relative px-5 pt-12 pb-6 text-white overflow-hidden">
                 <div className="absolute inset-0"
-                    style={{ background: "linear-gradient(135deg, #993F00, #CC6600, #FF9933)" }} />
+                    style={{ background: "linear-gradient(135deg, #047857, #059669, #10b981)" }} />
                 <div className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-10"
                     style={{ background: "radial-gradient(circle, white, transparent)" }} />
 
@@ -498,8 +500,8 @@ export default function SymptomsPage() {
                 <button className="w-full card flex items-center justify-between py-3">
                     <div className="flex items-center gap-2.5">
                         <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-                            style={{ background: "linear-gradient(135deg, #d3f3e4, #aae8cd)" }}>
-                            <UserCircle size={18} className="text-primary-700" />
+                            style={{ background: "linear-gradient(135deg, #dbeafe, #bfdbfe)" }}>
+                            <UserCircle size={18} className="text-emerald-700" />
                         </div>
                         <span className="text-sm font-semibold">{isHindi ? "मेरे लिए" : "For myself"}</span>
                     </div>
@@ -517,29 +519,29 @@ export default function SymptomsPage() {
                             {/* Body with gradient fill */}
                             <defs>
                                 <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#aae8cd" />
-                                    <stop offset="100%" stopColor="#e8eae3" />
+                                    <stop offset="0%" stopColor="#93c5fd" />
+                                    <stop offset="100%" stopColor="#dbeafe" />
                                 </linearGradient>
                                 <filter id="bodyShadow">
                                     <feDropShadow dx="0" dy="1" stdDeviation="1" floodOpacity="0.1" />
                                 </filter>
                             </defs>
                             <g filter="url(#bodyShadow)">
-                                <circle cx="50" cy="10" r="8" fill="url(#bodyGrad)" stroke="#72d7ae" strokeWidth="0.8" />
-                                <rect x="47" y="18" width="6" height="4" rx="1.5" fill="url(#bodyGrad)" stroke="#72d7ae" strokeWidth="0.5" />
-                                <path d="M38 22 L62 22 L60 50 L40 50 Z" fill="url(#bodyGrad)" stroke="#72d7ae" strokeWidth="0.8" />
-                                <path d="M38 22 L28 28 L24 44 L28 44 L32 32 L38 28" fill="url(#bodyGrad)" stroke="#72d7ae" strokeWidth="0.8" />
-                                <path d="M62 22 L72 28 L76 44 L72 44 L68 32 L62 28" fill="url(#bodyGrad)" stroke="#72d7ae" strokeWidth="0.8" />
-                                <path d="M40 50 L38 76 L34 90 L40 90 L44 76 L46 50" fill="url(#bodyGrad)" stroke="#72d7ae" strokeWidth="0.8" />
-                                <path d="M54 50 L56 76 L60 90 L66 90 L62 76 L60 50" fill="url(#bodyGrad)" stroke="#72d7ae" strokeWidth="0.8" />
+                                <circle cx="50" cy="10" r="8" fill="url(#bodyGrad)" stroke="#60a5fa" strokeWidth="0.8" />
+                                <rect x="47" y="18" width="6" height="4" rx="1.5" fill="url(#bodyGrad)" stroke="#60a5fa" strokeWidth="0.5" />
+                                <path d="M38 22 L62 22 L60 50 L40 50 Z" fill="url(#bodyGrad)" stroke="#60a5fa" strokeWidth="0.8" />
+                                <path d="M38 22 L28 28 L24 44 L28 44 L32 32 L38 28" fill="url(#bodyGrad)" stroke="#60a5fa" strokeWidth="0.8" />
+                                <path d="M62 22 L72 28 L76 44 L72 44 L68 32 L62 28" fill="url(#bodyGrad)" stroke="#60a5fa" strokeWidth="0.8" />
+                                <path d="M40 50 L38 76 L34 90 L40 90 L44 76 L46 50" fill="url(#bodyGrad)" stroke="#60a5fa" strokeWidth="0.8" />
+                                <path d="M54 50 L56 76 L60 90 L66 90 L62 76 L60 50" fill="url(#bodyGrad)" stroke="#60a5fa" strokeWidth="0.8" />
                             </g>
                             {bodyRegions.map((region) => (
                                 <rect
                                     key={region.key}
                                     x={region.x} y={region.y} width={region.w} height={region.h} rx="2"
                                     className={`cursor-pointer transition-all duration-300 ${selectedRegion === region.key
-                                        ? "fill-primary-500/30 stroke-primary-600"
-                                        : "fill-transparent stroke-transparent hover:fill-primary-500/10"
+                                        ? "fill-blue-500/30 stroke-blue-600"
+                                        : "fill-transparent stroke-transparent hover:fill-blue-500/10"
                                         }`}
                                     strokeWidth="1.2"
                                     onClick={() => setSelectedRegion(region.key)}
@@ -577,7 +579,7 @@ export default function SymptomsPage() {
                                     ? "bg-red-500 text-white animate-pulse-gentle"
                                     : "text-primary-700 hover:scale-110"
                                     }`}
-                                style={!isListening ? { background: "linear-gradient(135deg, #d3f3e4, #aae8cd)" } : {}}
+                                style={!isListening ? { background: "linear-gradient(135deg, #dbeafe, #bfdbfe)" } : {}}
                                 aria-label={t("symptoms.voiceInput")}
                             >
                                 {isListening ? <MicOff size={18} /> : <Mic size={18} />}
@@ -615,6 +617,7 @@ export default function SymptomsPage() {
                     {t("symptoms.disclaimer")}
                 </div>
             </div>
+            <FloatingHearts />
             <BottomNav />
         </div>
     );

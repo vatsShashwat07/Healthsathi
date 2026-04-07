@@ -1,10 +1,44 @@
 import { NextResponse } from 'next/server';
 
+const FASTAPI_URL = process.env.FASTAPI_BACKEND_URL || 'http://localhost:8000';
 
+/**
+ * Symptom Analysis Route — Proxies through FastAPI backend.
+ * Pipeline: Cache → Local KB → Rate Limit → Gemini API
+ * Fallback: Direct Gemini call if FastAPI is unreachable.
+ */
 export async function POST(req: Request) {
   try {
-    const { symptomText, region, isHindi } = await req.json();
+    const body = await req.json();
+    const { symptomText, region, isHindi } = body;
 
+    // --- Try FastAPI backend first ---
+    try {
+      const backendResponse = await fetch(`${FASTAPI_URL}/api/symptoms`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symptomText, region, isHindi }),
+        signal: AbortSignal.timeout(15000), // 15s timeout
+      });
+
+      if (backendResponse.ok) {
+        const data = await backendResponse.json();
+        console.log(`✅ FastAPI response — source: ${data.source || 'unknown'}`);
+        return NextResponse.json(data);
+      }
+
+      // Rate limited
+      if (backendResponse.status === 429) {
+        const errorData = await backendResponse.json();
+        return NextResponse.json(errorData, { status: 429 });
+      }
+
+      console.warn(`⚠ FastAPI returned ${backendResponse.status}, falling back to Gemini...`);
+    } catch (backendError) {
+      console.warn('⚠ FastAPI unreachable, falling back to direct Gemini call...', backendError);
+    }
+
+    // --- Fallback: Direct Gemini API call ---
     if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'YOUR_KEY_HERE') {
       return NextResponse.json(
         { error: 'API key not configured. Please add GEMINI_API_KEY to .env.local' },
@@ -71,11 +105,12 @@ You must return ONLY a JSON object with the following schema:
     const json = await response.json();
     const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
     const data = JSON.parse(rawText);
+    data.source = "gemini_direct_fallback";
 
     return NextResponse.json(data);
 
   } catch (error: unknown) {
-    console.error("Gemini API Error:", error);
+    console.error("Symptom Analysis Error:", error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to analyze symptoms';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }

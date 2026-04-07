@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import FloatingHearts from "@/components/shared/FloatingHearts";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 import {
@@ -132,7 +133,7 @@ export default function RecordsPage() {
             {/* Header */}
             <header className="relative px-5 pt-12 pb-6 text-white overflow-hidden">
                 <div className="absolute inset-0"
-                    style={{ background: "linear-gradient(135deg, #CC6600, #E67A00, #FF9933)" }} />
+                    style={{ background: "linear-gradient(135deg, #047857, #059669, #10b981)" }} />
                 <div className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-10"
                     style={{ background: "radial-gradient(circle, white, transparent)" }} />
 
@@ -220,10 +221,10 @@ export default function RecordsPage() {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
                                             <p className="text-sm font-bold text-text-primary truncate">{isHindi ? record.nameHi : record.name}</p>
-                                            {record.hasAbnormal && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: "linear-gradient(135deg, #FF9933, #E67A00)" }}>{t("records.abnormal")}</span>}
+                                            {record.hasAbnormal && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}>{t("records.abnormal")}</span>}
                                         </div>
                                         <p className="text-xs text-text-muted mt-0.5">{isHindi ? record.dateHi : record.date} • {record.lab}</p>
-                                        <p className="text-xs font-semibold mt-0.5" style={{ color: "#FF9933" }}>👤 {isHindi ? record.memberHi : record.member}</p>
+                                        <p className="text-xs font-semibold mt-0.5" style={{ color: "#10b981" }}>👤 {isHindi ? record.memberHi : record.member}</p>
                                     </div>
                                     <ChevronDown
                                         size={16}
@@ -282,8 +283,8 @@ export default function RecordsPage() {
             {/* Upload Paywall */}
             {showPaywall && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: "rgba(0,0,0,0.5)" }}>
-                    <div className="card max-w-sm w-full text-center py-10 px-6" style={{ border: "2px solid #FF9933", background: "#fff" }}>
-                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "linear-gradient(135deg, #FF9933, #E67A00)", boxShadow: "0 6px 20px rgba(255,153,51,0.3)" }}>
+                    <div className="card max-w-sm w-full text-center py-10 px-6" style={{ border: "2px solid #10b981", background: "#fff" }}>
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "linear-gradient(135deg, #10b981, #059669)", boxShadow: "0 6px 20px rgba(16,185,129,0.3)" }}>
                             <Sparkles size={28} className="text-white" />
                         </div>
                         <h2 className="text-xl font-extrabold text-text-primary mb-2">
@@ -339,6 +340,7 @@ export default function RecordsPage() {
                 </div>
             )}
 
+            <FloatingHearts />
             <BottomNav />
         </div>
     );

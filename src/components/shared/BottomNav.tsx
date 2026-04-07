@@ -26,9 +26,9 @@ export default function BottomNav() {
 
     return (
         <nav
-            className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-white/40"
+            className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100"
             style={{
-                boxShadow: "0 -4px 30px rgba(0,0,0,0.05)",
+                boxShadow: "0 -1px 10px rgba(0,0,0,0.04)",
             }}
             role="navigation"
             aria-label="Main navigation"
@@ -45,31 +45,30 @@ export default function BottomNav() {
                         <Link
                             key={item.key}
                             href={item.href}
-                            className={`flex flex-col items-center justify-center gap-0.5 py-2 px-3 rounded-2xl
+                            className={`flex flex-col items-center justify-center gap-0.5 py-2 px-3 rounded-xl
                 transition-all duration-300 min-w-[56px] relative
                 ${isActive
-                                    ? "text-white"
-                                    : "text-text-muted hover:text-primary-600"
+                                    ? "text-primary-500"
+                                    : "text-slate-400 hover:text-primary-500"
                                 }`}
                             aria-current={isActive ? "page" : undefined}
                         >
-                            {/* Active background pill */}
+                            {/* Active indicator dot */}
                             {isActive && (
                                 <div
-                                    className="absolute inset-0 rounded-2xl animate-scale-in"
+                                    className="absolute -top-1.5 w-5 h-0.5 rounded-full animate-scale-in"
                                     style={{
-                                        background: "linear-gradient(135deg, #FF9933, #E67A00)",
-                                        boxShadow: "0 2px 12px rgba(255, 153, 51, 0.35)",
+                                        background: "#10b981",
                                     }}
                                 />
                             )}
                             <Icon
                                 size={20}
                                 strokeWidth={isActive ? 2.5 : 1.8}
-                                className="transition-all duration-300 relative z-10"
+                                className="transition-all duration-300"
                             />
                             <span
-                                className={`text-[10px] leading-tight font-semibold relative z-10 ${isActive ? "text-white" : ""
+                                className={`text-[10px] leading-tight font-semibold ${isActive ? "text-primary-500" : ""
                                     }`}
                             >
                                 {t(`nav.${item.key}`)}

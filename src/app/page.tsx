@@ -1,848 +1,640 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useLanguage } from "@/context/LanguageContext";
-import {
-  Search,
-  FolderHeart,
-  Pill,
-  ArrowRight,
-  Shield,
-  Smartphone,
-  Globe,
-  Mic,
-  ChevronDown,
-  ChevronUp,
-  Sparkles,
-  Heart,
-  Check,
-  Star,
-  Users,
-  Clock,
-  Zap,
-  Crown,
-  Menu,
-  X,
-  Phone,
-  FileText,
-  Activity,
-  Lock,
-  Download,
-} from "lucide-react";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageToggle from "@/components/shared/LanguageToggle";
+import {
+  Heart,
+  ArrowRight,
+  Search,
+  Upload,
+  Pill,
+  ShieldCheck,
+  Stethoscope,
+  Activity,
+  Sparkles,
+  Brain,
+  Zap,
+  TrendingUp,
+  Globe,
+  Eye,
+  Dna,
+} from "lucide-react";
 
-/* ============== NAVBAR ============== */
-function Navbar() {
-  const { isHindi, setLanguage } = useLanguage();
+/* ===== SVG Components ===== */
+
+function HumanBodySVG() {
+  return (
+    <svg viewBox="0 0 200 500" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bodyFill" x1="100" y1="0" x2="100" y2="500" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#10b981" stopOpacity="0.08" />
+          <stop offset="50%" stopColor="#10b981" stopOpacity="0.04" />
+          <stop offset="100%" stopColor="#10b981" stopOpacity="0.01" />
+        </linearGradient>
+        <linearGradient id="bodyStroke" x1="100" y1="0" x2="100" y2="500" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#10b981" stopOpacity="0.08" />
+        </linearGradient>
+      </defs>
+      {/* Head */}
+      <circle cx="100" cy="40" r="28" fill="url(#bodyFill)" stroke="url(#bodyStroke)" strokeWidth="1.5" />
+      {/* Neck */}
+      <rect x="90" y="68" width="20" height="18" rx="6" fill="url(#bodyFill)" stroke="url(#bodyStroke)" strokeWidth="1" />
+      {/* Torso */}
+      <path d="M60 86 Q50 86 50 96 L55 200 Q55 210 65 210 L135 210 Q145 210 145 200 L150 96 Q150 86 140 86 Z"
+        fill="url(#bodyFill)" stroke="url(#bodyStroke)" strokeWidth="1.5" />
+      {/* Left Arm */}
+      <path d="M55 92 Q35 95 25 120 L18 180 Q16 190 22 192 Q28 194 30 184 L40 140 Q42 132 50 128"
+        fill="url(#bodyFill)" stroke="url(#bodyStroke)" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Right Arm */}
+      <path d="M145 92 Q165 95 175 120 L182 180 Q184 190 178 192 Q172 194 170 184 L160 140 Q158 132 150 128"
+        fill="url(#bodyFill)" stroke="url(#bodyStroke)" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Left Leg */}
+      <path d="M75 210 L68 320 Q66 340 62 360 L55 430 Q53 445 60 448 Q67 451 68 436 L78 360 Q80 340 82 320 L88 210"
+        fill="url(#bodyFill)" stroke="url(#bodyStroke)" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Right Leg */}
+      <path d="M125 210 L132 320 Q134 340 138 360 L145 430 Q147 445 140 448 Q133 451 132 436 L122 360 Q120 340 118 320 L112 210"
+        fill="url(#bodyFill)" stroke="url(#bodyStroke)" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Heart organ */}
+      <circle cx="110" cy="130" r="8" fill="none" stroke="#ef4444" strokeWidth="1" strokeOpacity="0.3">
+        <animate attributeName="r" values="7;9;7" dur="1.5s" repeatCount="indefinite" />
+        <animate attributeName="stroke-opacity" values="0.2;0.5;0.2" dur="1.5s" repeatCount="indefinite" />
+      </circle>
+      {/* Lung left */}
+      <ellipse cx="82" cy="130" rx="12" ry="20" fill="none" stroke="#10b981" strokeWidth="0.8" strokeOpacity="0.2">
+        <animate attributeName="ry" values="18;22;18" dur="3s" repeatCount="indefinite" />
+      </ellipse>
+      {/* Lung right */}
+      <ellipse cx="118" cy="130" rx="12" ry="20" fill="none" stroke="#10b981" strokeWidth="0.8" strokeOpacity="0.2">
+        <animate attributeName="ry" values="18;22;18" dur="3s" repeatCount="indefinite" />
+      </ellipse>
+      {/* Brain indicator */}
+      <circle cx="100" cy="35" r="4" fill="none" stroke="#8b5cf6" strokeWidth="0.8" strokeOpacity="0.3">
+        <animate attributeName="stroke-opacity" values="0.15;0.4;0.15" dur="2s" repeatCount="indefinite" />
+      </circle>
+    </svg>
+  );
+}
+
+function HeartbeatLine() {
+  return (
+    <svg viewBox="0 0 800 100" className="w-full h-24 opacity-[0.06]" preserveAspectRatio="none">
+      <path
+        d="M0,50 L120,50 L140,50 L155,20 L170,80 L185,10 L200,90 L215,30 L230,50 L350,50 L370,50 L385,20 L400,80 L415,10 L430,90 L445,30 L460,50 L580,50 L600,50 L615,20 L630,80 L645,10 L660,90 L675,30 L690,50 L800,50"
+        fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      >
+        <animate attributeName="stroke-dashoffset" from="1600" to="0" dur="4s" repeatCount="indefinite" />
+      </path>
+      <style>{`path { stroke-dasharray: 1600; }`}</style>
+    </svg>
+  );
+}
+
+function DNAHelix() {
+  return (
+    <svg viewBox="0 0 60 400" className="w-16 h-full opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
+      {Array.from({ length: 20 }).map((_, i) => {
+        const y = i * 20;
+        const offset = Math.sin(i * 0.8) * 15;
+        return (
+          <g key={i}>
+            <circle cx={30 + offset} cy={y} r="2.5" fill="#10b981" opacity={0.4 + Math.sin(i) * 0.3} />
+            <circle cx={30 - offset} cy={y} r="2.5" fill="#059669" opacity={0.4 + Math.cos(i) * 0.3} />
+            {i % 2 === 0 && (
+              <line x1={30 + offset} y1={y} x2={30 - offset} y2={y}
+                stroke="#10b981" strokeWidth="0.8" opacity="0.2" />
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function FloatingHealthIcons() {
+  const icons = [
+    { icon: "💊", x: "5%", y: "15%", delay: "0s", size: "text-2xl" },
+    { icon: "🫀", x: "88%", y: "20%", delay: "1s", size: "text-3xl" },
+    { icon: "🧬", x: "10%", y: "70%", delay: "2s", size: "text-xl" },
+    { icon: "🩺", x: "85%", y: "65%", delay: "0.5s", size: "text-2xl" },
+    { icon: "🧠", x: "15%", y: "45%", delay: "1.5s", size: "text-lg" },
+    { icon: "🫁", x: "90%", y: "42%", delay: "2.5s", size: "text-xl" },
+    { icon: "💉", x: "50%", y: "85%", delay: "3s", size: "text-lg" },
+    { icon: "🦴", x: "70%", y: "12%", delay: "1.8s", size: "text-lg" },
+  ];
+
+  return (
+    <>
+      {icons.map((item, i) => (
+        <div
+          key={i}
+          className={`absolute ${item.size} opacity-[0.07] pointer-events-none select-none`}
+          style={{
+            left: item.x,
+            top: item.y,
+            animation: `float 6s ease-in-out ${item.delay} infinite`,
+          }}
+        >
+          {item.icon}
+        </div>
+      ))}
+    </>
+  );
+}
+
+function OrganCircuits() {
+  return (
+    <svg viewBox="0 0 600 600" className="absolute inset-0 w-full h-full opacity-[0.03] pointer-events-none">
+      {/* Circular network - looks like cell structure */}
+      {Array.from({ length: 8 }).map((_, i) => {
+        const angle = (i / 8) * Math.PI * 2;
+        const cx = 300 + Math.cos(angle) * 180;
+        const cy = 300 + Math.sin(angle) * 180;
+        return (
+          <g key={i}>
+            <circle cx={cx} cy={cy} r={30 + i * 3} fill="none" stroke="#10b981" strokeWidth="1">
+              <animate attributeName="r" values={`${28 + i * 3};${34 + i * 3};${28 + i * 3}`} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
+            </circle>
+            <line x1="300" y1="300" x2={cx} y2={cy} stroke="#10b981" strokeWidth="0.5" strokeDasharray="4 4" />
+          </g>
+        );
+      })}
+      <circle cx="300" cy="300" r="40" fill="none" stroke="#10b981" strokeWidth="1.5">
+        <animate attributeName="r" values="38;45;38" dur="2s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="300" cy="300" r="8" fill="#10b981" opacity="0.15">
+        <animate attributeName="opacity" values="0.1;0.25;0.1" dur="2s" repeatCount="indefinite" />
+      </circle>
+    </svg>
+  );
+}
+
+/* ===== Main Page ===== */
+
+export default function LandingPage() {
+  const { t, isHindi } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const links = [
-    { href: "#features", label: isHindi ? "विशेषताएँ" : "Features" },
-    { href: "#how-it-works", label: isHindi ? "कैसे काम करे" : "How it Works" },
-    { href: "#pricing", label: isHindi ? "प्लान" : "Pricing" },
-    { href: "#testimonials", label: isHindi ? "समीक्षा" : "Reviews" },
-    { href: "#faq", label: isHindi ? "सवाल" : "FAQ" },
-  ];
-
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-      ? "bg-white/80 backdrop-blur-xl shadow-sm border-b border-sage-100"
-      : "bg-transparent"
-      }`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 sm:h-20">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center"
-            style={{
-              background: scrolled
-                ? "linear-gradient(135deg, #FF9933, #E67A00)"
-                : "rgba(255,255,255,0.2)",
-              boxShadow: scrolled ? "0 2px 8px rgba(255,153,51,0.3)" : "none",
-            }}>
-            <Heart size={18} className={scrolled ? "text-white" : "text-white"} />
-          </div>
-          <div>
-            <span className={`text-lg sm:text-xl font-extrabold tracking-tight ${scrolled ? "text-text-primary" : "text-white"}`}>
-              HealthSathi
-            </span>
-            <span className={`hidden sm:block text-[10px] font-medium -mt-1 ${scrolled ? "text-text-muted" : "text-white/60"}`}>
-              हेल्थसाथी
-            </span>
-          </div>
-        </Link>
+    <div className="bg-[#fafafa] text-gray-900 font-sans antialiased overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900">
 
-        {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-8">
-          {links.map((link) => (
-            <a key={link.href} href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-primary ${scrolled ? "text-text-secondary" : "text-white/80 hover:text-white"}`}>
-              {link.label}
-            </a>
-          ))}
+      {/* ===== Navigation ===== */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/70 backdrop-blur-lg border-b border-gray-200/50 shadow-sm" : "bg-transparent"}`}>
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white shadow-sm">
+              <Heart size={16} />
+            </div>
+            <span className="font-semibold tracking-tighter text-lg text-gray-900">HealthSathi</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
+            <a href="#features" className="hover:text-gray-900 transition-colors">{isHindi ? "फ़ीचर्स" : "Features"}</a>
+            <a href="#how-it-works" className="hover:text-gray-900 transition-colors">{isHindi ? "कैसे काम करता है" : "How It Works"}</a>
+            <a href="#pricing" className="hover:text-gray-900 transition-colors">{isHindi ? "प्लान" : "Pricing"}</a>
+          </div>
+          <div className="flex items-center gap-3">
+            <LanguageToggle />
+            <Link href="/login" className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-800 transition-all shadow-sm active:scale-95 flex items-center min-h-[40px]">
+              {isHindi ? "शुरू करें" : "Get Started"}
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* ===== Hero Section ===== */}
+      <main className="pt-32 pb-20 px-6 relative min-h-[92vh] flex items-center overflow-hidden">
+        {/* Background: Abstract emerald glow */}
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-tr from-emerald-100/50 via-teal-50/30 to-transparent blur-3xl -z-10 rounded-full animate-pulse" style={{ animationDuration: "8s" }} />
+
+        {/* Background: Heartbeat line across */}
+        <div className="absolute bottom-0 left-0 w-full -z-10">
+          <HeartbeatLine />
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => setLanguage(isHindi ? "en" : "hi")}
-            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all
-              ${scrolled ? "bg-sage-100 text-text-secondary hover:bg-sage-200" : "bg-white/15 text-white hover:bg-white/25"}`}
-          >
-            <Globe size={12} />
-            {isHindi ? "EN" : "हिंदी"}
-          </button>
+        {/* Background: Floating health icons */}
+        <FloatingHealthIcons />
 
-          <Link href="/dashboard"
-            className="hidden sm:inline-flex btn-primary !py-2.5 !px-5 !min-h-[38px] text-sm !rounded-xl gap-1.5">
-            {isHindi ? "ऐप खोलें" : "Open App"}
-            <ArrowRight size={14} />
-          </Link>
-
-          {/* Mobile menu toggle */}
-          <button
-            onClick={() => setMobileMenu(!mobileMenu)}
-            className={`lg:hidden w-10 h-10 rounded-xl flex items-center justify-center ${scrolled ? "bg-sage-100" : "bg-white/15"}`}
-          >
-            {mobileMenu
-              ? <X size={18} className={scrolled ? "text-text-primary" : "text-white"} />
-              : <Menu size={18} className={scrolled ? "text-text-primary" : "text-white"} />}
-          </button>
+        {/* Background: DNA helix left */}
+        <div className="absolute left-0 top-20 h-[500px] -z-10 hidden lg:block">
+          <DNAHelix />
         </div>
-      </div>
+        {/* DNA helix right */}
+        <div className="absolute right-0 top-40 h-[500px] -z-10 hidden lg:block" style={{ transform: "scaleX(-1)" }}>
+          <DNAHelix />
+        </div>
 
-      {/* Mobile menu */}
-      {mobileMenu && (
-        <div className="lg:hidden bg-white border-t border-sage-100 shadow-lg animate-slide-down">
-          <div className="p-4 space-y-1">
-            {links.map((link) => (
-              <a key={link.href} href={link.href}
-                onClick={() => setMobileMenu(false)}
-                className="block py-3 px-4 text-sm font-medium text-text-secondary hover:bg-sage-50 rounded-xl transition-colors">
-                {link.label}
-              </a>
-            ))}
-            <div className="pt-3 flex gap-2">
-              <button onClick={() => { setLanguage(isHindi ? "en" : "hi"); setMobileMenu(false); }}
-                className="btn-ghost flex-1 text-sm !min-h-[40px]">
-                <Globe size={14} /> {isHindi ? "English" : "हिंदी"}
-              </button>
-              <Link href="/dashboard" className="btn-primary flex-1 text-sm !min-h-[40px]" onClick={() => setMobileMenu(false)}>
-                {isHindi ? "ऐप खोलें" : "Open App"} <ArrowRight size={14} />
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
+          {/* Hero Text */}
+          <div className="flex flex-col gap-6 z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 w-fit min-h-[32px] min-w-fit">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-xs font-medium text-emerald-700">
+                {isHindi ? "AI-powered स्वास्थ्य प्लेटफ़ॉर्म" : "AI-Powered Health Platform"}
+              </span>
+            </div>
+
+            <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+              {isHindi ? "आपका स्वास्थ्य।" : "Your health."}<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 animate-gradient bg-[length:200%_200%]">
+                {isHindi ? "AI से संचालित।" : "Powered by AI."}
+              </span>
+            </h1>
+
+            <p className="text-lg text-gray-500 max-w-md font-light leading-relaxed">
+              {isHindi
+                ? "लक्षण जाँचें, रिपोर्ट अपलोड करें, दवाइयाँ ट्रैक करें — सब एक जगह। हिंदी और अंग्रेज़ी दोनों में।"
+                : "Check symptoms, upload reports, track medicines — all in one place. In both Hindi and English."}
+            </p>
+
+            <div className="flex items-center gap-4 pt-4">
+              <Link href="/login" className="bg-gray-900 text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-gray-800 transition-all shadow-md shadow-gray-900/10 active:scale-95 flex items-center gap-2 group min-h-[48px]">
+                {isHindi ? "मुफ़्त शुरू करें" : "Start Free"}
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link href="#features" className="bg-white text-gray-700 border border-gray-200 text-sm font-medium px-6 py-3 rounded-full hover:bg-gray-50 transition-all active:scale-95 min-h-[48px] flex items-center">
+                {isHindi ? "और जानें" : "Learn More"}
               </Link>
             </div>
+
+            {/* Trust badges */}
+            <div className="flex items-center gap-4 pt-4 text-xs text-gray-400">
+              <div className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-emerald-500" /> DPDPA 2023</div>
+              <div className="flex items-center gap-1.5"><Globe size={14} className="text-emerald-500" /> हिंदी + English</div>
+              <div className="flex items-center gap-1.5"><Zap size={14} className="text-emerald-500" /> {isHindi ? "तुरंत" : "Instant AI"}</div>
+            </div>
+          </div>
+
+          {/* Hero Interactive — Human Body Card */}
+          <div className="relative h-[550px] w-full hidden lg:block">
+            {/* Human body silhouette in background */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-60">
+              <div className="w-48 h-[480px]">
+                <HumanBodySVG />
+              </div>
+            </div>
+
+            {/* Main floating card */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-white/80 backdrop-blur-xl border border-white/80 rounded-3xl p-6 shadow-2xl shadow-emerald-900/5 animate-float z-20">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+                    {isHindi ? "स्वास्थ्य स्कोर" : "Health Score"}
+                  </p>
+                  <h3 className="text-2xl font-semibold tracking-tight text-gray-900">
+                    {isHindi ? "बेहतरीन" : "Optimal"} <span className="text-emerald-500">✓</span>
+                  </h3>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500">
+                  <Activity size={20} />
+                </div>
+              </div>
+              {/* Mini heartbeat */}
+              <svg viewBox="0 0 300 60" className="w-full h-12 mb-4">
+                <path d="M0,30 L60,30 L75,30 L85,10 L95,50 L105,5 L115,55 L125,20 L135,30 L180,30 L195,30 L205,10 L215,50 L225,5 L235,55 L245,20 L255,30 L300,30"
+                  fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" opacity="0.6">
+                  <animate attributeName="stroke-dashoffset" from="600" to="0" dur="3s" repeatCount="indefinite" />
+                </path>
+                <style>{`path { stroke-dasharray: 600; }`}</style>
+              </svg>
+              {/* Stats row */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-emerald-50 rounded-xl p-3 text-center">
+                  <p className="text-lg font-bold text-gray-900">72</p>
+                  <p className="text-[10px] text-gray-400 font-medium">{isHindi ? "हृदय" : "Heart"} ❤️</p>
+                </div>
+                <div className="bg-blue-50 rounded-xl p-3 text-center">
+                  <p className="text-lg font-bold text-gray-900">98%</p>
+                  <p className="text-[10px] text-gray-400 font-medium">SpO2 🫁</p>
+                </div>
+                <div className="bg-violet-50 rounded-xl p-3 text-center">
+                  <p className="text-lg font-bold text-gray-900">120</p>
+                  <p className="text-[10px] text-gray-400 font-medium">{isHindi ? "शुगर" : "Sugar"} 🩸</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating: AI Accuracy */}
+            <div className="absolute top-8 right-0 bg-white p-4 rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/50 flex items-center gap-3 animate-float-delayed z-30">
+              <div className="w-12 h-12 rounded-full relative flex items-center justify-center" style={{ background: "conic-gradient(#10b981 92%, #f3f4f6 0)" }}>
+                <div className="w-10 h-10 bg-white rounded-full absolute flex items-center justify-center">
+                  <Brain size={16} className="text-emerald-500" />
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-gray-400 font-medium">{isHindi ? "AI सटीकता" : "AI Accuracy"}</p>
+                <p className="text-lg font-semibold tracking-tight text-gray-900">95%</p>
+              </div>
+            </div>
+
+            {/* Floating: Bilingual */}
+            <div className="absolute bottom-12 left-0 bg-gray-900 p-4 rounded-2xl shadow-xl flex items-center gap-3 animate-float z-30 -rotate-2">
+              <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
+                <Dna size={14} className="text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 font-medium">{isHindi ? "भाषा" : "Bilingual"}</p>
+                <p className="text-sm font-medium text-white">हिंदी + English</p>
+              </div>
+            </div>
+
+            {/* Floating: Emergency */}
+            <div className="absolute bottom-8 right-8 bg-red-50 p-3 rounded-2xl border border-red-100 shadow-lg animate-float z-30 rotate-1" style={{ animationDelay: "1s" }}>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🚨</span>
+                <div>
+                  <p className="text-[10px] font-bold text-red-700 uppercase tracking-wider">{isHindi ? "इमरजेंसी" : "Emergency"}</p>
+                  <p className="text-xs text-red-500">112 / 108</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      )}
-    </nav>
-  );
-}
+      </main>
 
-/* ============== HERO ============== */
-function HeroSection() {
-  const { isHindi } = useLanguage();
+      {/* ===== Bento Grid Features ===== */}
+      <section id="features" className="max-w-7xl mx-auto px-6 pb-32 relative">
+        {/* Background organ circuits */}
+        <OrganCircuits />
 
-  return (
-    <section className="relative min-h-[92vh] flex items-center overflow-hidden">
-      {/* Animated gradient */}
-      <div className="absolute inset-0 animate-gradient"
-        style={{ background: "linear-gradient(135deg, #7A3300 0%, #8B3D00 20%, #993D00 40%, #B35400 60%, #CC6600 80%, #993D00 100%)", backgroundSize: "300% 300%" }} />
-
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-72 h-72 rounded-full opacity-[0.07] animate-float"
-        style={{ background: "radial-gradient(circle, white, transparent)" }} />
-      <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-[0.05]"
-        style={{ background: "radial-gradient(circle, #14b8a6, transparent)" }} />
-      <div className="absolute top-40 right-[20%] w-2 h-2 bg-white/20 rounded-full animate-pulse-gentle" />
-      <div className="absolute top-60 left-[15%] w-3 h-3 bg-white/10 rounded-full animate-float" />
-      <div className="absolute bottom-40 left-[30%] w-1.5 h-1.5 bg-white/15 rounded-full animate-pulse-gentle" />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-20 w-full">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 animate-slide-down"
-            style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", backdropFilter: "blur(10px)" }}>
-            <Sparkles size={14} className="text-yellow-200" />
-            <span className="text-xs font-bold text-white" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
-              {isHindi ? "AI-Powered • 140 करोड़ भारतीयों के लिए" : "AI-Powered • Built for 1.4B Indians"}
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-[1.1] tracking-tight" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.35)" }}>
-            {isHindi ? (
-              <>
-                आपका <span className="bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">भरोसेमंद</span>
-                <br />हेल्थसाथी
-              </>
-            ) : (
-              <>
-                Your <span className="bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">Trusted</span>
-                <br />Health Companion
-              </>
-            )}
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-white mt-6 max-w-xl mx-auto leading-relaxed font-medium" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.3)" }}>
+        <div className="mb-12 text-center max-w-2xl mx-auto relative z-10">
+          <h2 className="text-3xl font-semibold tracking-tight text-gray-900 mb-4">
+            {isHindi ? "एक ही जगह, सारी सुविधाएँ" : "Everything your health needs"}
+          </h2>
+          <p className="text-sm text-gray-500 font-light">
             {isHindi
-              ? "लक्षण जाँचें • रिपोर्ट समझें • दवाई याद दिलाएँ — सब हिंदी में, सब AI से, सब मुफ़्त।"
-              : "Check symptoms • Understand reports • Medicine reminders — Hindi-first, AI-powered, free to start."}
-          </p>
-
-          {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
-            <Link href="/dashboard" className="btn-primary w-full sm:w-auto text-base !py-4 !px-8 gap-2">
-              {isHindi ? "अभी शुरू करें — मुफ़्त" : "Start Free Now"}
-              <ArrowRight size={18} />
-            </Link>
-            <a href="#features" className="btn w-full sm:w-auto text-base !py-4 !px-8 text-white gap-2"
-              style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>
-              {isHindi ? "और जानें" : "Learn More"}
-              <ChevronDown size={18} />
-            </a>
-          </div>
-
-          {/* Trust signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-10 text-white/40 text-xs font-medium">
-            <span className="flex items-center gap-1.5"><Lock size={12} /> {isHindi ? "DPDPA अनुपालन" : "DPDPA Compliant"}</span>
-            <span className="flex items-center gap-1.5"><Shield size={12} /> {isHindi ? "कोई डेटा बिक्री नहीं" : "No Data Selling"}</span>
-            <span className="flex items-center gap-1.5"><Smartphone size={12} /> {isHindi ? "PWA • ऑफ़लाइन" : "PWA • Works Offline"}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <ChevronDown size={24} className="text-white/30" />
-      </div>
-    </section>
-  );
-}
-
-/* ============== FEATURES ============== */
-function FeaturesSection() {
-  const { isHindi } = useLanguage();
-
-  const features = [
-    {
-      icon: Search, gradient: "linear-gradient(135deg, #d3f3e4, #aae8cd)", iconColor: "text-emerald-700",
-      shadowColor: "rgba(5,150,105,0.15)",
-      title: isHindi ? "AI लक्षण जाँच" : "AI Symptom Checker",
-      desc: isHindi
-        ? "बस बताइए कहाँ दर्द है — AI आपको बताएगा क्या हो सकता है, घर पर क्या करें, और डॉक्टर को क्या बताएँ।"
-        : "Point where it hurts — AI tells you possible causes, home care tips, and what to tell your doctor.",
-      highlights: isHindi
-        ? ["हिंदी में बोलें या लिखें", "बॉडी डायग्राम पर टैप", "WhatsApp पर रिपोर्ट भेजें"]
-        : ["Speak or type in Hindi", "Tap on body diagram", "Share report via WhatsApp"],
-    },
-    {
-      icon: FolderHeart, gradient: "linear-gradient(135deg, #ccfbf1, #cffafe)", iconColor: "text-teal-700",
-      shadowColor: "rgba(13,148,136,0.15)",
-      title: isHindi ? "हेल्थ रिकॉर्ड मैनेजर" : "Health Record Manager",
-      desc: isHindi
-        ? "फ़ोटो खींचो, AI पढ़ेगा — ब्लड टेस्ट, एक्स-रे, पर्चे सब एक जगह, पूरे परिवार के।"
-        : "Snap a photo, AI reads it — blood tests, X-rays, prescriptions all in one place, for your entire family.",
-      highlights: isHindi
-        ? ["OCR से रिपोर्ट पढ़ाई", "असामान्य वैल्यू हाइलाइट", "सुरक्षित शेयर लिंक"]
-        : ["OCR-powered extraction", "Abnormal values highlighted", "Secure share links"],
-    },
-    {
-      icon: Pill, gradient: "linear-gradient(135deg, #fef3c7, #fde68a)", iconColor: "text-amber-700",
-      shadowColor: "rgba(245,158,11,0.15)",
-      title: isHindi ? "दवाई रिमाइंडर + रीफ़िल" : "Medicine Reminder + Refill",
-      desc: isHindi
-        ? "दवाई कभी न भूलें — AI पर्चा पढ़कर रिमाइंडर सेट करेगा, जेनेरिक से पैसे बचाएगा, और दवाई ख़त्म होने से पहले मँगवाएगा।"
-        : "Never miss a dose — AI reads prescriptions, sets reminders, saves money with generics, auto-orders refills.",
-      highlights: isHindi
-        ? ["पर्चा स्कैन → ऑटो सेटअप", "जेनेरिक से 90% तक बचत", "दवाई ख़त्म होने की चेतावनी"]
-        : ["Scan prescription → auto-setup", "Save up to 90% with generics", "Low stock alerts + refill"],
-    },
-  ];
-
-  return (
-    <section id="features" className="py-20 sm:py-28 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <span className="badge-green text-xs mb-4 inline-block">
-            {isHindi ? "मुख्य विशेषताएँ" : "Core Features"}
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
-            {isHindi ? "3 समस्याएँ, 1 ऐप" : "3 Problems, 1 App"}
-          </h2>
-          <p className="text-text-muted mt-3 max-w-lg mx-auto">
-            {isHindi ? "हर भारतीय की 3 सबसे बड़ी स्वास्थ्य समस्याओं का एक समाधान" : "One solution for every Indian family's 3 biggest health pain points"}
+              ? "लक्षण जाँचें, रिपोर्ट अपलोड करें, दवाइयाँ ट्रैक करें — बिना किसी अनुमान के"
+              : "Stop guessing. Get AI-powered insights and track your complete health journey."}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {features.map((f, i) => {
-            const Icon = f.icon;
-            return (
-              <div key={i} className="rounded-3xl p-6 sm:p-8 transition-all duration-500 group hover:-translate-y-2"
-                style={{ background: "#fafbf9", border: "1px solid #f0f2eb" }}>
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500"
-                  style={{ background: f.gradient, boxShadow: `0 8px 24px ${f.shadowColor}` }}>
-                  <Icon size={28} className={f.iconColor} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px] relative z-10">
+          {/* AI Symptom Checker — spans 2 */}
+          <div className="md:col-span-2 bg-white rounded-3xl p-8 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-500 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-50 rounded-full blur-3xl -mr-24 -mt-24 group-hover:scale-125 transition-transform duration-700" />
+            <div className="relative z-10 h-full flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center mb-4">
+                  <Brain size={20} />
                 </div>
-                <h3 className="text-xl font-extrabold text-text-primary mb-2">{f.title}</h3>
-                <p className="text-sm text-text-muted leading-relaxed mb-4">{f.desc}</p>
-                <ul className="space-y-2">
-                  {f.highlights.map((h, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm">
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                        style={{ background: f.gradient }}>
-                        <Check size={10} className={f.iconColor} />
-                      </div>
-                      <span className="text-text-secondary font-medium">{h}</span>
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="text-2xl font-semibold tracking-tight text-gray-900 mb-2">
+                  {isHindi ? "AI लक्षण जाँच" : "AI Symptom Checker"}
+                </h3>
+                <p className="text-sm text-gray-500 max-w-sm">
+                  {isHindi
+                    ? "बॉडी मैप पर टैप करें या बोलकर बताएँ — AI समझेगा और सलाह देगा"
+                    : "Tap on the body map or speak — AI understands and provides personalized guidance"}
+                </p>
               </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============== HOW IT WORKS ============== */
-function HowItWorksSection() {
-  const { isHindi } = useLanguage();
-
-  const steps = [
-    { num: "01", emoji: "📱", title: isHindi ? "ऐप खोलें" : "Open the App", desc: isHindi ? "फ़ोन नंबर से OTP लॉगिन — 30 सेकंड" : "Login with phone OTP — 30 seconds" },
-    { num: "02", emoji: "🗣️", title: isHindi ? "बताइए क्या हुआ" : "Describe Your Issue", desc: isHindi ? "हिंदी में बोलें या लिखें, बॉडी पर टैप करें" : "Speak or type in Hindi, tap on body diagram" },
-    { num: "03", emoji: "🤖", title: isHindi ? "AI जवाब देगा" : "Get AI Analysis", desc: isHindi ? "संभावित कारण, घरेलू उपाय, डॉक्टर नोट्स — सब तुरंत" : "Possible causes, home care, doctor notes — instantly" },
-    { num: "04", emoji: "📋", title: isHindi ? "रिकॉर्ड रखें" : "Track Everything", desc: isHindi ? "रिपोर्ट अपलोड करें, दवाई सेट करें, सब एक जगह" : "Upload reports, set medicine reminders, all in one place" },
-  ];
-
-  return (
-    <section id="how-it-works" className="py-20 sm:py-28"
-      style={{ background: "linear-gradient(180deg, #f5f7f2 0%, #fff 100%)" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <span className="badge-blue text-xs mb-4 inline-block">
-            {isHindi ? "कैसे काम करता है" : "How it Works"}
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
-            {isHindi ? "4 आसान स्टेप में शुरू करें" : "Get Started in 4 Simple Steps"}
-          </h2>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map((step, i) => (
-            <div key={i} className="text-center group animate-slide-up" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="relative inline-block mb-4">
-                <div className="w-20 h-20 rounded-3xl flex items-center justify-center text-3xl mx-auto
-                               group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500"
-                  style={{ background: "linear-gradient(135deg, #f0fdf4, #d3f3e4)", boxShadow: "0 8px 24px rgba(5,150,105,0.1)" }}>
-                  {step.emoji}
+              <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100 max-w-md w-full">
+                <div className="flex gap-3">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex-shrink-0 flex items-center justify-center mt-1">
+                    <Heart size={10} className="text-emerald-600" />
+                  </div>
+                  <div className="bg-white px-4 py-2.5 rounded-2xl rounded-tl-none border border-gray-100 text-xs text-gray-600 shadow-sm">
+                    {isHindi
+                      ? "आपके लक्षणों के आधार पर, यह सामान्य सर्दी-ज़ुकाम हो सकता है। आराम करें और गर्म पानी पिएँ। 🩺"
+                      : "Based on your symptoms, this could be common cold. Rest and stay hydrated with warm water. 🩺"}
+                  </div>
                 </div>
-                <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-extrabold text-white"
-                  style={{ background: "linear-gradient(135deg, #FF9933, #E67A00)" }}>
-                  {step.num}
-                </span>
               </div>
-              <h3 className="text-base font-bold text-text-primary mb-1">{step.title}</h3>
-              <p className="text-sm text-text-muted">{step.desc}</p>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+          </div>
 
-/* ============== STATS ============== */
-function StatsSection() {
-  const { isHindi } = useLanguage();
-  const stats = [
-    { value: "140Cr+", label: isHindi ? "भारत की जनसंख्या" : "India's Population" },
-    { value: "78%", label: isHindi ? "हिंदी बोलने वाले" : "Hindi Speakers" },
-    { value: "₹99", label: isHindi ? "प्रति माह से शुरू" : "Per Month Starts At" },
-    { value: "90%", label: isHindi ? "जेनेरिक से बचत" : "Savings with Generics" },
-  ];
-
-  return (
-    <section className="py-16 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((s, i) => (
-            <div key={i} className="text-center p-6 rounded-2xl" style={{ background: "#fafbf9" }}>
-              <p className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-                {s.value}
+          {/* Report Upload */}
+          <div className="bg-white rounded-3xl p-8 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-500 flex flex-col justify-between group">
+            <div>
+              <div className="w-10 h-10 rounded-full bg-gray-50 text-gray-900 flex items-center justify-center mb-4 border border-gray-100 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors duration-500">
+                <Upload size={20} />
+              </div>
+              <h3 className="text-xl font-semibold tracking-tight text-gray-900 mb-2">
+                {isHindi ? "रिपोर्ट अपलोड" : "Smart Reports"}
+              </h3>
+              <p className="text-sm text-gray-500">
+                {isHindi ? "ब्लड टेस्ट, X-Ray — कुछ भी अपलोड करें, AI समझेगा" : "Upload blood tests, X-Rays — AI reads and explains them"}
               </p>
-              <p className="text-sm text-text-muted mt-1 font-medium">{s.label}</p>
+            </div>
+            <div className="space-y-3 mt-6">
+              {[
+                { label: isHindi ? "PDF / फ़ोटो" : "PDF / Photo", icon: <Eye size={14} className="text-gray-400" />, on: true },
+                { label: isHindi ? "AI विश्लेषण" : "AI Analysis", icon: <Sparkles size={14} className="text-gray-400" />, on: true },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                    {item.icon} {item.label}
+                  </div>
+                  <div className={`w-10 h-5 ${item.on ? "bg-emerald-500" : "bg-gray-200"} rounded-full relative`}>
+                    <div className={`w-4 h-4 bg-white rounded-full absolute left-0.5 top-0.5 shadow-sm ${item.on ? "translate-x-5" : ""} transition-transform`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Medicine Tracker — dark card */}
+          <div className="bg-gray-900 rounded-3xl p-8 shadow-sm hover:shadow-lg transition-all duration-500 flex flex-col justify-between text-white relative overflow-hidden group">
+            <div className="absolute -bottom-20 -right-20 w-56 h-56 bg-emerald-500/20 rounded-full blur-3xl group-hover:bg-emerald-400/30 transition-colors duration-700" />
+            {/* Mini body SVG in bg */}
+            <div className="absolute top-4 right-4 w-20 h-32 opacity-[0.06]">
+              <HumanBodySVG />
+            </div>
+            <div className="relative z-10">
+              <div className="w-10 h-10 rounded-full bg-gray-800 text-emerald-400 flex items-center justify-center mb-4">
+                <Pill size={20} />
+              </div>
+              <h3 className="text-xl font-semibold tracking-tight mb-2">
+                {isHindi ? "दवाई ट्रैकर" : "Medicine Tracker"}
+              </h3>
+              <p className="text-sm text-gray-400">
+                {isHindi ? "समय पर दवाई लें, रीफ़िल अलर्ट पाएँ, जेनेरिक विकल्प देखें" : "Take medicines on time, get refill alerts, explore generic options"}
+              </p>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-2 relative z-10">
+              <span className="px-3 py-1.5 rounded-lg bg-gray-800 border border-gray-700 text-xs font-medium text-gray-300">
+                ⏰ {isHindi ? "रिमाइंडर" : "Reminders"}</span>
+              <span className="px-3 py-1.5 rounded-lg bg-gray-800 border border-emerald-500/30 text-xs font-medium text-emerald-400">
+                💰 {isHindi ? "जेनेरिक" : "Generics"}</span>
+              <span className="px-3 py-1.5 rounded-lg bg-gray-800 border border-gray-700 text-xs font-medium text-gray-300">
+                📦 {isHindi ? "रीफ़िल" : "Refill"}</span>
+            </div>
+          </div>
+
+          {/* Emergency + Safety — spans 2 */}
+          <div className="md:col-span-2 bg-white rounded-3xl p-8 border border-gray-200/60 shadow-sm flex flex-col md:flex-row items-center gap-8 justify-between hover:shadow-md transition-all duration-500 relative overflow-hidden">
+            {/* Heartbeat line bg */}
+            <div className="absolute bottom-0 left-0 w-full opacity-30">
+              <HeartbeatLine />
+            </div>
+            <div className="max-w-sm relative z-10">
+              <h3 className="text-2xl font-semibold tracking-tight text-gray-900 mb-2">
+                {isHindi ? "इमरजेंसी + गोपनीयता" : "Emergency + Privacy"}
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                {isHindi
+                  ? "एक टैप से 112/108 कॉल, निकटतम अस्पताल। DPDPA 2023 अनुपालन।"
+                  : "One-tap 112/108 emergency call. Find nearest hospital. DPDPA 2023 compliant."}
+              </p>
+              <Link href="/login" className="text-sm font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1 group w-fit min-h-[44px] min-w-fit">
+                {isHindi ? "और जानें" : "Learn more"}
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+            {/* Safety ring with pulse */}
+            <div className="relative w-40 h-40 flex-shrink-0">
+              <div className="absolute inset-0 rounded-full border-2 border-dashed border-gray-200 animate-[spin_20s_linear_infinite]" />
+              <div className="absolute inset-2 rounded-full flex items-center justify-center shadow-inner" style={{ background: "conic-gradient(#10b981 92%, #f3f4f6 0)" }}>
+                <div className="w-[88%] h-[88%] bg-white rounded-full absolute flex flex-col items-center justify-center shadow-sm">
+                  <span className="text-2xl">🛡️</span>
+                  <span className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold mt-1">DPDPA ✓</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== How It Works ===== */}
+      <section id="how-it-works" className="max-w-7xl mx-auto px-6 pb-28 relative">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-semibold tracking-tight text-gray-900 mb-4">
+            {isHindi ? "3 आसान स्टेप" : "3 simple steps"}
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { num: "01", icon: <Search size={24} />, emoji: "🗣️", title: isHindi ? "लक्षण बताएँ" : "Describe symptoms", desc: isHindi ? "बोलें या टाइप करें — हिंदी/अंग्रेज़ी" : "Speak or type — in Hindi or English" },
+            { num: "02", icon: <Sparkles size={24} />, emoji: "🧠", title: isHindi ? "AI विश्लेषण" : "AI analyzes", desc: isHindi ? "Gemini AI आपके लक्षणों का विश्लेषण करता है" : "Gemini AI analyzes your symptoms in seconds" },
+            { num: "03", icon: <Stethoscope size={24} />, emoji: "💊", title: isHindi ? "सलाह पाएँ" : "Get guidance", desc: isHindi ? "दवाई, डॉक्टर, या घरेलू उपचार — तुरंत" : "Medicine, doctor, or home remedy — instantly" },
+          ].map((step, i) => (
+            <div key={i} className="bg-white rounded-3xl p-8 border border-gray-200/60 shadow-sm text-center hover:shadow-md transition-all duration-500 group">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-3xl flex items-center justify-center mx-auto mb-5 relative group-hover:scale-110 transition-transform duration-500">
+                {step.emoji}
+                <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center text-[10px] font-bold text-white">{step.num}</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h3>
+              <p className="text-sm text-gray-500">{step.desc}</p>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-/* ============== PRICING (Premium Animated Dark Cards) ============== */
-function PricingSection() {
-  const { isHindi } = useLanguage();
-  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
-
-  const plans = [
-    {
-      name: isHindi ? "मुफ़्त" : "Starter",
-      subtitle: isHindi ? "शुरू करने के लिए" : "Perfect for beginners",
-      price: "₹0",
-      period: isHindi ? "हमेशा" : "forever",
-      periodSub: isHindi ? "कोई क्रेडिट कार्ड नहीं" : "No credit card required",
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></svg>
-      ),
-      features: isHindi
-        ? ["3 लक्षण जाँच/दिन", "50 MB स्टोरेज", "1 प्रोफ़ाइल", "5 AI रिपोर्ट/महीना", "3 दवाई रिमाइंडर"]
-        : ["3 symptom checks/day", "50 MB storage", "1 profile", "5 AI reports/mo", "3 reminders"],
-      cta: isHindi ? "मुफ़्त शुरू करें" : "START FREE",
-      highlighted: false,
-      glowColors: "radial-gradient(at 0% 64%, hsla(142, 80%, 40%, 0.6) 0px, transparent 85%), radial-gradient(at 41% 94%, hsla(160, 80%, 70%, 0.4) 0px, transparent 85%), radial-gradient(at 100% 99%, hsla(174, 80%, 50%, 0.5) 0px, transparent 85%)",
-    },
-    {
-      name: isHindi ? "साथी प्लस" : "Saathi Plus",
-      subtitle: isHindi ? "पूरे परिवार के लिए" : "For your entire family",
-      price: billing === "monthly" ? "₹99" : "₹799",
-      period: billing === "monthly" ? (isHindi ? "/महीना" : "/ mo") : (isHindi ? "/साल" : "/ yr"),
-      periodSub: billing === "annual" ? (isHindi ? "₹200+ बचत" : "Save ₹200+") : (isHindi ? "एक कप चाय से कम" : "Less than a cup of chai"),
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /><path d="M5 3v4" /><path d="M19 17v4" /><path d="M3 5h4" /><path d="M17 19h4" /></svg>
-      ),
-      features: isHindi
-        ? ["सब कुछ Free में +", "अनलिमिटेड लक्षण जाँच", "5 GB स्टोरेज", "4 परिवार प्रोफ़ाइल", "अनलिमिटेड AI रिपोर्ट", "पर्चा स्कैन + दवाई चेक", "2% कैशबैक", "कोई विज्ञापन नहीं"]
-        : ["Everything in Free +", "Unlimited symptom checks", "5 GB storage", "4 family profiles", "Unlimited AI reports", "Prescription scan + drug check", "2% cashback", "No ads"],
-      cta: isHindi ? "अभी शुरू करें" : "GET STARTED",
-      highlighted: true,
-      glowColors: "radial-gradient(at 0% 64%, hsla(263, 93%, 56%, 1) 0px, transparent 85%), radial-gradient(at 41% 94%, hsla(284, 100%, 84%, 1) 0px, transparent 85%), radial-gradient(at 100% 99%, hsla(306, 100%, 57%, 1) 0px, transparent 85%)",
-    },
-    {
-      name: isHindi ? "साथी फ़ैमिली" : "Saathi Family",
-      subtitle: isHindi ? "बड़े परिवारों के लिए" : "For large families & clinics",
-      price: billing === "monthly" ? "₹199" : "₹1599",
-      period: billing === "monthly" ? (isHindi ? "/महीना" : "/ mo") : (isHindi ? "/साल" : "/ yr"),
-      periodSub: billing === "annual" ? (isHindi ? "₹800+ बचत" : "Save ₹800+") : (isHindi ? "प्राइअरिटी सपोर्ट" : "Priority support"),
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m16 6 4 14" /><path d="M12 6v14" /><path d="M8 8v12" /><path d="M4 4v16" /></svg>
-      ),
-      features: isHindi
-        ? ["सब कुछ Plus में +", "10 GB स्टोरेज", "10 परिवार प्रोफ़ाइल", "बल्क डाउनलोड", "5% कैशबैक", "साप्ताहिक हेल्थ रिपोर्ट", "प्राइअरिटी सपोर्ट"]
-        : ["Everything in Plus +", "10 GB storage", "10 family profiles", "Bulk download", "5% cashback", "Weekly health report", "Priority support"],
-      cta: isHindi ? "अपग्रेड करें" : "UPGRADE",
-      highlighted: false,
-      glowColors: "radial-gradient(at 0% 64%, hsla(220, 80%, 50%, 0.5) 0px, transparent 85%), radial-gradient(at 41% 94%, hsla(240, 80%, 75%, 0.4) 0px, transparent 85%), radial-gradient(at 100% 99%, hsla(260, 80%, 60%, 0.5) 0px, transparent 85%)",
-    },
-  ];
-
-  return (
-    <section id="pricing" className="py-20 sm:py-28 overflow-hidden w-full"
-      style={{ background: "hsla(240, 15%, 4%, 1)", fontFamily: "'Inter', sans-serif" }}>
-
-      {/* Animated border keyframes */}
-      <style>{`
-        @keyframes rotateBorder {
-          to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-      `}</style>
-
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 flex flex-col items-center">
-
-        {/* Header */}
-        <div className="text-center mb-16 relative w-full flex flex-col items-center">
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-normal tracking-tight mb-4 text-white max-w-4xl mx-auto leading-[1.1]">
-            {isHindi ? "एक कप चाय से भी " : "Plans for "}
-            <span className="text-transparent bg-clip-text" style={{
-              backgroundImage: "linear-gradient(135deg, hsl(277, 95%, 60%), hsl(306, 100%, 57%), hsl(284, 100%, 84%))"
-            }}>
-              {isHindi ? "कम दाम" : "every family"}
-            </span>
-          </h2>
-          <p className="text-sm sm:text-base text-neutral-500 mb-8">{isHindi ? "मुफ़्त शुरू करें, बाद में अपग्रेड करें" : "Start free, upgrade when you need more"}</p>
-
-          {/* Monthly/Annual Toggle */}
-          <div className="inline-flex items-center p-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-sm">
-            <button
-              onClick={() => setBilling("monthly")}
-              className={`px-6 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 ${billing === "monthly"
-                ? "text-zinc-100 bg-white/10 shadow-sm border border-white/5"
-                : "text-zinc-400 hover:text-zinc-200"
-                }`}
-            >
-              {isHindi ? "मासिक" : "MONTHLY"}
-            </button>
-            <button
-              onClick={() => setBilling("annual")}
-              className={`px-6 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 ${billing === "annual"
-                ? "text-zinc-100 bg-white/10 shadow-sm border border-white/5"
-                : "text-zinc-400 hover:text-zinc-200"
-                }`}
-            >
-              {isHindi ? "वार्षिक (-33%)" : "ANNUALLY (-33%)"}
-            </button>
+      {/* ===== Stats ===== */}
+      <section className="max-w-7xl mx-auto px-6 pb-28">
+        <div className="bg-gray-900 rounded-3xl p-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.03]">
+            <HeartbeatLine />
           </div>
+          {[
+            { value: "18+", label: isHindi ? "बीमारियाँ KB" : "Diseases in KB", emoji: "🏥" },
+            { value: "2", label: isHindi ? "भाषाएँ" : "Languages", emoji: "🌐" },
+            { value: "24/7", label: isHindi ? "उपलब्ध" : "Available", emoji: "⚡" },
+            { value: "₹0", label: isHindi ? "शुरू करें" : "To Start", emoji: "🎉" },
+          ].map((stat, i) => (
+            <div key={i} className="relative z-10">
+              <p className="text-sm mb-2">{stat.emoji}</p>
+              <p className="text-3xl font-semibold text-white mb-1">{stat.value}</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">{stat.label}</p>
+            </div>
+          ))}
         </div>
+      </section>
 
-        {/* Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full items-stretch relative z-10">
-          {plans.map((plan, i) => (
-            <div key={i}
-              className={`relative hover:bg-white/[0.04] transition-all duration-300 group rounded-2xl p-6 ${plan.highlighted ? "md:-mt-4 md:-mb-4" : ""}`}
-              style={{
-                backgroundColor: "hsla(240, 15%, 9%, 1)",
-                backgroundImage: `radial-gradient(at 88% 40%, hsla(240, 15%, 9%, 1) 0px, transparent 85%), radial-gradient(at 49% 30%, hsla(240, 15%, 9%, 1) 0px, transparent 85%), radial-gradient(at 14% 26%, hsla(240, 15%, 9%, 1) 0px, transparent 85%), ${plan.glowColors}`,
-                boxShadow: "0px -16px 24px 0px rgba(255, 255, 255, 0.25) inset",
-              }}
-            >
-              {/* Animated border overlay */}
-              <div style={{
-                overflow: "hidden",
-                pointerEvents: "none",
-                position: "absolute",
-                zIndex: -10,
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "calc(100% + 2px)",
-                height: "calc(100% + 2px)",
-                backgroundImage: "linear-gradient(0deg, hsl(0, 0%, 100%) -50%, hsl(0, 0%, 40%) 100%)",
-                borderRadius: "1rem",
-              }}>
-                <div style={{
-                  pointerEvents: "none",
-                  position: "fixed",
-                  zIndex: 200,
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%) rotate(0deg)",
-                  transformOrigin: "left",
-                  width: "200%",
-                  height: "10rem",
-                  backgroundImage: plan.highlighted
-                    ? "linear-gradient(0deg, hsla(0, 0%, 100%, 0) 0%, hsl(277, 95%, 60%) 40%, hsl(277, 95%, 60%) 60%, hsla(0, 0%, 40%, 0) 100%)"
-                    : "linear-gradient(0deg, hsla(0, 0%, 100%, 0) 0%, hsl(142, 70%, 45%) 40%, hsl(142, 70%, 45%) 60%, hsla(0, 0%, 40%, 0) 100%)",
-                  animation: "rotateBorder 8s linear infinite",
-                }} />
-              </div>
-
-              {/* Recommended Badge */}
-              {plan.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full z-30"
-                  style={{
-                    background: "linear-gradient(135deg, hsl(277, 95%, 60%), hsl(306, 100%, 57%))",
-                    boxShadow: "0 0 20px hsla(277, 95%, 60%, 0.4)",
-                  }}>
-                  <span className="text-[10px] text-white font-semibold tracking-widest uppercase">
-                    {isHindi ? "लोकप्रिय" : "RECOMMENDED"}
-                  </span>
+      {/* ===== Pricing ===== */}
+      <section id="pricing" className="max-w-7xl mx-auto px-6 pb-28">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-semibold tracking-tight text-gray-900 mb-4">
+            {isHindi ? "सिंपल प्लान" : "Simple pricing"}
+          </h2>
+          <p className="text-sm text-gray-500">{isHindi ? "कोई छिपा शुल्क नहीं" : "No hidden fees. Cancel anytime."}</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          {[
+            { name: isHindi ? "मुफ़्त" : "Free", price: "₹0", features: isHindi ? ["3 AI जाँच/दिन", "दवाई ट्रैकिंग", "इमरजेंसी 🚨"] : ["3 AI checks/day", "Medicine tracking", "Emergency 🚨"], popular: false },
+            { name: isHindi ? "साथी प्लस" : "Saathi Plus", price: "₹99", features: isHindi ? ["अनलिमिटेड AI जाँच", "रिपोर्ट अपलोड 📋", "फ़ैमिली प्रोफ़ाइल 👨‍👩‍👧‍👦"] : ["Unlimited AI checks", "Report upload 📋", "Family profiles 👨‍👩‍👧‍👦"], popular: true },
+            { name: isHindi ? "फ़ैमिली" : "Family", price: "₹199", features: isHindi ? ["6 सदस्य तक", "प्राथमिकता सहायता ⚡", "सभी फ़ीचर्स ✨"] : ["Up to 6 members", "Priority support ⚡", "All features ✨"], popular: false },
+          ].map((plan, i) => (
+            <div key={i} className={`rounded-3xl p-8 border ${plan.popular ? "bg-gray-900 text-white border-gray-800 relative shadow-xl shadow-gray-900/20" : "bg-white border-gray-200/60 shadow-sm"} hover:shadow-lg transition-all duration-500 hover:-translate-y-1`}>
+              {plan.popular && (
+                <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-2xl rounded-tr-3xl">
+                  {isHindi ? "लोकप्रिय" : "Popular"} ⭐
                 </div>
               )}
-
-              {/* Card Header — Icon + Name */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl border border-white/20 flex items-center justify-center"
-                    style={{
-                      background: plan.highlighted
-                        ? "linear-gradient(135deg, hsla(277, 95%, 60%, 0.2), hsla(306, 100%, 57%, 0.2))"
-                        : "linear-gradient(135deg, hsla(142, 70%, 45%, 0.2), hsla(174, 80%, 50%, 0.2))",
-                    }}>
-                    <span className={plan.highlighted ? "text-purple-400" : "text-emerald-400"}>{plan.icon}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-medium tracking-tight text-white">{plan.name}</h3>
-                    <p className="text-xs text-neutral-500">{plan.subtitle}</p>
-                  </div>
-                </div>
+              <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className={`text-3xl font-semibold ${plan.popular ? "text-emerald-400" : "text-gray-900"}`}>{plan.price}</span>
+                <span className={`text-sm ${plan.popular ? "text-gray-400" : "text-gray-500"}`}>/{isHindi ? "महीना" : "mo"}</span>
               </div>
-
-              {/* Price */}
-              <div className="mb-6">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-semibold tracking-tight text-white">{plan.price}</span>
-                  <span className="text-sm text-neutral-400">{plan.period}</span>
-                </div>
-                <p className="text-xs text-neutral-500 mt-1">{plan.periodSub}</p>
-              </div>
-
-              {/* Features */}
-              <ul className="space-y-3 text-sm text-neutral-300 mb-8 flex-1">
-                {plan.features.map((feature, j) => (
-                  <li key={j} className="flex items-start gap-3">
-                    <div className="shrink-0 mt-0.5" style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      width: "1rem",
-                      height: "1rem",
-                      backgroundColor: plan.highlighted ? "hsl(277, 92%, 58%)" : "hsl(142, 70%, 45%)",
-                      borderRadius: "50%",
-                    }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="hsla(240, 15%, 9%, 1)" stroke="hsla(240, 15%, 9%, 1)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+              <ul className="space-y-3 mb-8">
+                {plan.features.map((f, j) => (
+                  <li key={j} className={`flex items-center gap-2 text-sm ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center ${plan.popular ? "bg-emerald-500/20 text-emerald-400" : "bg-emerald-50 text-emerald-600"}`}>
+                      <Zap size={10} />
                     </div>
-                    {feature}
+                    {f}
                   </li>
                 ))}
               </ul>
-
-              {/* CTA Button */}
-              <Link href="/subscription" className={`w-full py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center text-sm font-medium tracking-wide ${plan.highlighted
-                ? "text-white bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 shadow-[0_0_20px_hsla(277,95%,60%,0.3)]"
-                : "text-zinc-300 border border-white/10 bg-white/5 hover:bg-white/10 hover:text-white"
-                }`}>
-                {plan.cta}
+              <Link href="/login" className={`w-full text-center text-sm font-medium py-3 rounded-full block transition-all active:scale-95 min-h-[44px] flex items-center justify-center ${plan.popular ? "bg-white text-gray-900 hover:bg-gray-100" : "bg-gray-900 text-white hover:bg-gray-800"}`}>
+                {isHindi ? "शुरू करें" : "Get Started"} →
               </Link>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-/* ============== TESTIMONIALS ============== */
-function TestimonialsSection() {
-  const { isHindi } = useLanguage();
-
-  const reviews = [
-    {
-      name: "रमेश कुमार", city: isHindi ? "कानपुर" : "Kanpur", avatar: "👨", rating: 5,
-      text: isHindi ? "पहली बार किसी ऐप ने हिंदी में इतना अच्छा काम किया। मेरी माँ भी अपनी रिपोर्ट समझ पाती हैं अब।" : "First app that works so well in Hindi. Even my mother can now understand her reports."
-    },
-    {
-      name: "प्रिया शर्मा", city: isHindi ? "जयपुर" : "Jaipur", avatar: "👩", rating: 5,
-      text: isHindi ? "जेनेरिक दवाई से हर महीने ₹800 बचत हो रही है। बहुत ही काम का ऐप है!" : "Saving ₹800 every month with generic medicines. Extremely useful app!"
-    },
-    {
-      name: "अमित वर्मा", city: isHindi ? "लखनऊ" : "Lucknow", avatar: "👨‍⚕️", rating: 5,
-      text: isHindi ? "मरीज़ अब अपनी रिपोर्ट लेकर आते हैं तो सब organized होता है। डॉक्टर नोट्स फ़ीचर बहुत अच्छा है।" : "Patients come with organized reports now. The doctor notes feature is excellent."
-    },
-  ];
-
-  return (
-    <section id="testimonials" className="py-20 sm:py-28 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <span className="badge-yellow text-xs mb-4 inline-block">
-            {isHindi ? "उपयोगकर्ता समीक्षा" : "User Reviews"}
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
-            {isHindi ? "लोग क्या कहते हैं" : "What People Say"}
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {reviews.map((r, i) => (
-            <div key={i} className="rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:-translate-y-1"
-              style={{ background: "#fafbf9", border: "1px solid #f0f2eb" }}>
-              <div className="flex items-center gap-0.5 mb-4">
-                {Array.from({ length: r.rating }).map((_, j) => (
-                  <Star key={j} size={16} className="text-amber-400 fill-amber-400" />
-                ))}
-              </div>
-              <p className="text-sm text-text-primary leading-relaxed mb-6">"{r.text}"</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
-                  style={{ background: "linear-gradient(135deg, #d3f3e4, #aae8cd)" }}>
-                  {r.avatar}
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-text-primary">{r.name}</p>
-                  <p className="text-xs text-text-muted">{r.city}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============== FAQ ============== */
-function FAQSection() {
-  const { isHindi } = useLanguage();
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const faqs = [
-    {
-      q: isHindi ? "क्या HealthSathi मुफ़्त है?" : "Is HealthSathi free?",
-      a: isHindi ? "हाँ! मुफ़्त प्लान में 3 लक्षण जाँच/दिन, 50MB स्टोरेज, और 3 दवाई रिमाइंडर शामिल हैं। कोई क्रेडिट कार्ड नहीं चाहिए।" : "Yes! Free plan includes 3 daily symptom checks, 50MB storage, and 3 medicine reminders. No credit card required."
-    },
-    {
-      q: isHindi ? "क्या AI सलाह सुरक्षित है?" : "Is the AI advice safe?",
-      a: isHindi ? "HealthSathi कभी निश्चित निदान नहीं देता। हर जवाब में 'यह डॉक्टर की सलाह का विकल्प नहीं है' लिखा होता है। इमरजेंसी में सीधे 108 कॉल बटन दिखता है।" : "HealthSathi never gives a definitive diagnosis. Every response includes a 'this is not a substitute for medical advice' disclaimer. Emergency cases show a direct 108 call button."
-    },
-    {
-      q: isHindi ? "मेरा डेटा कहाँ स्टोर होता है?" : "Where is my data stored?",
-      a: isHindi ? "आपका डेटा एन्क्रिप्टेड सर्वर पर भारत में स्टोर होता है। DPDPA 2023 का पूरा अनुपालन। AI को भेजने से पहले सभी PII हटा दिए जाते हैं।" : "Your data is stored on encrypted servers in India. Full DPDPA 2023 compliance. All PII is stripped before sending to AI."
-    },
-    {
-      q: isHindi ? "परिवार के सदस्य कैसे जोड़ें?" : "How do I add family members?",
-      a: isHindi ? "प्रोफ़ाइल में जाकर '+ सदस्य जोड़ें' पर टैप करें। मुफ़्त प्लान में 1, Plus में 4, और Family में 10 सदस्य जोड़ सकते हैं।" : "Go to Profile and tap '+ Add Member'. Free plan allows 1, Plus allows 4, and Family allows 10 members."
-    },
-    {
-      q: isHindi ? "जेनेरिक दवाई कैसे बचत करती है?" : "How do generic medicines save money?",
-      a: isHindi ? "जब आप दवाई जोड़ते हैं, AI उसका सस्ता जेनेरिक विकल्प दिखाता है — ज़्यादातर में 70-93% बचत होती है, और दोनों में एक ही सॉल्ट होता है।" : "When you add a medicine, AI shows its cheaper generic alternative — most save 70-93%, and both contain the same active ingredient."
-    },
-  ];
-
-  return (
-    <section id="faq" className="py-20 sm:py-28"
-      style={{ background: "linear-gradient(180deg, #f5f7f2 0%, #fff 100%)" }}>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <span className="badge-blue text-xs mb-4 inline-block">FAQ</span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
-            {isHindi ? "अक्सर पूछे जाने वाले सवाल" : "Frequently Asked Questions"}
-          </h2>
-        </div>
-
-        <div className="space-y-3">
-          {faqs.map((faq, i) => (
-            <div key={i} className="rounded-2xl overflow-hidden border border-sage-200 bg-white transition-all duration-300"
-              style={openIndex === i ? { boxShadow: "0 4px 16px rgba(0,0,0,0.06)" } : {}}>
-              <button
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex items-center justify-between p-5 text-left"
-              >
-                <span className="text-sm font-semibold text-text-primary pr-4">{faq.q}</span>
-                {openIndex === i
-                  ? <ChevronUp size={18} className="text-primary-600 shrink-0" />
-                  : <ChevronDown size={18} className="text-text-muted shrink-0" />}
-              </button>
-              {openIndex === i && (
-                <div className="px-5 pb-5 animate-slide-down">
-                  <p className="text-sm text-text-muted leading-relaxed">{faq.a}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============== CTA ============== */
-function CTASection() {
-  const { isHindi } = useLanguage();
-
-  return (
-    <section className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="absolute inset-0 animate-gradient"
-        style={{ background: "linear-gradient(135deg, #7A3300, #993F00, #CC6600, #FF9933)", backgroundSize: "300% 300%" }} />
-      <div className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10 animate-float"
-        style={{ background: "radial-gradient(circle, white, transparent)" }} />
-
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
-        <h2 className="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
-          {isHindi ? "आज ही अपना स्वास्थ्य साथी बनाएँ" : "Make Your Health Companion Today"}
-        </h2>
-        <p className="text-white/60 mt-4 max-w-lg mx-auto text-base">
-          {isHindi ? "मुफ़्त प्लान से शुरू — कोई क्रेडिट कार्ड नहीं" : "Start with free plan — no credit card needed"}
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
-          <Link href="/dashboard" className="btn-primary w-full sm:w-auto text-base !py-4 !px-10 gap-2 !bg-white !text-emerald-700"
-            style={{ boxShadow: "0 4px 20px rgba(255,255,255,0.3)" }}>
-            {isHindi ? "अभी शुरू करें" : "Get Started Free"}
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============== FOOTER ============== */
-function Footer() {
-  const { isHindi } = useLanguage();
-
-  return (
-    <footer className="bg-text-primary text-white/60 py-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-          {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #FF9933, #E67A00)" }}>
-                <Heart size={16} className="text-white" />
-              </div>
-              <span className="text-lg font-extrabold text-white">HealthSathi</span>
-            </div>
-            <p className="text-sm leading-relaxed">
-              {isHindi ? "AI-पावर्ड हेल्थ कम्पैनियन — हिंदी में, भारत के लिए।" : "AI-Powered Health Companion — Hindi-first, built for India."}
+      {/* ===== Final CTA ===== */}
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+        <div className="bg-gray-900 rounded-3xl p-12 md:p-16 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-56 h-56 bg-teal-500/10 rounded-full blur-3xl" />
+          {/* Heartbeat in bg */}
+          <div className="absolute inset-0 flex items-end opacity-10">
+            <HeartbeatLine />
+          </div>
+          <div className="relative z-10">
+            <p className="text-5xl mb-4">🫀</p>
+            <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4 tracking-tight">
+              {isHindi ? "आज ही शुरू करें" : "Start your health journey"}
+            </h2>
+            <p className="text-gray-400 text-sm mb-8 max-w-md mx-auto">
+              {isHindi ? "कोई क्रेडिट कार्ड नहीं चाहिए। फ़्री प्लान हमेशा के लिए।" : "No credit card required. Free plan forever. Your data stays private."}
             </p>
-          </div>
-
-          {/* Product */}
-          <div>
-            <h4 className="text-sm font-bold text-white mb-4">{isHindi ? "प्रोडक्ट" : "Product"}</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><a href="#features" className="hover:text-white transition-colors">{isHindi ? "विशेषताएँ" : "Features"}</a></li>
-              <li><a href="#pricing" className="hover:text-white transition-colors">{isHindi ? "प्लान" : "Pricing"}</a></li>
-              <li><Link href="/dashboard" className="hover:text-white transition-colors">{isHindi ? "ऐप खोलें" : "Open App"}</Link></li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-sm font-bold text-white mb-4">{isHindi ? "कानूनी" : "Legal"}</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">{isHindi ? "गोपनीयता नीति" : "Privacy Policy"}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{isHindi ? "नियम व शर्तें" : "Terms of Service"}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{isHindi ? "DPDPA अनुपालन" : "DPDPA Compliance"}</a></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-sm font-bold text-white mb-4">{isHindi ? "संपर्क" : "Contact"}</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li className="flex items-center gap-2"><Phone size={12} /> +91 98765 43210</li>
-              <li className="flex items-center gap-2"><FileText size={12} /> support@healthsathi.in</li>
-            </ul>
+            <Link href="/login" className="bg-emerald-500 text-white text-sm font-semibold px-8 py-3.5 rounded-full hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/25 active:scale-95 inline-flex items-center gap-2 min-h-[48px]">
+              {isHindi ? "अभी शुरू करें" : "Get Started Now"} <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
+      </section>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs">© 2026 HealthSathi (हेल्थसाथी). {isHindi ? "सर्वाधिकार सुरक्षित।" : "All rights reserved."}</p>
-          <p className="text-xs flex items-center gap-2">
-            <span>{isHindi ? "भारत में बनाया" : "Made in India"} 🇮🇳</span>
-            <span>•</span>
-            <span>{isHindi ? "प्यार से" : "with"} 🧡</span>
+      {/* ===== Footer ===== */}
+      <footer className="border-t border-gray-200/60 py-12 px-6 bg-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white">
+              <Heart size={14} />
+            </div>
+            <span className="font-semibold tracking-tighter text-gray-900">HealthSathi</span>
+          </div>
+          <div className="flex items-center gap-6 text-sm text-gray-400">
+            <Link href="/login" className="hover:text-gray-900 transition-colors min-h-[44px] flex items-center">{isHindi ? "गोपनीयता" : "Privacy"}</Link>
+            <Link href="/login" className="hover:text-gray-900 transition-colors min-h-[44px] flex items-center">{isHindi ? "शर्तें" : "Terms"}</Link>
+            <Link href="/emergency" className="hover:text-gray-900 transition-colors min-h-[44px] flex items-center">{isHindi ? "इमरजेंसी" : "Emergency"}</Link>
+          </div>
+          <p className="text-xs text-gray-400">
+            © 2024 HealthSathi — {isHindi ? "आपका स्वास्थ्य साथी" : "Your Health Companion"} 💚
           </p>
         </div>
-      </div>
-    </footer>
-  );
-}
-
-/* ============== MAIN PAGE ============== */
-export default function LandingPage() {
-  return (
-    <div className="min-h-screen">
-      <Navbar />
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <StatsSection />
-      <PricingSection />
-      <TestimonialsSection />
-      <FAQSection />
-      <CTASection />
-      <Footer />
+      </footer>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import FloatingHearts from "@/components/shared/FloatingHearts";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 import {
@@ -124,7 +125,7 @@ export default function MedicinesPage() {
             {/* Header */}
             <header className="relative px-5 pt-12 pb-8 text-white overflow-hidden">
                 <div className="absolute inset-0"
-                    style={{ background: "linear-gradient(135deg, #993F00, #CC6600, #FF9933, #E67A00)" }} />
+                    style={{ background: "linear-gradient(135deg, #047857, #059669, #10b981)" }} />
                 <div className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-10 animate-float"
                     style={{ background: "radial-gradient(circle, white, transparent)" }} />
 
@@ -144,14 +145,14 @@ export default function MedicinesPage() {
                         <div className="flex-1 rounded-2xl p-3.5"
                             style={{ background: "rgba(255,255,255,0.12)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.15)" }}>
                             <div className="flex items-center gap-2.5">
-                                <div className="w-10 h-10 rounded-xl flex items-center justify-center relative streak-glow"
-                                    style={{ background: "rgba(249,115,22,0.3)" }}>
-                                    <Flame size={20} className="text-orange-300" />
+                                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                                    style={{ background: "rgba(255,255,255,0.2)" }}>
+                                    <Pill size={20} />
                                 </div>
                                 <div>
-                                    <p className="text-lg font-extrabold">7 🔥</p>
+                                    <p className="text-lg font-extrabold">{totalMeds}</p>
                                     <p className="text-[10px] text-white/50 font-medium">
-                                        {isHindi ? "दिन स्ट्रीक" : "Day Streak"}
+                                        {isHindi ? "कुल दवाइयाँ" : "Total Meds"}
                                     </p>
                                 </div>
                             </div>
@@ -176,13 +177,11 @@ export default function MedicinesPage() {
             </header>
 
             <div className="px-4 -mt-4 relative z-10 space-y-4">
-                {/* Family chips */}
-                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                    {(isHindi ? ["सभी", "रमेश", "पिताजी", "माताजी"] : ["All", "Ramesh", "Father", "Mother"]).map((name, i) => (
-                        <button key={name} className={i === 0 ? "chip-active" : "chip-inactive"}>
-                            👤 {name}
-                        </button>
-                    ))}
+                {/* Action buttons */}
+                <div className="flex gap-2 pb-1">
+                    <button onClick={() => setShowRefill(true)} className="chip-inactive flex items-center gap-1.5">
+                        <ShoppingCart size={12} /> {isHindi ? "रीफ़िल" : "Refill"}
+                    </button>
                 </div>
 
                 {/* Low stock alert */}
@@ -224,7 +223,7 @@ export default function MedicinesPage() {
                                         return (
                                             <div
                                                 key={med.id}
-                                                className={`card border-l-[3px] transition-all duration-500 ${isTaken ? "border-l-emerald-400 opacity-60" : "border-l-amber-400"
+                                                className={`card border-l-[3px] transition-all duration-500 ${isTaken ? "border-l-emerald-400 opacity-60" : "border-l-blue-400"
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-3.5">
@@ -233,9 +232,9 @@ export default function MedicinesPage() {
                                                         className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 shrink-0"
                                                         style={{
                                                             background: isTaken
-                                                                ? "linear-gradient(135deg, #FF9933, #E67A00)"
+                                                                ? "linear-gradient(135deg, #10b981, #059669)"
                                                                 : "linear-gradient(135deg, #f1f5f9, #e2e8f0)",
-                                                            boxShadow: isTaken ? "0 2px 8px rgba(5,150,105,0.3)" : "none",
+                                                            boxShadow: isTaken ? "0 2px 8px rgba(16,185,129,0.3)" : "none",
                                                         }}
                                                     >
                                                         {isTaken ? (
@@ -277,14 +276,14 @@ export default function MedicinesPage() {
                         <span className="text-xs font-semibold text-text-secondary">
                             {isHindi ? "आज की प्रगति" : "Today's Progress"}
                         </span>
-                        <span className="text-xs font-bold" style={{ color: "#FF9933" }}>{progress}%</span>
+                        <span className="text-xs font-bold text-emerald-600">{progress}%</span>
                     </div>
-                    <div className="w-full h-2.5 bg-sage-200 rounded-full overflow-hidden">
+                    <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
                         <div
                             className="h-full rounded-full transition-all duration-700"
                             style={{
                                 width: `${progress}%`,
-                                background: "linear-gradient(90deg, #FF9933, #E67A00, #FFB366)",
+                                background: "linear-gradient(90deg, #10b981, #3B8AFF, #60a5fa)",
                             }}
                         />
                     </div>
@@ -306,7 +305,7 @@ export default function MedicinesPage() {
                         <div className="grid grid-cols-2 gap-3">
                             <button className="card flex flex-col items-center gap-2.5 py-6 border border-sage-100 hover:border-primary-300">
                                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                                    style={{ background: "linear-gradient(135deg, #d3f3e4, #aae8cd)" }}>
+                                    style={{ background: "linear-gradient(135deg, #dbeafe, #bfdbfe)" }}>
                                     <Camera size={24} className="text-emerald-700" />
                                 </div>
                                 <span className="text-sm font-bold">{t("medicines.scanPrescription")}</span>
@@ -394,7 +393,7 @@ export default function MedicinesPage() {
 
                             {/* Brand option */}
                             <div className={`card transition-all duration-300 ${!showGeneric ? '' : 'opacity-60'}`}
-                                style={!showGeneric ? { border: "2px solid #FF9933" } : { border: "1px solid #e5e7eb" }}>
+                                style={!showGeneric ? { border: "2px solid #10b981" } : { border: "1px solid #e5e7eb" }}>
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-sm font-bold">Glycomet 500mg</p>
@@ -431,6 +430,7 @@ export default function MedicinesPage() {
                 </div>
             )}
 
+            <FloatingHearts />
             <BottomNav />
         </div>
     );
