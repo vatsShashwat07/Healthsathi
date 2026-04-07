@@ -22,14 +22,15 @@ import {
     Sparkles,
     X,
     User,
+    HelpCircle,
+    AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
 
 const menuItems = [
     { key: "subscription", icon: CreditCard, href: "/subscription", bg: "bg-indigo-50", color: "text-indigo-600" },
-    { key: "notifications", icon: Bell, href: "#", bg: "bg-amber-50", color: "text-amber-600" },
-    { key: "language", icon: Globe, href: "#", bg: "bg-teal-50", color: "text-teal-600" },
-    { key: "privacy", icon: Shield, href: "#", bg: "bg-slate-50", color: "text-slate-600" },
+    { key: "help", icon: HelpCircle, href: "/help", bg: "bg-amber-50", color: "text-amber-600", labelEn: "Help Centre", labelHi: "सहायता केंद्र" },
+    { key: "privacy", icon: Shield, href: "/privacy", bg: "bg-teal-50", color: "text-teal-600" },
 ];
 
 export default function ProfilePage() {
@@ -44,6 +45,25 @@ export default function ProfilePage() {
     const [showAddMember, setShowAddMember] = useState(false);
     const [newMember, setNewMember] = useState({ name: "", relation: "", age: "" });
     const [saving, setSaving] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDeleteAllData = async () => {
+        if (!user) return;
+        setDeleting(true);
+        try {
+            await Promise.all([
+                supabase.from('medicines').delete().eq('user_id', user.id),
+                supabase.from('health_records').delete().eq('user_id', user.id),
+                supabase.from('family_members').delete().eq('user_id', user.id),
+            ]);
+            await signOut();
+            window.location.href = '/login';
+        } catch (e) {
+            console.error('Delete failed:', e);
+            setDeleting(false);
+        }
+    };
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -211,23 +231,50 @@ export default function ProfilePage() {
 
                 {/* Danger zone */}
                 <section className="card divide-y divide-slate-50">
-                    <button className="flex items-center gap-3 py-3.5 w-full text-left">
+                    <button onClick={() => setShowDeleteConfirm(true)} className="flex items-center gap-3 py-3.5 w-full text-left">
                         <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
                             <Trash2 size={16} className="text-red-500" />
                         </div>
-                        <span className="flex-1 text-sm font-semibold text-red-600">{t("profile.deleteData")}</span>
+                        <span className="flex-1 text-sm font-extrabold text-red-600">{t("profile.deleteData")}</span>
                     </button>
                     <button onClick={async () => { await signOut(); window.location.href = "/login"; }} className="flex items-center gap-3 py-3.5 w-full text-left">
                         <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
                             <LogOut size={16} className="text-slate-500" />
                         </div>
-                        <span className="flex-1 text-sm font-semibold text-slate-600">{t("profile.logout")}</span>
+                        <span className="flex-1 text-sm font-extrabold text-slate-600">{t("profile.logout")}</span>
                     </button>
                 </section>
 
                 <p className="text-center text-[11px] text-slate-400 py-3 font-medium">
-                    HealthSathi v1.0.0 — {isHindi ? "आपका भरोसेमंद स्वास्थ्य साथी 💙" : "Your trusted health companion 💙"}
+                    HealthSathi v1.0.0 — {isHindi ? "आपका भरोसेमंद स्वास्थ्य साथी" : "Your trusted health companion"} 💚
                 </p>
+
+                {/* Delete Confirmation Modal */}
+                {showDeleteConfirm && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: "rgba(0,0,0,0.5)" }}>
+                        <div className="bg-white max-w-sm w-full rounded-3xl p-6 text-center animate-scale-in">
+                            <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-4">
+                                <AlertTriangle size={28} className="text-red-500" />
+                            </div>
+                            <h3 className="text-lg font-extrabold text-slate-900 mb-2">
+                                {isHindi ? "सारा डेटा हटाएँ?" : "Delete All Data?"}
+                            </h3>
+                            <p className="text-sm text-slate-500 mb-6 font-medium">
+                                {isHindi
+                                    ? "आपकी सभी दवाइयाँ, रिपोर्ट, और परिवार सदस्य हटा दिए जाएँगे। यह क्रिया पलटी नहीं जा सकती।"
+                                    : "All your medicines, records, and family members will be permanently deleted. This action cannot be undone."}
+                            </p>
+                            <div className="flex gap-3">
+                                <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-3 rounded-2xl bg-slate-100 text-sm font-bold text-slate-700">
+                                    {isHindi ? "रद्द करें" : "Cancel"}
+                                </button>
+                                <button onClick={handleDeleteAllData} disabled={deleting} className="flex-1 py-3 rounded-2xl bg-red-500 text-white text-sm font-bold disabled:opacity-50">
+                                    {deleting ? (isHindi ? "हटा रहे हैं..." : "Deleting...") : (isHindi ? "हाँ, हटाएँ" : "Yes, Delete")}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Add Family Member Modal */}

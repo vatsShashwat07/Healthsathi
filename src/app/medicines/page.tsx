@@ -58,6 +58,7 @@ export default function MedicinesPage() {
     const [showRefill, setShowRefill] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showGeneric, setShowGeneric] = useState(true);
+    const [orderMedName, setOrderMedName] = useState("");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [schedule, setSchedule] = useState<any>({ morning: [], afternoon: [], evening: [], night: [] });
@@ -324,107 +325,86 @@ export default function MedicinesPage() {
                 </div>
             )}
 
-            {/* Refill Bottom Sheet */}
+            {/* Order Medicine Bottom Sheet */}
             {showRefill && (
                 <div className="bottom-sheet">
                     <div className="bottom-sheet-overlay" onClick={() => setShowRefill(false)} />
                     <div className="bottom-sheet-content">
-                        <div className="w-10 h-1 bg-sage-300 rounded-full mx-auto mb-4" />
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-bold flex items-center gap-2">
-                                <Pill size={18} className="text-primary-500" />
-                                {t("medicines.orderRefill")}
+                        <div className="w-10 h-1 bg-slate-200 rounded-full mx-auto mb-4" />
+                        <div className="flex items-center justify-between mb-5">
+                            <h3 className="text-lg font-extrabold flex items-center gap-2 text-slate-900">
+                                <ShoppingCart size={18} className="text-emerald-600" />
+                                {isHindi ? "दवाई ऑर्डर करें" : "Order Medicine"}
                             </h3>
-                            <button onClick={() => setShowRefill(false)} className="w-8 h-8 rounded-xl bg-sage-100 flex items-center justify-center">
-                                <X size={16} className="text-text-muted" />
+                            <button onClick={() => setShowRefill(false)} className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center">
+                                <X size={16} className="text-slate-500" />
                             </button>
                         </div>
 
-                        <div className="card border border-sage-200 mb-4">
-                            <p className="text-sm font-bold flex items-center gap-2">
-                                <Pill size={14} className="text-text-muted" />
-                                Metformin 500mg
-                            </p>
-                            <p className="text-xs text-text-muted mt-1">
-                                {formatRefillInfo(5, 2, isHindi)}
-                            </p>
+                        <div className="mb-4">
+                            <label className="text-xs font-bold text-slate-600 mb-1.5 block uppercase tracking-wider">
+                                {isHindi ? "दवाई का नाम" : "Medicine Name"}
+                            </label>
+                            <input
+                                type="text"
+                                value={orderMedName}
+                                onChange={e => setOrderMedName(e.target.value)}
+                                className="input text-sm"
+                                placeholder={isHindi ? "जैसे: Paracetamol, Azithromycin..." : "e.g. Paracetamol, Azithromycin..."}
+                            />
                         </div>
 
-                        {/* Generic Alternative Toggle */}
-                        <div className="card border border-primary-200 mb-4" style={{ background: "linear-gradient(135deg, #edfaf4, #f5f7f2)" }}>
+                        <div className="card border border-emerald-200 mb-4" style={{ background: "linear-gradient(135deg, #ecfdf5, #f0fdfa)" }}>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <BadgeIndianRupee size={16} className="text-primary-600" />
+                                    <BadgeIndianRupee size={16} className="text-emerald-600" />
                                     <div>
-                                        <p className="text-sm font-bold text-primary-800">
-                                            {isHindi ? "जेनेरिक विकल्प" : "Generic Alternative"}
+                                        <p className="text-sm font-bold text-emerald-800">
+                                            {isHindi ? "जेनेरिक विकल्प खोजें" : "Search Generic Alternative"}
                                         </p>
-                                        <p className="text-[10px] text-primary-600">
-                                            {isHindi ? "वही नमक • FDA प्रमाणित" : "Same salt formula • FDA approved"}
+                                        <p className="text-[10px] text-emerald-600 font-medium">
+                                            {isHindi ? "वही नमक • FDA प्रमाणित • कम दाम" : "Same salt • FDA approved • Lower cost"}
                                         </p>
                                     </div>
                                 </div>
                                 <button onClick={handleGenericToggle} className="flex items-center">
                                     {showGeneric ? (
-                                        <ToggleRight size={32} className="text-primary-500" />
+                                        <ToggleRight size={32} className="text-emerald-500" />
                                     ) : (
-                                        <ToggleLeft size={32} className="text-sage-400" />
+                                        <ToggleLeft size={32} className="text-slate-400" />
                                     )}
                                 </button>
                             </div>
                         </div>
 
-                        <div className="space-y-3 mb-4">
-                            {/* Generic option */}
-                            <div className={`card transition-all duration-300 ${showGeneric ? 'order-first' : 'order-last opacity-60'}`}
-                                style={showGeneric ? { background: "linear-gradient(135deg, #edfaf4, #d3f3e4)", border: "2px solid #72d7ae" } : { border: "1px solid #e8eae3" }}>
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        {showGeneric && <span className="badge-green text-[10px] mb-1">{isHindi ? "💰 सबसे सस्ता" : "💰 Best Price"}</span>}
-                                        <p className={`text-sm font-bold ${showGeneric ? 'text-primary-800' : 'text-text-primary'}`}>Generic — Metformin</p>
-                                        <p className={`text-xs ${showGeneric ? 'text-primary-600' : 'text-text-muted'}`}>1mg Pharmacy</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className={`text-2xl font-extrabold ${showGeneric ? 'text-primary-700' : 'text-text-primary'}`}>₹45</p>
-                                        <p className={`text-[10px] ${showGeneric ? 'text-primary-600' : 'text-text-muted'}`}>{isHindi ? "30 गोलियाँ" : "30 tablets"}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Brand option */}
-                            <div className={`card transition-all duration-300 ${!showGeneric ? '' : 'opacity-60'}`}
-                                style={!showGeneric ? { border: "2px solid #10b981" } : { border: "1px solid #e5e7eb" }}>
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm font-bold">Glycomet 500mg</p>
-                                        <p className="text-xs text-text-muted">PharmEasy</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-xl font-bold text-text-primary">₹125</p>
-                                        <p className="text-[10px] text-text-muted">{isHindi ? "30 गोलियाँ" : "30 tablets"}</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="flex items-center gap-2 mb-4 p-3 rounded-2xl bg-blue-50 border border-blue-100">
+                            <ShieldCheck size={14} className="text-blue-600 shrink-0" />
+                            <p className="text-xs font-semibold text-blue-800">
+                                {isHindi
+                                    ? "📍 आपकी लोकेशन से नज़दीकी मेडिकल स्टोर Google Maps पर दिखेंगे"
+                                    : "📍 Nearby medical stores shown on Google Maps based on your location"}
+                            </p>
                         </div>
 
-                        {showGeneric && (
-                            <div className="flex items-center gap-2 mb-3 p-2.5 rounded-xl" style={{ background: "#edfaf4" }}>
-                                <ShieldCheck size={14} className="text-primary-600 shrink-0" />
-                                <p className="text-xs font-bold text-primary-700">
-                                    💰 {isHindi ? "जेनेरिक से ₹80 बचाएँ (64%) — वही दवाई, कम दाम" : "Save ₹80 with generic (64%) — Same medicine, lower cost"}
-                                </p>
-                            </div>
-                        )}
-
                         <button
-                            onClick={() => trackRefillOrder(showGeneric, showGeneric ? 80 : 0)}
-                            className="btn-primary w-full text-base gap-2.5"
+                            onClick={() => {
+                                const medName = orderMedName.trim() || "medicine";
+                                const q = showGeneric ? `generic ${medName} medical store near me` : `${medName} medical store near me`;
+                                if (navigator.geolocation) {
+                                    navigator.geolocation.getCurrentPosition(
+                                        (pos) => window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}/@${pos.coords.latitude},${pos.coords.longitude},14z`, "_blank"),
+                                        () => window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}`, "_blank")
+                                    );
+                                } else {
+                                    window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}`, "_blank");
+                                }
+                                setShowRefill(false);
+                            }}
+                            disabled={!orderMedName.trim()}
+                            className="btn-accent w-full text-base gap-2.5 disabled:opacity-40"
                         >
                             <ShoppingCart size={18} />
-                            {showGeneric
-                                ? (isHindi ? "जेनेरिक ऑर्डर करें — ₹45" : "Order Generic — ₹45")
-                                : (isHindi ? "ब्रांड ऑर्डर करें — ₹125" : "Order Brand — ₹125")
-                            }
+                            {isHindi ? "नज़दीकी स्टोर खोजें 📍" : "Find Nearby Stores 📍"}
                         </button>
                     </div>
                 </div>
