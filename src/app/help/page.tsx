@@ -57,13 +57,13 @@ export default function HelpPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#f8faf9]">
-            <header className="bg-white border-b border-slate-100 px-5 pt-14 pb-5">
+        <div className="min-h-screen bg-[#f8faf9] dark:bg-[#0c0f14]">
+            <header className="bg-white dark:bg-[#1a1f2e] border-b border-slate-100 px-5 pt-14 pb-5">
                 <div className="max-w-3xl mx-auto flex items-center gap-3">
                     <Link href="/profile" className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
                         <ArrowLeft size={18} className="text-slate-600" />
                     </Link>
-                    <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h1 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                         {isHindi ? "सहायता केंद्र" : "Help Centre"}
                     </h1>
                 </div>
@@ -78,10 +78,10 @@ export default function HelpPage() {
                         </div>
                         <div>
                             <h2 className="text-lg font-extrabold text-slate-900">{isHindi ? "हमसे संपर्क करें" : "Contact Us"}</h2>
-                            <p className="text-sm text-slate-500 font-medium">{isHindi ? "हम मदद के लिए तैयार हैं" : "We're here to help"}</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 font-medium">{isHindi ? "हम मदद के लिए तैयार हैं" : "We're here to help"}</p>
                         </div>
                     </div>
-                    <a href="mailto:vantiquityai@gmail.com" className="flex items-center gap-2 mt-3 bg-white rounded-2xl px-4 py-3 border border-emerald-100 hover:shadow-md transition-all">
+                    <a href="mailto:vantiquityai@gmail.com" className="flex items-center gap-2 mt-3 bg-white dark:bg-[#1a1f2e] rounded-2xl px-4 py-3 border border-emerald-100 hover:shadow-md transition-all">
                         <Mail size={18} className="text-emerald-600" />
                         <span className="text-sm font-bold text-slate-900">vantiquityai@gmail.com</span>
                     </a>
@@ -89,13 +89,13 @@ export default function HelpPage() {
 
                 {/* Features */}
                 <div>
-                    <h2 className="text-lg font-extrabold text-slate-900 mb-4">{isHindi ? "फ़ीचर्स" : "Features"}</h2>
+                    <h2 className="text-lg font-extrabold text-slate-900 dark:text-white mb-4">{isHindi ? "फ़ीचर्स" : "Features"}</h2>
                     <div className="grid grid-cols-2 gap-3">
                         {features.map((f, i) => (
-                            <div key={i} className="bg-white rounded-2xl p-4 border border-slate-100/60">
+                            <div key={i} className="bg-white dark:bg-[#1a1f2e] rounded-2xl p-4 border border-slate-100/60">
                                 <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">{f.icon}</div>
                                 <p className="text-sm font-bold text-slate-900">{f.label}</p>
-                                <p className="text-xs text-slate-400 font-medium">{f.desc}</p>
+                                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">{f.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -103,28 +103,28 @@ export default function HelpPage() {
 
                 {/* FAQ */}
                 <div>
-                    <h2 className="text-lg font-extrabold text-slate-900 mb-4">{isHindi ? "अक्सर पूछे जाने वाले प्रश्न" : "FAQ"}</h2>
+                    <h2 className="text-lg font-extrabold text-slate-900 dark:text-white mb-4">{isHindi ? "अक्सर पूछे जाने वाले प्रश्न" : "FAQ"}</h2>
                     <div className="space-y-3">
                         {faqs.map((faq, i) => (
-                            <details key={i} className="bg-white rounded-2xl border border-slate-100/60 group">
-                                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-slate-900 flex items-center justify-between list-none">
+                            <details key={i} className="bg-white dark:bg-[#1a1f2e] rounded-2xl border border-slate-100/60 group">
+                                <summary className="px-5 py-4 cursor-pointer text-sm font-bold text-slate-900 dark:text-white flex items-center justify-between list-none">
                                     {faq.q}
                                     <span className="text-slate-300 group-open:rotate-180 transition-transform text-lg">▾</span>
                                 </summary>
-                                <p className="px-5 pb-4 text-sm text-slate-600 leading-relaxed font-medium">{faq.a}</p>
+                                <p className="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{faq.a}</p>
                             </details>
                         ))}
                     </div>
                 </div>
 
                 {/* Legal */}
-                <div className="bg-white rounded-3xl p-6 border border-slate-100/60">
-                    <h2 className="text-lg font-extrabold text-slate-900 mb-3">{isHindi ? "कानूनी" : "Legal"}</h2>
+                <div className="bg-white dark:bg-[#1a1f2e] rounded-3xl p-6 border border-slate-100/60">
+                    <h2 className="text-lg font-extrabold text-slate-900 dark:text-white mb-3">{isHindi ? "कानूनी" : "Legal"}</h2>
                     <div className="space-y-2">
                         <Link href="/privacy" className="flex items-center gap-2 py-2 text-sm font-semibold text-emerald-600 hover:underline">
                             <FileText size={14} /> {isHindi ? "गोपनीयता नीति" : "Privacy Policy"}
                         </Link>
-                        <p className="text-xs text-slate-400 mt-3 font-medium">
+                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-3 font-medium">
                             {isHindi
                                 ? "⚠️ HealthSathi चिकित्सा सलाह का विकल्प नहीं है। गंभीर स्थिति में हमेशा डॉक्टर से मिलें।"
                                 : "⚠️ HealthSathi is NOT a substitute for professional medical advice. Always consult a doctor for serious conditions."}
@@ -134,7 +134,7 @@ export default function HelpPage() {
 
                 <div className="text-center py-4">
                     <div className="flex items-center justify-center gap-1.5 text-emerald-500 mb-1"><Heart size={14} /> HealthSathi</div>
-                    <p className="text-xs text-slate-400 font-medium">
+                    <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
                         {isHindi ? "आपका स्वास्थ्य साथी" : "Your Health Companion"} 💚
                     </p>
                 </div>

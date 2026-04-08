@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-import FloatingHearts from "@/components/shared/FloatingHearts";
+import FloatingOrgans from "@/components/shared/FloatingOrgans";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
+import ThemeToggle from "@/components/shared/ThemeToggle";
 import {
     Plus,
     Camera,
@@ -138,7 +139,10 @@ export default function MedicinesPage() {
                                 {isHindi ? `${takenCount}/${totalMeds} दवाइयाँ ली` : `${takenCount}/${totalMeds} taken`}
                             </p>
                         </div>
-                        <LanguageToggle />
+                        <div className="flex items-center gap-2">
+                            <ThemeToggle />
+                            <LanguageToggle />
+                        </div>
                     </div>
 
                     {/* Streak + Progress */}
@@ -196,7 +200,7 @@ export default function MedicinesPage() {
                         <AlertTriangle size={18} className="text-white" />
                     </div>
                     <div className="flex-1">
-                        <p className="text-sm font-bold text-red-800">{t("medicines.lowStock")}</p>
+                        <p className="text-sm font-extrabold text-red-800">{t("medicines.lowStock")}</p>
                         <p className="text-xs text-red-600 mt-0.5">
                             {formatRefillInfo(5, 2, isHindi)}
                         </p>
@@ -216,7 +220,7 @@ export default function MedicinesPage() {
                             <section key={slot.key} className="animate-slide-up">
                                 <div className="flex items-center gap-2 mb-2.5 px-1">
                                     <span className="text-base">{slot.emoji}</span>
-                                    <h3 className="text-sm font-bold text-text-primary">{t(`medicines.times.${slot.key}`)}</h3>
+                                    <h3 className="text-sm font-extrabold text-text-primary">{t(`medicines.times.${slot.key}`)}</h3>
                                 </div>
                                 <div className="space-y-2.5">
                                     {meds.map((med: any) => {
@@ -245,12 +249,12 @@ export default function MedicinesPage() {
                                                         )}
                                                     </button>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className={`text-sm font-bold ${isTaken ? "line-through text-text-muted" : "text-text-primary"}`}>
+                                                        <p className={`text-sm font-extrabold ${isTaken ? "line-through text-text-muted" : "text-text-primary"}`}>
                                                             {isHindi ? med.name_hi : med.name}
                                                         </p>
                                                         <p className="text-xs text-text-muted mt-0.5">{isHindi ? med.dose : med.doseEn} • {isHindi ? med.meal : med.mealEn}</p>
                                                         {((isHindi ? med.generic : med.genericEn)) && !isTaken && (
-                                                            <p className="text-xs text-emerald-600 mt-1 font-semibold">💡 {isHindi ? med.generic : med.genericEn}</p>
+                                                            <p className="text-xs text-emerald-600 mt-1 font-extrabold">💡 {isHindi ? med.generic : med.genericEn}</p>
                                                         )}
                                                     </div>
                                                     {!isTaken && (
@@ -274,10 +278,10 @@ export default function MedicinesPage() {
                 {/* Progress bar */}
                 <div className="card">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-semibold text-text-secondary">
+                        <span className="text-xs font-extrabold text-text-secondary">
                             {isHindi ? "आज की प्रगति" : "Today's Progress"}
                         </span>
-                        <span className="text-xs font-bold text-emerald-600">{progress}%</span>
+                        <span className="text-xs font-extrabold text-emerald-600">{progress}%</span>
                     </div>
                     <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
                         <div
@@ -302,14 +306,14 @@ export default function MedicinesPage() {
                     <div className="bottom-sheet-overlay" onClick={() => setShowAddModal(false)} />
                     <div className="bottom-sheet-content">
                         <div className="w-10 h-1 bg-sage-300 rounded-full mx-auto mb-4" />
-                        <h3 className="text-lg font-bold mb-4">{t("medicines.addMedicine")}</h3>
+                        <h3 className="text-lg font-extrabold mb-4">{t("medicines.addMedicine")}</h3>
                         <div className="grid grid-cols-2 gap-3">
                             <button className="card flex flex-col items-center gap-2.5 py-6 border border-sage-100 hover:border-primary-300">
                                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
                                     style={{ background: "linear-gradient(135deg, #dbeafe, #bfdbfe)" }}>
                                     <Camera size={24} className="text-emerald-700" />
                                 </div>
-                                <span className="text-sm font-bold">{t("medicines.scanPrescription")}</span>
+                                <span className="text-sm font-extrabold">{t("medicines.scanPrescription")}</span>
                                 <span className="text-[10px] text-text-muted font-medium">AI {isHindi ? "पढ़ेगा" : "reads"}</span>
                             </button>
                             <button className="card flex flex-col items-center gap-2.5 py-6 border border-sage-100 hover:border-primary-300">
@@ -317,7 +321,7 @@ export default function MedicinesPage() {
                                     style={{ background: "linear-gradient(135deg, #ccfbf1, #cffafe)" }}>
                                     <Edit3 size={24} className="text-teal-700" />
                                 </div>
-                                <span className="text-sm font-bold">{t("medicines.manualAdd")}</span>
+                                <span className="text-sm font-extrabold">{t("medicines.manualAdd")}</span>
                                 <span className="text-[10px] text-text-muted font-medium">{isHindi ? "ख़ुद लिखें" : "Type"}</span>
                             </button>
                         </div>
@@ -342,7 +346,7 @@ export default function MedicinesPage() {
                         </div>
 
                         <div className="mb-4">
-                            <label className="text-xs font-bold text-slate-600 mb-1.5 block uppercase tracking-wider">
+                            <label className="text-xs font-extrabold text-slate-600 dark:text-slate-300 mb-1.5 block uppercase tracking-wider">
                                 {isHindi ? "दवाई का नाम" : "Medicine Name"}
                             </label>
                             <input
@@ -359,7 +363,7 @@ export default function MedicinesPage() {
                                 <div className="flex items-center gap-2">
                                     <BadgeIndianRupee size={16} className="text-emerald-600" />
                                     <div>
-                                        <p className="text-sm font-bold text-emerald-800">
+                                        <p className="text-sm font-extrabold text-emerald-800">
                                             {isHindi ? "जेनेरिक विकल्प खोजें" : "Search Generic Alternative"}
                                         </p>
                                         <p className="text-[10px] text-emerald-600 font-medium">
@@ -379,7 +383,7 @@ export default function MedicinesPage() {
 
                         <div className="flex items-center gap-2 mb-4 p-3 rounded-2xl bg-blue-50 border border-blue-100">
                             <ShieldCheck size={14} className="text-blue-600 shrink-0" />
-                            <p className="text-xs font-semibold text-blue-800">
+                            <p className="text-xs font-extrabold text-blue-800">
                                 {isHindi
                                     ? "📍 आपकी लोकेशन से नज़दीकी मेडिकल स्टोर Google Maps पर दिखेंगे"
                                     : "📍 Nearby medical stores shown on Google Maps based on your location"}
@@ -410,7 +414,7 @@ export default function MedicinesPage() {
                 </div>
             )}
 
-            <FloatingHearts />
+            <FloatingOrgans />
             <BottomNav />
         </div>
     );

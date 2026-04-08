@@ -6,6 +6,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import LanguageToggle from "@/components/shared/LanguageToggle";
+import ThemeToggle from "@/components/shared/ThemeToggle";
+import FloatingOrgans from "@/components/shared/FloatingOrgans";
 import BottomNav from "@/components/shared/BottomNav";
 import {
   Search, Upload, Pill, ChevronRight, Clock, ArrowRight,
@@ -53,24 +55,22 @@ export default function HomePage() {
   const userName = user?.email ? user.email.split('@')[0] : "";
 
   return (
-    <div className="w-full min-h-screen pb-nav bg-[#f8faf9] relative">
-      {/* Floating hearts background */}
-      <div className="floating-heart text-4xl" style={{ left: "8%", top: "20%", animationDelay: "0s" }}>💚</div>
-      <div className="floating-heart text-2xl" style={{ left: "85%", top: "35%", animationDelay: "2s" }}>💚</div>
-      <div className="floating-heart text-3xl" style={{ left: "70%", top: "70%", animationDelay: "4s" }}>💚</div>
-      <div className="floating-heart text-xl" style={{ left: "15%", top: "75%", animationDelay: "6s" }}>💚</div>
+    <div className="w-full min-h-screen pb-nav bg-[#f8faf9] dark:bg-[#0c0f14] relative">
+      {/* Floating organs background */}
+      <FloatingOrgans />
 
       {/* Header */}
-      <header className="px-5 md:px-12 pt-14 pb-6 bg-white border-b border-slate-100/60">
+      <header className="px-5 md:px-12 pt-14 pb-6 bg-white dark:bg-[#1a1f2e] dark:bg-[#0f1319] border-b border-slate-100/60 dark:border-slate-800/40 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-1">
             <div>
-              <p suppressHydrationWarning className="text-slate-400 text-sm font-medium">{greeting}</p>
-              <h1 suppressHydrationWarning className="text-2xl md:text-3xl font-bold text-slate-900 mt-0.5 tracking-tight">
+              <p suppressHydrationWarning className="text-slate-400 dark:text-slate-500 text-sm font-medium">{greeting}</p>
+              <h1 suppressHydrationWarning className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mt-0.5 tracking-tight">
                 {userName ? `${userName} 👋` : "HealthSathi 👋"}
               </h1>
             </div>
             <div className="flex items-center gap-2.5">
+              <ThemeToggle />
               <LanguageToggle />
               <Link href="/emergency" className="w-11 h-11 rounded-xl bg-red-50 flex items-center justify-center border border-red-100 hover:scale-105 active:scale-95 transition-transform">
                 <AlertTriangle className="text-red-500" size={20} />
@@ -92,11 +92,11 @@ export default function HomePage() {
             { icon: <CalendarCheck size={22} />, label: isHindi ? "प्लान" : "Plans", href: "/subscription", bg: "bg-amber-50", iconColor: "text-amber-600" },
           ].map((action, i) => (
             <Link key={i} href={action.href}
-              className="bg-white rounded-3xl p-4 md:p-5 flex flex-col items-center gap-2.5 transition-all duration-500 hover:shadow-lg hover:-translate-y-1 active:scale-[0.97] border border-slate-100/60 group">
+              className="bg-white dark:bg-[#1a1f2e] rounded-3xl p-4 md:p-5 flex flex-col items-center gap-2.5 transition-all duration-500 hover:shadow-lg hover:-translate-y-1 active:scale-[0.97] border border-slate-100/60 group">
               <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl ${action.bg} flex items-center justify-center ${action.iconColor} group-hover:scale-110 transition-transform duration-500`}>
                 {action.icon}
               </div>
-              <span className="text-xs md:text-sm font-bold text-slate-800 text-center leading-tight">{action.label}</span>
+              <span className="text-xs md:text-sm font-extrabold text-slate-800 text-center leading-tight">{action.label}</span>
             </Link>
           ))}
         </div>
@@ -108,8 +108,8 @@ export default function HomePage() {
               <Activity size={20} className="text-emerald-600" />
             </div>
             <div>
-              <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider">{isHindi ? "स्वास्थ्य सारांश" : "Health Summary"}</p>
-              <p className="text-sm text-emerald-800 font-semibold mt-0.5">
+              <p className="text-xs font-extrabold text-emerald-900 uppercase tracking-wider">{isHindi ? "स्वास्थ्य सारांश" : "Health Summary"}</p>
+              <p className="text-sm text-emerald-800 font-extrabold mt-0.5">
                 {isHindi
                   ? `${stats.medCount} दवाइयाँ ट्रैक • ${stats.recordCount} रिपोर्ट सेव`
                   : `${stats.medCount} medicines tracked • ${stats.recordCount} records saved`}
@@ -125,18 +125,18 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Clock size={18} className="text-emerald-600" />
-                <h2 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">{isHindi ? "आज की दवाइयाँ" : "Today's Medicines"}</h2>
+                <h2 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">{isHindi ? "आज की दवाइयाँ" : "Today's Medicines"}</h2>
               </div>
-              <Link href="/medicines" className="text-sm font-bold text-emerald-600 flex items-center gap-1 hover:gap-2 transition-all">
+              <Link href="/medicines" className="text-sm font-extrabold text-emerald-600 flex items-center gap-1 hover:gap-2 transition-all">
                 {isHindi ? "सभी" : "All"} <ChevronRight size={16} />
               </Link>
             </div>
             <div className="space-y-3">
               {medicines.length === 0 ? (
-                <div className="p-8 bg-white rounded-3xl border border-dashed border-slate-200 text-center">
+                <div className="p-8 bg-white dark:bg-[#1a1f2e] rounded-3xl border border-dashed border-slate-200 text-center">
                   <Pill size={28} className="text-slate-300 mx-auto mb-3" />
-                  <p className="text-sm text-slate-500 font-semibold">{isHindi ? "अभी कोई दवाई नहीं" : "No medicines added yet"}</p>
-                  <Link href="/medicines" className="text-sm text-emerald-600 font-bold mt-2 inline-block">{isHindi ? "दवाई जोड़ें →" : "Add Medicine →"}</Link>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 font-extrabold">{isHindi ? "अभी कोई दवाई नहीं" : "No medicines added yet"}</p>
+                  <Link href="/medicines" className="text-sm text-emerald-600 font-extrabold mt-2 inline-block">{isHindi ? "दवाई जोड़ें →" : "Add Medicine →"}</Link>
                 </div>
               ) : medicines.map((med) => (
                 <div key={med.id} className="card flex items-center justify-between"
@@ -146,14 +146,14 @@ export default function HomePage() {
                       {med.status === "taken" ? "✅" : (med.emoji || "💊")}
                     </div>
                     <div>
-                      <p suppressHydrationWarning className={`font-bold text-sm ${med.status === "taken" ? "text-slate-400 line-through" : "text-slate-900"}`}>
+                      <p suppressHydrationWarning className={`font-extrabold text-sm ${med.status === "taken" ? "text-slate-400 dark:text-slate-500 line-through" : "text-slate-900"}`}>
                         {isHindi ? med.name_hi : med.name_en}
                       </p>
-                      <p suppressHydrationWarning className="text-xs text-slate-400 font-medium">{isHindi ? med.time_hi : med.time_en}</p>
+                      <p suppressHydrationWarning className="text-xs text-slate-400 dark:text-slate-500 font-medium">{isHindi ? med.time_hi : med.time_en}</p>
                     </div>
                   </div>
                   {med.status === "pending" && (
-                    <button className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-all active:scale-95">
+                    <button className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-extrabold hover:bg-slate-800 transition-all active:scale-95">
                       {isHindi ? "लिया" : "Take"}
                     </button>
                   )}
@@ -166,24 +166,24 @@ export default function HomePage() {
           <div className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">{isHindi ? "हाल की रिपोर्ट" : "Recent Records"}</h2>
-                <Link href="/records" className="text-sm font-bold text-emerald-600 flex items-center gap-1 hover:gap-2 transition-all">
+                <h2 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">{isHindi ? "हाल की रिपोर्ट" : "Recent Records"}</h2>
+                <Link href="/records" className="text-sm font-extrabold text-emerald-600 flex items-center gap-1 hover:gap-2 transition-all">
                   {isHindi ? "सभी" : "All"} <ChevronRight size={16} />
                 </Link>
               </div>
               <div className="space-y-3">
                 {records.length === 0 ? (
-                  <div className="p-8 bg-white rounded-3xl border border-dashed border-slate-200 text-center">
+                  <div className="p-8 bg-white dark:bg-[#1a1f2e] rounded-3xl border border-dashed border-slate-200 text-center">
                     <Upload size={28} className="text-slate-300 mx-auto mb-3" />
-                    <p className="text-sm text-slate-500 font-semibold">{isHindi ? "अभी कोई रिपोर्ट नहीं" : "No records yet"}</p>
-                    <Link href="/records" className="text-sm text-emerald-600 font-bold mt-2 inline-block">{isHindi ? "अपलोड करें →" : "Upload →"}</Link>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 font-extrabold">{isHindi ? "अभी कोई रिपोर्ट नहीं" : "No records yet"}</p>
+                    <Link href="/records" className="text-sm text-emerald-600 font-extrabold mt-2 inline-block">{isHindi ? "अपलोड करें →" : "Upload →"}</Link>
                   </div>
                 ) : records.map((rec) => (
                   <div key={rec.id} className="card flex items-center gap-3 cursor-pointer group">
                     <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center text-base">{rec.emoji || '📋'}</div>
                     <div className="flex-1">
-                      <p suppressHydrationWarning className="font-bold text-slate-900 text-sm">{isHindi ? rec.name_hi : rec.name_en}</p>
-                      <p suppressHydrationWarning className="text-xs text-slate-400 font-medium">{rec.record_date}</p>
+                      <p suppressHydrationWarning className="font-extrabold text-slate-900 dark:text-white text-sm">{isHindi ? rec.name_hi : rec.name_en}</p>
+                      <p suppressHydrationWarning className="text-xs text-slate-400 dark:text-slate-500 font-medium">{rec.record_date}</p>
                     </div>
                     <ArrowRight size={16} className="text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
                   </div>
@@ -198,12 +198,12 @@ export default function HomePage() {
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles size={20} className="text-emerald-400" />
-                  <h3 className="font-bold text-lg">{isHindi ? "साथी प्लस" : "Saathi Plus"}</h3>
+                  <h3 className="font-extrabold text-lg">{isHindi ? "साथी प्लस" : "Saathi Plus"}</h3>
                 </div>
                 <p className="text-white/60 text-sm mb-4 font-medium">
                   {isHindi ? "अनलिमिटेड AI, फ़ैमिली प्रोफ़ाइल, और बहुत कुछ!" : "Unlimited AI, family profiles, and more!"}
                 </p>
-                <Link href="/subscription" className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-emerald-600 transition-all active:scale-95">
+                <Link href="/subscription" className="inline-flex items-center gap-2 bg-emerald-500 text-white font-extrabold text-sm px-5 py-2.5 rounded-xl hover:bg-emerald-600 transition-all active:scale-95">
                   {isHindi ? "अपग्रेड" : "Upgrade"} <ArrowRight size={16} />
                 </Link>
               </div>

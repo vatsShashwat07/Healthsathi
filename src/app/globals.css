@@ -553,3 +553,127 @@
     animation-delay: 400ms;
   }
 }
+
+/* organFloat animation for FloatingOrgans */
+@keyframes organFloat {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  20% {
+    transform: translateY(-18px) rotate(3deg) scale(1.02);
+  }
+
+  40% {
+    transform: translateY(-8px) rotate(-2deg) scale(0.98);
+  }
+
+  60% {
+    transform: translateY(-22px) rotate(2deg) scale(1.03);
+  }
+
+  80% {
+    transform: translateY(-5px) rotate(-1deg) scale(1);
+  }
+}
+
+/* ===== Dark Mode Overrides ===== */
+.dark body {
+  color: #e2e8f0;
+}
+
+.dark .card {
+  background: #1a1f2e;
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark .card:hover {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.dark .card-glass {
+  background: rgba(26, 31, 46, 0.7);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .glass {
+  background: rgba(12, 15, 20, 0.8);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .input {
+  background: #1a1f2e;
+  border-color: #2d3548;
+  color: #e2e8f0;
+}
+
+.dark .input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+.dark .input::placeholder {
+  color: #64748b;
+}
+
+.dark .bottom-sheet-content {
+  background: #1a1f2e;
+}
+
+.dark .chip-inactive {
+  background: #1a1f2e;
+  border-color: #2d3548;
+  color: #94a3b8;
+}
+
+.dark .chip-active {
+  background: #10b981;
+}
+
+.dark .fab {
+  background: #10b981;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+}
+
+.dark .disclaimer-banner {
+  background: #1e293b;
+  border-color: #334155;
+  color: #fde68a;
+}
+
+.dark .badge-green {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+}
+
+.dark .badge-red {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}
+
+.dark .badge-yellow {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fde68a;
+}
+
+.dark .badge-blue {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+}
+
+.dark ::selection {
+  background: rgba(16, 185, 129, 0.3);
+  color: #ecfdf5;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}

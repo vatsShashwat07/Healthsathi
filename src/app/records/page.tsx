@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-import FloatingHearts from "@/components/shared/FloatingHearts";
+import FloatingOrgans from "@/components/shared/FloatingOrgans";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 import {
@@ -220,11 +220,11 @@ export default function RecordsPage() {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <p className="text-sm font-bold text-text-primary truncate">{isHindi ? record.nameHi : record.name}</p>
-                                            {record.hasAbnormal && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}>{t("records.abnormal")}</span>}
+                                            <p className="text-sm font-extrabold text-text-primary truncate">{isHindi ? record.nameHi : record.name}</p>
+                                            {record.hasAbnormal && <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white" style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}>{t("records.abnormal")}</span>}
                                         </div>
                                         <p className="text-xs text-text-muted mt-0.5">{isHindi ? record.dateHi : record.date} • {record.lab}</p>
-                                        <p className="text-xs font-semibold mt-0.5" style={{ color: "#10b981" }}>👤 {isHindi ? record.memberHi : record.member}</p>
+                                        <p className="text-xs font-extrabold mt-0.5" style={{ color: "#10b981" }}>👤 {isHindi ? record.memberHi : record.member}</p>
                                     </div>
                                     <ChevronDown
                                         size={16}
@@ -235,7 +235,7 @@ export default function RecordsPage() {
 
                                 {expandedId === record.id && record.tests.length > 0 && (
                                     <div className="mt-3 pt-3 border-t border-sage-100 animate-slide-up">
-                                        <p className="text-xs text-text-muted mb-2 font-semibold flex items-center gap-1">
+                                        <p className="text-xs text-text-muted mb-2 font-extrabold flex items-center gap-1">
                                             ✨ {t("records.extracted")}:
                                         </p>
                                         <div className="space-y-2">
@@ -249,9 +249,9 @@ export default function RecordsPage() {
                                                             : "linear-gradient(135deg, #f0fdf4, #f5f7f2)",
                                                     }}
                                                 >
-                                                    <span className="font-semibold">{test.name}</span>
+                                                    <span className="font-extrabold">{test.name}</span>
                                                     <div className="text-right">
-                                                        <span className={`font-bold ${test.abnormal ? "text-red-600" : "text-emerald-700"}`}>
+                                                        <span className={`font-extrabold ${test.abnormal ? "text-red-600" : "text-emerald-700"}`}>
                                                             {test.value} <span className="text-xs font-normal text-text-muted">{test.unit}</span>
                                                         </span>
                                                         <span className="text-[10px] text-text-muted block">Range: {test.range}</span>
@@ -316,7 +316,7 @@ export default function RecordsPage() {
                     <div className="bottom-sheet-overlay" onClick={() => setShowUpload(false)} />
                     <div className="bottom-sheet-content md:pb-8 pb-14">
                         <div className="w-10 h-1 bg-sage-300 rounded-full mx-auto mb-4" />
-                        <h3 className="text-lg font-bold mb-4">{t("records.addRecord")}</h3>
+                        <h3 className="text-lg font-extrabold mb-4">{t("records.addRecord")}</h3>
                         <div className="grid grid-cols-2 gap-3 mb-6">
                             {[
                                 { icon: Camera, label: t("records.camera"), gradient: "linear-gradient(135deg, #d3f3e4, #aae8cd)", color: "text-emerald-700", action: () => cameraInputRef.current?.click() },
@@ -331,7 +331,7 @@ export default function RecordsPage() {
                                             style={{ background: item.gradient }}>
                                             <Icon size={24} className={item.color} />
                                         </div>
-                                        <span className="text-sm font-semibold text-text-primary">{item.label}</span>
+                                        <span className="text-sm font-extrabold text-text-primary">{item.label}</span>
                                     </button>
                                 );
                             })}
@@ -340,7 +340,7 @@ export default function RecordsPage() {
                 </div>
             )}
 
-            <FloatingHearts />
+            <FloatingOrgans />
             <BottomNav />
         </div>
     );

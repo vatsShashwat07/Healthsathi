@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageToggle from "@/components/shared/LanguageToggle";
+import ThemeToggle from "@/components/shared/ThemeToggle";
+import FloatingOrgans from "@/components/shared/FloatingOrgans";
 import {
   Heart,
   ArrowRight,
@@ -184,16 +186,19 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="bg-[#fafafa] text-gray-900 font-sans antialiased overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="bg-[#fafafa] dark:bg-[#0c0f14] text-gray-900 dark:text-white font-sans antialiased overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900">
+
+      {/* Floating organs background */}
+      <FloatingOrgans />
 
       {/* ===== Navigation ===== */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/70 backdrop-blur-lg border-b border-gray-200/50 shadow-sm" : "bg-transparent"}`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/70 dark:bg-[#0c0f14]/80 backdrop-blur-lg border-b border-gray-200/50 dark:border-slate-800/50 shadow-sm" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white shadow-sm">
               <Heart size={16} />
             </div>
-            <span className="font-semibold tracking-tighter text-lg text-gray-900">HealthSathi</span>
+            <span className="font-extrabold tracking-tighter text-lg text-gray-900 dark:text-white">HealthSathi</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
             <a href="#features" className="hover:text-gray-900 transition-colors">{isHindi ? "फ़ीचर्स" : "Features"}</a>
@@ -201,6 +206,7 @@ export default function LandingPage() {
             <a href="#pricing" className="hover:text-gray-900 transition-colors">{isHindi ? "प्लान" : "Pricing"}</a>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <LanguageToggle />
             <Link href="/login" className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-800 transition-all shadow-sm active:scale-95 flex items-center min-h-[40px]">
               {isHindi ? "शुरू करें" : "Get Started"}
@@ -244,14 +250,14 @@ export default function LandingPage() {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-[1.1]">
               {isHindi ? "आपका स्वास्थ्य।" : "Your health."}<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 animate-gradient bg-[length:200%_200%]">
                 {isHindi ? "AI से संचालित।" : "Powered by AI."}
               </span>
             </h1>
 
-            <p className="text-lg text-gray-500 max-w-md font-light leading-relaxed">
+            <p className="text-lg text-gray-500 dark:text-gray-400 max-w-md font-medium leading-relaxed">
               {isHindi
                 ? "लक्षण जाँचें, रिपोर्ट अपलोड करें, दवाइयाँ ट्रैक करें — सब एक जगह। हिंदी और अंग्रेज़ी दोनों में।"
                 : "Check symptoms, upload reports, track medicines — all in one place. In both Hindi and English."}
@@ -617,7 +623,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== Footer ===== */}
-      <footer className="border-t border-gray-200/60 py-12 px-6 bg-white">
+      <footer className="border-t border-gray-200/60 dark:border-slate-800 py-12 px-6 bg-white dark:bg-[#0f1319]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white">
@@ -626,9 +632,9 @@ export default function LandingPage() {
             <span className="font-semibold tracking-tighter text-gray-900">HealthSathi</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-gray-400">
-            <Link href="/login" className="hover:text-gray-900 transition-colors min-h-[44px] flex items-center">{isHindi ? "गोपनीयता" : "Privacy"}</Link>
-            <Link href="/login" className="hover:text-gray-900 transition-colors min-h-[44px] flex items-center">{isHindi ? "शर्तें" : "Terms"}</Link>
-            <Link href="/emergency" className="hover:text-gray-900 transition-colors min-h-[44px] flex items-center">{isHindi ? "इमरजेंसी" : "Emergency"}</Link>
+            <Link href="/privacy" className="hover:text-gray-900 dark:hover:text-white transition-colors min-h-[44px] flex items-center">{isHindi ? "गोपनीयता" : "Privacy"}</Link>
+            <Link href="/help" className="hover:text-gray-900 dark:hover:text-white transition-colors min-h-[44px] flex items-center">{isHindi ? "सहायता" : "Help"}</Link>
+            <Link href="/emergency" className="hover:text-gray-900 dark:hover:text-white transition-colors min-h-[44px] flex items-center">{isHindi ? "इमरजेंसी" : "Emergency"}</Link>
           </div>
           <p className="text-xs text-gray-400">
             © 2024 HealthSathi — {isHindi ? "आपका स्वास्थ्य साथी" : "Your Health Companion"} 💚

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
-import FloatingHearts from "@/components/shared/FloatingHearts";
+import FloatingOrgans from "@/components/shared/FloatingOrgans";
 import BottomNav from "@/components/shared/BottomNav";
 import { ArrowLeft, Check, Crown, Zap } from "lucide-react";
 import Link from "next/link";
@@ -177,7 +177,7 @@ export default function SubscriptionPage() {
                 <div className="card !p-1.5 flex items-center" style={{ border: "1px solid #e8eae3" }}>
                     <button
                         onClick={() => setBillingCycle("monthly")}
-                        className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${billingCycle === "monthly" ? "text-white" : "text-text-muted"
+                        className={`flex-1 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-300 ${billingCycle === "monthly" ? "text-white" : "text-text-muted"
                             }`}
                         style={billingCycle === "monthly" ? {
                             background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
@@ -188,7 +188,7 @@ export default function SubscriptionPage() {
                     </button>
                     <button
                         onClick={() => setBillingCycle("annual")}
-                        className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 relative ${billingCycle === "annual" ? "text-white" : "text-text-muted"
+                        className={`flex-1 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-300 relative ${billingCycle === "annual" ? "text-white" : "text-text-muted"
                             }`}
                         style={billingCycle === "annual" ? {
                             background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
@@ -211,7 +211,7 @@ export default function SubscriptionPage() {
                             <div key={plan.key} className="rounded-2xl p-5 relative overflow-hidden animate-slide-up"
                                 style={{ background: plan.gradient, border: plan.border }}>
                                 {plan.popular && (
-                                    <div className="absolute top-0 right-0 text-white text-[10px] font-bold px-3 py-1 rounded-bl-2xl"
+                                    <div className="absolute top-0 right-0 text-white text-[10px] font-extrabold px-3 py-1 rounded-bl-2xl"
                                         style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}>
                                         {t("subscription.popular")} ⭐
                                     </div>
@@ -274,7 +274,7 @@ export default function SubscriptionPage() {
                     <div className="rounded-2xl p-4 text-center cursor-pointer animate-fade-in"
                         style={{ background: "linear-gradient(135deg, #fef3c7, #fde68a30)", border: "1px solid #fde68a50" }}
                         onClick={() => setBillingCycle("annual")}>
-                        <p className="text-sm font-bold text-amber-800">
+                        <p className="text-sm font-extrabold text-amber-800">
                             💡 {isHindi ? "वार्षिक प्लान — सिर्फ़ ₹75/महीना" : "Annual Plan — just ₹75/month"}
                         </p>
                         <p className="text-xs text-amber-600 mt-1">
@@ -322,7 +322,7 @@ export default function SubscriptionPage() {
                     </div>
                 )}
             </div>
-            <FloatingHearts />
+            <FloatingOrgans />
             <BottomNav />
         </div>
     );

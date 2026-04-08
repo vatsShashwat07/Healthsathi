@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -75,12 +76,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-full bg-white">
-        <LanguageProvider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </LanguageProvider>
+      <body className="h-full bg-[#f8faf9] dark:bg-[#0c0f14] transition-colors duration-500">
+        <ThemeProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

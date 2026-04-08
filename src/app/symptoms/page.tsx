@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-import FloatingHearts from "@/components/shared/FloatingHearts";
+import FloatingOrgans from "@/components/shared/FloatingOrgans";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
 
@@ -74,11 +74,11 @@ function EmergencyOverlay({
                 <div className="relative">
                     <button
                         onClick={onDismiss}
-                        className="absolute -top-2 right-0 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center"
+                        className="absolute -top-2 right-0 w-10 h-10 rounded-full bg-white dark:bg-[#1a1f2e]/20 flex items-center justify-center"
                     >
                         <X size={18} />
                     </button>
-                    <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4 animate-pulse-gentle">
+                    <div className="w-20 h-20 rounded-full bg-white dark:bg-[#1a1f2e]/20 flex items-center justify-center mx-auto mb-4 animate-pulse-gentle">
                         <AlertTriangle size={36} />
                     </div>
                     <h1 className="text-2xl font-extrabold">
@@ -113,7 +113,7 @@ function EmergencyOverlay({
                 >
                     <Phone size={18} />
                     <div className="text-left">
-                        <p className="font-bold">112 — Emergency Helpline</p>
+                        <p className="font-extrabold">112 — Emergency Helpline</p>
                         <p className="text-xs text-white/60">
                             {isHindi ? "पुलिस + फ़ायर + एम्बुलेंस" : "Police + Fire + Ambulance"}
                         </p>
@@ -335,13 +335,13 @@ export default function SymptomsPage() {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setShowResult(false)}
-                            className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center"
+                            className="w-10 h-10 rounded-2xl bg-white dark:bg-[#1a1f2e] flex items-center justify-center"
                             style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
                         >
                             <ArrowLeft size={18} className="text-text-primary" />
                         </button>
                         <div>
-                            <h1 className="text-lg font-bold text-text-primary">{t("symptoms.result")}</h1>
+                            <h1 className="text-lg font-extrabold text-text-primary">{t("symptoms.result")}</h1>
                             <p className="text-xs text-text-muted">
                                 {isHindi ? "AI द्वारा विश्लेषण" : "AI-powered analysis"}
                             </p>
@@ -365,7 +365,7 @@ export default function SymptomsPage() {
 
                     {/* Possible Causes */}
                     <section className="card animate-slide-up">
-                        <h3 className="text-sm font-bold text-text-primary mb-3 flex items-center gap-2">
+                        <h3 className="text-sm font-extrabold text-text-primary mb-3 flex items-center gap-2">
                             <div className="w-7 h-7 rounded-lg flex items-center justify-center"
                                 style={{ background: "linear-gradient(135deg, #ccfbf1, #cffafe)" }}>
                                 <Stethoscope size={14} className="text-teal-700" />
@@ -387,7 +387,7 @@ export default function SymptomsPage() {
                                                 (isHindi ? "कम संभव" : "Less likely")}
                                     </span>
                                     <div>
-                                        <p className="text-sm font-bold">{cause.name}</p>
+                                        <p className="text-sm font-extrabold">{cause.name}</p>
                                         <p className="text-xs text-text-muted mt-0.5">{cause.description}</p>
                                     </div>
                                 </div>
@@ -397,7 +397,7 @@ export default function SymptomsPage() {
 
                     {/* Home Care */}
                     <section className="card animate-slide-up">
-                        <h3 className="text-sm font-bold text-text-primary mb-3 flex items-center gap-2">
+                        <h3 className="text-sm font-extrabold text-text-primary mb-3 flex items-center gap-2">
                             <div className="w-7 h-7 rounded-lg flex items-center justify-center"
                                 style={{ background: "linear-gradient(135deg, #d3f3e4, #aae8cd)" }}>
                                 <HomeIcon size={14} className="text-primary-700" />
@@ -407,7 +407,7 @@ export default function SymptomsPage() {
                         <ul className="space-y-2.5">
                             {currentResult!.homeCareTips.map((tip, i) => (
                                 <li key={i} className="flex items-start gap-2.5 text-sm">
-                                    <span className="w-5 h-5 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                                    <span className="w-5 h-5 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">
                                         {i + 1}
                                     </span>
                                     <span className="text-text-primary">{tip}</span>
@@ -419,7 +419,7 @@ export default function SymptomsPage() {
                     {/* Doctor Notes */}
                     <section className="rounded-2xl p-4 animate-slide-up"
                         style={{ background: "linear-gradient(135deg, #edfaf4, #d3f3e4)", border: "1px solid #72d7ae" }}>
-                        <h3 className="text-sm font-bold text-primary-900 mb-3 flex items-center gap-2">
+                        <h3 className="text-sm font-extrabold text-primary-900 mb-3 flex items-center gap-2">
                             <div className="w-7 h-7 rounded-lg flex items-center justify-center"
                                 style={{ background: "linear-gradient(135deg, #72d7ae, #39c08b)" }}>
                                 <ShieldCheck size={14} className="text-primary-900" />
@@ -439,7 +439,7 @@ export default function SymptomsPage() {
                     {/* Red Flags */}
                     <section className="rounded-2xl p-4 animate-slide-up"
                         style={{ background: "linear-gradient(135deg, #fef2f2, #fee2e2)", border: "1px solid #fca5a5" }}>
-                        <h3 className="text-sm font-bold text-red-900 mb-3 flex items-center gap-2">
+                        <h3 className="text-sm font-extrabold text-red-900 mb-3 flex items-center gap-2">
                             <AlertTriangle size={16} className="text-red-600" />
                             {t("symptoms.redFlags")}
                         </h3>
@@ -467,7 +467,7 @@ export default function SymptomsPage() {
                         </button>
                     </div>
                 </div>
-                <FloatingHearts />
+                <FloatingOrgans />
             <BottomNav />
             </div>
         );
@@ -503,7 +503,7 @@ export default function SymptomsPage() {
                             style={{ background: "linear-gradient(135deg, #dbeafe, #bfdbfe)" }}>
                             <UserCircle size={18} className="text-emerald-700" />
                         </div>
-                        <span className="text-sm font-semibold">{isHindi ? "मेरे लिए" : "For myself"}</span>
+                        <span className="text-sm font-extrabold">{isHindi ? "मेरे लिए" : "For myself"}</span>
                     </div>
                     <ChevronDown size={16} className="text-text-muted" />
                 </button>
@@ -617,7 +617,7 @@ export default function SymptomsPage() {
                     {t("symptoms.disclaimer")}
                 </div>
             </div>
-            <FloatingHearts />
+            <FloatingOrgans />
             <BottomNav />
         </div>
     );

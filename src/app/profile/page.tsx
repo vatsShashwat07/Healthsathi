@@ -5,9 +5,10 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import FloatingHearts from "@/components/shared/FloatingHearts";
+import FloatingOrgans from "@/components/shared/FloatingOrgans";
 import BottomNav from "@/components/shared/BottomNav";
 import LanguageToggle from "@/components/shared/LanguageToggle";
+import ThemeToggle from "@/components/shared/ThemeToggle";
 import {
     Users,
     CreditCard,
@@ -121,12 +122,15 @@ export default function ProfilePage() {
     };
 
     return (
-        <div className="w-full min-h-screen pb-nav bg-white">
+        <div className="w-full min-h-screen pb-nav bg-[#f8faf9] dark:bg-[#0c0f14]">
             {/* Header */}
-            <header className="px-5 pt-14 pb-8 bg-white border-b border-slate-100">
+            <header className="px-5 pt-14 pb-8 bg-white dark:bg-[#1a1f2e] dark:bg-[#0f1319] border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center justify-between mb-5">
-                    <h1 className="text-xl font-bold text-slate-900">{t("profile.title")}</h1>
-                    <LanguageToggle />
+                    <h1 className="text-xl font-extrabold text-slate-900 dark:text-white">{t("profile.title")}</h1>
+                    <div className="flex items-center gap-2">
+                        <ThemeToggle />
+                        <LanguageToggle />
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -134,9 +138,9 @@ export default function ProfilePage() {
                         <User size={28} className="text-emerald-600" />
                     </div>
                     <div>
-                        <h2 suppressHydrationWarning className="text-xl font-bold text-slate-900 capitalize">{userName || (isHindi ? "उपयोगकर्ता" : "User")}</h2>
-                        <p suppressHydrationWarning className="text-slate-500 text-sm mt-0.5">{userContact}</p>
-                        <span suppressHydrationWarning className="inline-flex items-center gap-1 mt-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                        <h2 suppressHydrationWarning className="text-xl font-extrabold text-slate-900 dark:text-white capitalize">{userName || (isHindi ? "उपयोगकर्ता" : "User")}</h2>
+                        <p suppressHydrationWarning className="text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mt-0.5">{userContact}</p>
+                        <span suppressHydrationWarning className="inline-flex items-center gap-1 mt-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100">
                             <Heart size={10} />
                             {isPremium ? (isHindi ? "प्लस मेंबर" : "Plus Member") : (isHindi ? "फ्री प्लान" : "Free Plan")}
                         </span>
@@ -154,7 +158,7 @@ export default function ProfilePage() {
                             <Sparkles size={18} className="text-white" />
                         </div>
                         <div className="flex-1">
-                            <p className="text-sm font-bold text-emerald-900">
+                            <p className="text-sm font-extrabold text-emerald-900">
                                 {isHindi ? "साथी प्लस में अपग्रेड करें" : "Upgrade to Saathi Plus"}
                             </p>
                             <p className="text-xs text-emerald-600 mt-0.5">
@@ -168,7 +172,7 @@ export default function ProfilePage() {
                 {/* Family Members — from DB */}
                 <section className="card">
                     <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
                             <div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
                                 <Users size={14} className="text-emerald-600" />
                             </div>
@@ -176,7 +180,7 @@ export default function ProfilePage() {
                         </h3>
                         <button
                             onClick={() => setShowAddMember(true)}
-                            className="text-xs text-emerald-600 font-semibold flex items-center gap-1 hover:gap-2 transition-all"
+                            className="text-xs text-emerald-600 font-extrabold flex items-center gap-1 hover:gap-2 transition-all"
                         >
                             <Plus size={12} />
                             {t("profile.addMember")}
@@ -191,7 +195,7 @@ export default function ProfilePage() {
                                 </p>
                                 <button
                                     onClick={() => setShowAddMember(true)}
-                                    className="text-sm text-emerald-600 font-semibold mt-1"
+                                    className="text-sm text-emerald-600 font-extrabold mt-1"
                                 >
                                     {isHindi ? "सदस्य जोड़ें →" : "Add Member →"}
                                 </button>
@@ -203,7 +207,7 @@ export default function ProfilePage() {
                                         {emojiForRelation(member.relation || "")}
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-semibold text-slate-900">{member.name}</p>
+                                        <p className="text-sm font-extrabold text-slate-900">{member.name}</p>
                                         <p className="text-xs text-slate-500">{member.relation}{member.age ? ` • ${member.age} ${isHindi ? "वर्ष" : "yrs"}` : ""}</p>
                                     </div>
                                     <ChevronRight size={14} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
@@ -222,7 +226,7 @@ export default function ProfilePage() {
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.bg}`}>
                                     <Icon size={16} className={item.color} />
                                 </div>
-                                <span className="flex-1 text-sm font-semibold text-slate-900">{t(`profile.${item.key}`)}</span>
+                                <span className="flex-1 text-sm font-extrabold text-slate-900">{t(`profile.${item.key}`)}</span>
                                 <ChevronRight size={14} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
                             </Link>
                         );
@@ -245,30 +249,30 @@ export default function ProfilePage() {
                     </button>
                 </section>
 
-                <p className="text-center text-[11px] text-slate-400 py-3 font-medium">
+                <p className="text-center text-[11px] text-slate-400 dark:text-slate-500 py-3 font-medium">
                     HealthSathi v1.0.0 — {isHindi ? "आपका भरोसेमंद स्वास्थ्य साथी" : "Your trusted health companion"} 💚
                 </p>
 
                 {/* Delete Confirmation Modal */}
                 {showDeleteConfirm && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center px-5" style={{ background: "rgba(0,0,0,0.5)" }}>
-                        <div className="bg-white max-w-sm w-full rounded-3xl p-6 text-center animate-scale-in">
+                        <div className="bg-white dark:bg-[#1a1f2e] max-w-sm w-full rounded-3xl p-6 text-center animate-scale-in">
                             <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-4">
                                 <AlertTriangle size={28} className="text-red-500" />
                             </div>
-                            <h3 className="text-lg font-extrabold text-slate-900 mb-2">
+                            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-2">
                                 {isHindi ? "सारा डेटा हटाएँ?" : "Delete All Data?"}
                             </h3>
-                            <p className="text-sm text-slate-500 mb-6 font-medium">
+                            <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 mb-6 font-medium">
                                 {isHindi
                                     ? "आपकी सभी दवाइयाँ, रिपोर्ट, और परिवार सदस्य हटा दिए जाएँगे। यह क्रिया पलटी नहीं जा सकती।"
                                     : "All your medicines, records, and family members will be permanently deleted. This action cannot be undone."}
                             </p>
                             <div className="flex gap-3">
-                                <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-3 rounded-2xl bg-slate-100 text-sm font-bold text-slate-700">
+                                <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-3 rounded-2xl bg-slate-100 text-sm font-extrabold text-slate-700">
                                     {isHindi ? "रद्द करें" : "Cancel"}
                                 </button>
-                                <button onClick={handleDeleteAllData} disabled={deleting} className="flex-1 py-3 rounded-2xl bg-red-500 text-white text-sm font-bold disabled:opacity-50">
+                                <button onClick={handleDeleteAllData} disabled={deleting} className="flex-1 py-3 rounded-2xl bg-red-500 text-white text-sm font-extrabold disabled:opacity-50">
                                     {deleting ? (isHindi ? "हटा रहे हैं..." : "Deleting...") : (isHindi ? "हाँ, हटाएँ" : "Yes, Delete")}
                                 </button>
                             </div>
@@ -284,7 +288,7 @@ export default function ProfilePage() {
                     <div className="bottom-sheet-content">
                         <div className="w-10 h-1 bg-slate-200 rounded-full mx-auto mb-4" />
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-bold text-slate-900">
+                            <h3 className="text-lg font-extrabold text-slate-900">
                                 {isHindi ? "परिवार सदस्य जोड़ें" : "Add Family Member"}
                             </h3>
                             <button onClick={() => setShowAddMember(false)} className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center">
@@ -294,7 +298,7 @@ export default function ProfilePage() {
 
                         <div className="space-y-3">
                             <div>
-                                <label className="text-xs font-semibold text-slate-600 mb-1 block">
+                                <label className="text-xs font-extrabold text-slate-600 dark:text-slate-300 mb-1 block">
                                     {isHindi ? "नाम *" : "Name *"}
                                 </label>
                                 <input
@@ -306,7 +310,7 @@ export default function ProfilePage() {
                                 />
                             </div>
                             <div>
-                                <label className="text-xs font-semibold text-slate-600 mb-1 block">
+                                <label className="text-xs font-extrabold text-slate-600 dark:text-slate-300 mb-1 block">
                                     {isHindi ? "रिश्ता" : "Relation"}
                                 </label>
                                 <input
@@ -318,7 +322,7 @@ export default function ProfilePage() {
                                 />
                             </div>
                             <div>
-                                <label className="text-xs font-semibold text-slate-600 mb-1 block">
+                                <label className="text-xs font-extrabold text-slate-600 dark:text-slate-300 mb-1 block">
                                     {isHindi ? "उम्र" : "Age"}
                                 </label>
                                 <input
@@ -343,7 +347,7 @@ export default function ProfilePage() {
                 </div>
             )}
 
-            <FloatingHearts />
+            <FloatingOrgans />
             <BottomNav />
         </div>
     );

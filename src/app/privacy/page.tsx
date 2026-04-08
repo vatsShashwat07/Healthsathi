@@ -8,20 +8,20 @@ import { ArrowLeft, Shield, Lock, Eye, Trash2, Server, Mail } from "lucide-react
 export default function PrivacyPage() {
     const { isHindi } = useLanguage();
     return (
-        <div className="min-h-screen bg-[#f8faf9]">
-            <header className="bg-white border-b border-slate-100 px-5 pt-14 pb-5">
+        <div className="min-h-screen bg-[#f8faf9] dark:bg-[#0c0f14]">
+            <header className="bg-white dark:bg-[#1a1f2e] border-b border-slate-100 px-5 pt-14 pb-5">
                 <div className="max-w-3xl mx-auto flex items-center gap-3">
                     <Link href="/profile" className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
                         <ArrowLeft size={18} className="text-slate-600" />
                     </Link>
-                    <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                    <h1 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                         {isHindi ? "गोपनीयता नीति" : "Privacy Policy"}
                     </h1>
                 </div>
             </header>
 
             <div className="max-w-3xl mx-auto px-5 py-8 space-y-8">
-                <p className="text-sm text-slate-500 font-medium">
+                <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 font-medium">
                     {isHindi ? "अंतिम अपडेट: 7 अप्रैल 2025" : "Last updated: April 7, 2025"}
                 </p>
 
@@ -69,21 +69,21 @@ export default function PrivacyPage() {
                             : "For privacy-related queries:\n📧 vantiquityai@gmail.com\n\nData Protection Officer (DPO): HealthSathi Team"
                     },
                 ].map((section, i) => (
-                    <div key={i} className="bg-white rounded-3xl p-6 border border-slate-100/60">
+                    <div key={i} className="bg-white dark:bg-[#1a1f2e] rounded-3xl p-6 border border-slate-100/60">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                                 {section.icon}
                             </div>
                             <h2 className="text-lg font-extrabold text-slate-900">{section.title}</h2>
                         </div>
-                        <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line font-medium">
+                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line font-medium">
                             {section.content}
                         </p>
                     </div>
                 ))}
 
                 <div className="text-center py-4">
-                    <p className="text-xs text-slate-400 font-medium">
+                    <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
                         © 2024-2025 HealthSathi — {isHindi ? "DPDPA 2023 अनुपालन" : "DPDPA 2023 Compliant"} 🛡️
                     </p>
                 </div>
